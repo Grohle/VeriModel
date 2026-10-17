@@ -1,0 +1,36 @@
+[package]
+name = "verimodel-assistant"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "VeriModel copilot: a small local language model for navigation, explanation and configuration help. Read-only by construction; never part of a verdict."
+
+[lib]
+name = "verimodel_assistant"
+path = "src/lib.rs"
+
+[features]
+default = ["candle"]
+# Pure-Rust inference of GGUF models (Qwen2.5 / Llama / SmolLM) via Hugging Face Candle.
+candle = ["dep:candle-core", "dep:candle-transformers", "dep:tokenizers"]
+
+[dependencies]
+verimodel-core = { path = "../core" }
+serde.workspace = true
+serde_json.workspace = true
+serde_yaml.workspace = true
+thiserror.workspace = true
+sha2.workspace = true
+hex.workspace = true
+regex.workspace = true
+log.workspace = true
+zip.workspace = true
+quick-xml.workspace = true
+ureq = { version = "2", default-features = false, features = ["tls"] }
+pdf-extract = "0.9"
+candle-core = { version = "0.11", optional = true }
+candle-transformers = { version = "0.11", optional = true }
+tokenizers = { version = "0.23", optional = true, default-features = false, features = ["onig"] }
+
+[dev-dependencies]
+tempfile.workspace = true

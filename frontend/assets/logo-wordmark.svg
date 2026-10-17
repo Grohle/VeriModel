@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 64" width="260" height="64" role="img" aria-label="VeriModel">
+  <defs>
+    <linearGradient id="vmw-plate" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1f2937"/>
+      <stop offset="1" stop-color="#0b1220"/>
+    </linearGradient>
+  </defs>
+  <g>
+    <path d="M10 2h44l8 8v44l-8 8H10l-8-8V10z" fill="url(#vmw-plate)"/>
+    <path d="M10 2h44l8 8v44l-8 8H10l-8-8V10z" fill="none" stroke="#374151" stroke-width="1.5"/>
+    <circle cx="9" cy="9" r="1.6" fill="#4b5563"/><circle cx="55" cy="9" r="1.6" fill="#4b5563"/>
+    <circle cx="9" cy="55" r="1.6" fill="#4b5563"/><circle cx="55" cy="55" r="1.6" fill="#4b5563"/>
+    <path d="M14 17l12 30" fill="none" stroke="#e5e7eb" stroke-width="7" stroke-linecap="round"/>
+    <path d="M26 47l24-28" fill="none" stroke="#f59e0b" stroke-width="7" stroke-linecap="round"/>
+  </g>
+  <text x="78" y="41" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="30" font-weight="800" letter-spacing="-0.5" fill="currentColor">Veri<tspan fill="#f59e0b">Model</tspan></text>
+  <text x="79" y="56" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="9.5" font-weight="600" letter-spacing="2.2" fill="currentColor" opacity="0.6">IFC QA GATE · QTO · BCF</text>
+</svg>
