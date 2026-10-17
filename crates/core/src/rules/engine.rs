@@ -163,11 +163,18 @@ pub fn load_allowed_codes(config: &Config, config_dir: Option<&Path>) -> CoreRes
     Ok(set)
 }
 
+/// The category vocabulary used by the built-in pack and the documentation. A custom
+/// pack may add its own; a config may toggle any of these even when the active pack
+/// has no rule in that category (e.g. one project.yaml shared by several packs).
+pub const STANDARD_CATEGORIES: &[&str] =
+    &["identity", "spatial", "properties", "geometry", "classification", "naming", "sanity", "schema", "ids"];
+
 /// Reject `checks.rules` / `checks.categories` keys that match no rule, so a typo
 /// can never silently disable a check.
 fn validate_toggles(config: &Config, rules: &[(Rule, RuleSource)]) -> CoreResult<()> {
     let ids: BTreeSet<&str> = rules.iter().map(|(r, _)| r.id.as_str()).collect();
-    let cats: BTreeSet<&str> = rules.iter().map(|(r, _)| r.category.as_str()).collect();
+    let mut cats: BTreeSet<&str> = rules.iter().map(|(r, _)| r.category.as_str()).collect();
+    cats.extend(STANDARD_CATEGORIES.iter().copied());
     let mut problems = Vec::new();
     for k in config.checks.rules.keys() {
         if !ids.contains(k.as_str()) && !k.starts_with("IDS-") {
@@ -175,7 +182,7 @@ fn validate_toggles(config: &Config, rules: &[(Rule, RuleSource)]) -> CoreResult
         }
     }
     for k in config.checks.categories.keys() {
-        if !cats.contains(k.as_str()) && k != "ids" {
+        if !cats.contains(k.as_str()) {
             problems.push(format!("checks.categories refers to unknown category '{k}' (known: {})", cats.iter().copied().collect::<Vec<_>>().join(", ")));
         }
     }
