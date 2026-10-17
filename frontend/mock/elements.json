@@ -1,0 +1,2730 @@
+{
+  "1kh8rjgveXY7q2FCraWfaf": {
+    "global_id": "1kh8rjgveXY7q2FCraWfaf",
+    "step_id": 135,
+    "ifc_type": "IfcWall",
+    "ancestors": [
+      "IfcWall",
+      "IfcBuildingElement",
+      "IfcElement",
+      "IfcProduct",
+      "IfcObject",
+      "IfcObjectDefinition",
+      "IfcRoot"
+    ],
+    "predefined_type": "STANDARD",
+    "name": "WL-001 Exterior North",
+    "description": null,
+    "object_type": null,
+    "tag": "200000",
+    "type_name": "Basic Wall: Exterior - Masonry 300",
+    "storey": "Level 0",
+    "container": {
+      "global_id": "2vcXfRFMeC9Ux8WeYvIPM6",
+      "ifc_type": "IfcBuildingStorey",
+      "name": "Level 0"
+    },
+    "psets": {
+      "Pset_WallCommon": {
+        "IsExternal": true,
+        "FireRating": "60",
+        "LoadBearing": true,
+        "Reference": "Exterior - Masonry 300",
+        "AcousticRating": "Rw 52 dB"
+      },
+      "Pset_QuantityTakeOff": {
+        "Source": "Revit"
+      }
+    },
+    "quantities": {
+      "Qto_WallBaseQuantities": {
+        "Length": 8.4,
+        "Height": 3,
+        "Width": 0.3,
+        "NetSideArea": 23.69,
+        "NetVolume": 7.107
+      }
+    },
+    "classifications": [
+      {
+        "system": "Uniclass 2015",
+        "code": "EF_25_10",
+        "name": "Walls"
+      }
+    ],
+    "materials": [
+      "Brick",
+      "Insulation",
+      "Concrete block"
+    ],
+    "has_representation": true,
+    "geometry": {
+      "bbox_min": [
+        4,
+        0,
+        0
+      ],
+      "bbox_max": [
+        12.4,
+        0.3,
+        3
+      ],
+      "volume_m3": 7.107,
+      "area_m2": 23.69,
+      "triangle_count": 36
+    }
+  },
+  "0DWyutvRulH3U9$Pumo8hu": {
+    "global_id": "0DWyutvRulH3U9$Pumo8hu",
+    "step_id": 148,
+    "ifc_type": "IfcWall",
+    "ancestors": [
+      "IfcWall",
+      "IfcBuildingElement",
+      "IfcElement",
+      "IfcProduct",
+      "IfcObject",
+      "IfcObjectDefinition",
+      "IfcRoot"
+    ],
+    "predefined_type": "STANDARD",
+    "name": "WL-002 Exterior East",
+    "description": null,
+    "object_type": null,
+    "tag": "200013",
+    "type_name": "Basic Wall: Exterior - Masonry 300",
+    "storey": "Level 0",
+    "container": {
+      "global_id": "2vcXfRFMeC9Ux8WeYvIPM6",
+      "ifc_type": "IfcBuildingStorey",
+      "name": "Level 0"
+    },
+    "psets": {
+      "Pset_WallCommon": {
+        "IsExternal": true,
+        "FireRating": "",
+        "LoadBearing": true,
+        "Reference": "Exterior - Masonry 300",
+        "AcousticRating": "Rw 52 dB"
+      },
+      "Pset_QuantityTakeOff": {
+        "Source": "Revit"
+      }
+    },
+    "quantities": {
+      "Qto_WallBaseQuantities": {
+        "Length": 6.2,
+        "Height": 3,
+        "Width": 0.3,
+        "NetSideArea": 17.48,
+        "NetVolume": 5.244
+      }
+    },
+    "classifications": [
+      {
+        "system": "Uniclass 2015",
+        "code": "EF_25_10",
+        "name": "Walls"
+      }
+    ],
+    "materials": [
+      "Brick",
+      "Insulation",
+      "Concrete block"
+    ],
+    "has_representation": true,
+    "geometry": {
+      "bbox_min": [
+        10.5,
+        0,
+        0
+      ],
+      "bbox_max": [
+        16.7,
+        0.3,
+        3
+      ],
+      "volume_m3": 5.244,
+      "area_m2": 17.48,
+      "triangle_count": 36
+    }
+  },
+  "0xfgXlKaAl8qK0YBBzbU1c": {
+    "global_id": "0xfgXlKaAl8qK0YBBzbU1c",
+    "step_id": 179,
+    "ifc_type": "IfcWall",
+    "ancestors": [
+      "IfcWall",
+      "IfcBuildingElement",
+      "IfcElement",
+      "IfcProduct",
+      "IfcObject",
+      "IfcObjectDefinition",
+      "IfcRoot"
+    ],
+    "predefined_type": "STANDARD",
+    "name": "WL-003 Exterior South",
+    "description": null,
+    "object_type": null,
+    "tag": "200026",
+    "type_name": "Basic Wall: Exterior - Masonry 300",
+    "storey": "Level 0",
+    "container": {
+      "global_id": "2vcXfRFMeC9Ux8WeYvIPM6",
+      "ifc_type": "IfcBuildingStorey",
+      "name": "Level 0"
+    },
+    "psets": {
+      "Pset_WallCommon": {
+        "IsExternal": true,
+        "FireRating": "60",
+        "LoadBearing": true,
+        "Reference": "Exterior - Masonry 300",
+        "AcousticRating": "Rw 52 dB"
+      },
+      "Pset_QuantityTakeOff": {
+        "Source": "Revit"
+      }
+    },
+    "quantities": {
+      "Qto_WallBaseQuantities": {
+        "Length": 8.4,
+        "Height": 3,
+        "Width": 0.3,
+        "NetSideArea": 23.69,
+        "NetVolume": 7.107
+      }
+    },
+    "classifications": [
+      {
+        "system": "Uniclass 2015",
+        "code": "EF_25_10",
+        "name": "Walls"
+      }
+    ],
+    "materials": [
+      "Brick",
+      "Insulation",
+      "Concrete block"
+    ],
+    "has_representation": true,
+    "geometry": {
+      "bbox_min": [
+        17,
+        0,
+        0
+      ],
+      "bbox_max": [
+        25.4,
+        0.3,
+        3
+      ],
+      "volume_m3": 7.107,
+      "area_m2": 23.69,
+      "triangle_count": 36
+    }
+  },
+  "37ywwydDJaxVRNshe9riMd": {
+    "global_id": "37ywwydDJaxVRNshe9riMd",
+    "step_id": 191,
+    "ifc_type": "IfcWall",
+    "ancestors": [
+      "IfcWall",
+      "IfcBuildingElement",
+      "IfcElement",
+      "IfcProduct",
+      "IfcObject",
+      "IfcObjectDefinition",
+      "IfcRoot"
+    ],
+    "predefined_type": "STANDARD",
+    "name": "WL-004 Exterior West",
+    "description": null,
+    "object_type": null,
+    "tag": "200039",
+    "type_name": "Basic Wall: Exterior - Masonry 300",
+    "storey": "Level 0",
+    "container": {
+      "global_id": "2vcXfRFMeC9Ux8WeYvIPM6",
+      "ifc_type": "IfcBuildingStorey",
+      "name": "Level 0"
+    },
+    "psets": {
+      "Pset_WallCommon": {
+        "IsExternal": true,
+        "FireRating": "60",
+        "LoadBearing": true,
+        "Reference": "Exterior - Masonry 300",
+        "AcousticRating": "Rw 52 dB"
+      },
+      "Pset_QuantityTakeOff": {
+        "Source": "Revit"
+      }
+    },
+    "quantities": {
+      "Qto_WallBaseQuantities": {
+        "Length": 6.2,
+        "Height": 3,
+        "Width": 0.3,
+        "NetSideArea": 17.48,
+        "NetVolume": 5.244
+      }
+    },
+    "classifications": [],
+    "materials": [
+      "Brick",
+      "Insulation",
+      "Concrete block"
+    ],
+    "has_representation": true,
+    "geometry": {
+      "bbox_min": [
+        23.5,
+        0,
+        0
+      ],
+      "bbox_max": [
+        29.7,
+        0.3,
+        3
+      ],
+      "volume_m3": 5.244,
+      "area_m2": 17.48,
+      "triangle_count": 36
+    }
+  },
+  "1QhgU9tRgsCPTUrqKqmVBQ": {
+    "global_id": "1QhgU9tRgsCPTUrqKqmVBQ",
+    "step_id": 203,
+    "ifc_type": "IfcWall",
+    "ancestors": [
+      "IfcWall",
+      "IfcBuildingElement",
+      "IfcElement",
+      "IfcProduct",
+      "IfcObject",
+      "IfcObjectDefinition",
+      "IfcRoot"
+    ],
+    "predefined_type": "STANDARD",
+    "name": "WL-005 Corridor Partition",
+    "description": null,
+    "object_type": null,
+    "tag": "200052",
+    "type_name": "Basic Wall: Interior - Partition 100",
+    "storey": "Level 0",
+    "container": {
+      "global_id": "2vcXfRFMeC9Ux8WeYvIPM6",
+      "ifc_type": "IfcBuildingStorey",
+      "name": "Level 0"
+    },
+    "psets": {
+      "Pset_WallCommon": {
+        "IsExternal": false,
+        "FireRating": "30",
+        "LoadBearing": false,
+        "Reference": "Interior - Partition 100",
+        "AcousticRating": "Rw 44 dB"
+      },
+      "Pset_QuantityTakeOff": {
+        "Source": "Revit"
+      }
+    },
+    "quantities": {
+      "Qto_WallBaseQuantities": {
+        "Length": 5.5,
+        "Height": 3,
+        "Width": 0.1,
+        "NetSideArea": 15.51,
+        "NetVolume": 1.551
+      }
+    },
+    "classifications": [],
+    "materials": [
+      "Gypsum board",
+      "Steel stud"
+    ],
+    "has_representation": true,
+    "geometry": {
+      "bbox_min": [
+        30,
+        6,
+        0
+      ],
+      "bbox_max": [
+        35.5,
+        6.1,
+        3
+      ],
+      "volume_m3": 1.551,
+      "area_m2": 15.51,
+      "triangle_count": 36
+    }
+  },
+  "0Su5vpiqehHyl133Yx1RPL": {
+    "global_id": "0Su5vpiqehHyl133Yx1RPL",
+    "step_id": 227,
+    "ifc_type": "IfcWall",
+    "ancestors": [
+      "IfcWall",
+      "IfcBuildingElement",
+      "IfcElement",
+      "IfcProduct",
+      "IfcObject",
+      "IfcObjectDefinition",
+      "IfcRoot"
+    ],
+    "predefined_type": "STANDARD",
+    "name": "WL-006 Ward Partition A",
+    "description": null,
+    "object_type": null,
+    "tag": "200065",
+    "type_name": "Basic Wall: Interior - Partition 100",
+    "storey": "Level 0",
+    "container": {
+      "global_id": "2vcXfRFMeC9Ux8WeYvIPM6",
+      "ifc_type": "IfcBuildingStorey",
+      "name": "Level 0"
+    },
+    "psets": {
+      "Pset_WallCommon": {
+        "IsExternal": false,
+        "FireRating": "30",
+        "LoadBearing": false,
+        "Reference": "Interior - Partition 100",
+        "AcousticRating": "Rw 44 dB"
+      },
+      "Pset_QuantityTakeOff": {
+        "Source": "Revit"
+      }
+    },
+    "quantities": {
+      "Qto_WallBaseQuantities": {
+        "Length": 4.1,
+        "Height": 3,
+        "Width": 0.1,
+        "NetSideArea": 11.56,
+        "NetVolume": 1.156
+      }
+    },
+    "classifications": [],
+    "materials": [
+      "Gypsum board",
+      "Steel stud"
+    ],
+    "has_representation": true,
+    "geometry": {
+      "bbox_min": [
+        36.5,
+        6,
+        0
+      ],
+      "bbox_max": [
+        40.6,
+        6.1,
+        3
+      ],
+      "volume_m3": 1.156,
+      "area_m2": 11.56,
+      "triangle_count": 36
+    }
+  },
+  "1LY6_LcAGrieIKxzelKD$M": {
+    "global_id": "1LY6_LcAGrieIKxzelKD$M",
+    "step_id": 261,
+    "ifc_type": "IfcWall",
+    "ancestors": [
+      "IfcWall",
+      "IfcBuildingElement",
+      "IfcElement",
+      "IfcProduct",
+      "IfcObject",
+      "IfcObjectDefinition",
+      "IfcRoot"
+    ],
+    "predefined_type": "STANDARD",
+    "name": "WL-007 Ward Partition B",
+    "description": null,
+    "object_type": null,
+    "tag": "200078",
+    "type_name": "Basic Wall: Interior - Partition 100",
+    "storey": "Level 0",
+    "container": {
+      "global_id": "2vcXfRFMeC9Ux8WeYvIPM6",
+      "ifc_type": "IfcBuildingStorey",
+      "name": "Level 0"
+    },
+    "psets": {
+      "Pset_WallCommon": {
+        "IsExternal": false,
+        "FireRating": "30",
+        "LoadBearing": false,
+        "Reference": "Interior - Partition 100",
+        "AcousticRating": "Rw 44 dB"
+      },
+      "Pset_QuantityTakeOff": {
+        "Source": "Revit"
+      }
+    },
+    "quantities": {
+      "Qto_WallBaseQuantities": {
+        "Length": 4.1,
+        "Height": 3,
+        "Width": 0.1,
+        "NetSideArea": 11.56,
+        "NetVolume": 1.156
+      }
+    },
+    "classifications": [
+      {
+        "system": "Uniclass 2015",
+        "code": "EF_25_30",
+        "name": "Walls"
+      }
+    ],
+    "materials": [
+      "Gypsum board",
+      "Steel stud"
+    ],
+    "has_representation": true,
+    "geometry": {
+      "bbox_min": [
+        43,
+        6,
+        0
+      ],
+      "bbox_max": [
+        47.1,
+        6.1,
+        3
+      ],
+      "volume_m3": 1.156,
+      "area_m2": 11.56,
+      "triangle_count": 36
+    }
+  },
+  "0G88D713uuO1DRajF9fuTW": {
+    "global_id": "0G88D713uuO1DRajF9fuTW",
+    "step_id": 278,
+    "ifc_type": "IfcWall",
+    "ancestors": [
+      "IfcWall",
+      "IfcBuildingElement",
+      "IfcElement",
+      "IfcProduct",
+      "IfcObject",
+      "IfcObjectDefinition",
+      "IfcRoot"
+    ],
+    "predefined_type": "STANDARD",
+    "name": "WL-101 Exterior North",
+    "description": null,
+    "object_type": null,
+    "tag": "200091",
+    "type_name": "Basic Wall: Exterior - Masonry 300",
+    "storey": "Level 1",
+    "container": {
+      "global_id": "2gddZueDZNL888Z_$X5cpS",
+      "ifc_type": "IfcBuildingStorey",
+      "name": "Level 1"
+    },
+    "psets": {
+      "Pset_WallCommon": {
+        "IsExternal": true,
+        "FireRating": "60",
+        "LoadBearing": true,
+        "Reference": "Exterior - Masonry 300",
+        "AcousticRating": "Rw 52 dB"
+      },
+      "Pset_QuantityTakeOff": {
+        "Source": "Revit"
+      }
+    },
+    "quantities": {
+      "Qto_WallBaseQuantities": {
+        "Length": 8.4,
+        "Height": 3,
+        "Width": 0.3,
+        "NetSideArea": 23.69,
+        "NetVolume": 7.107
+      }
+    },
+    "classifications": [
+      {
+        "system": "Uniclass 2015",
+        "code": "EF_25_10",
+        "name": "Walls"
+      }
+    ],
+    "materials": [
+      "Brick",
+      "Insulation",
+      "Concrete block"
+    ],
+    "has_representation": true,
+    "geometry": {
+      "bbox_min": [
+        4,
+        0,
+        3.2
+      ],
+      "bbox_max": [
+        12.4,
+        0.3,
+        6.2
+      ],
+      "volume_m3": 7.107,
+      "area_m2": 23.69,
+      "triangle_count": 36
+    }
+  },
+  "0nR0WRk2usN65N$DkULGo$": {
+    "global_id": "0nR0WRk2usN65N$DkULGo$",
+    "step_id": 292,
+    "ifc_type": "IfcWall",
+    "ancestors": [
+      "IfcWall",
+      "IfcBuildingElement",
+      "IfcElement",
+      "IfcProduct",
+      "IfcObject",
+      "IfcObjectDefinition",
+      "IfcRoot"
+    ],
+    "predefined_type": "STANDARD",
+    "name": "WL-102 Exterior East",
+    "description": null,
+    "object_type": null,
+    "tag": "200104",
+    "type_name": "Basic Wall: Exterior - Masonry 300",
+    "storey": "Level 1",
+    "container": {
+      "global_id": "2gddZueDZNL888Z_$X5cpS",
+      "ifc_type": "IfcBuildingStorey",
+      "name": "Level 1"
+    },
+    "psets": {
+      "Pset_WallCommon": {
+        "IsExternal": true,
+        "FireRating": "60",
+        "LoadBearing": true,
+        "Reference": "Exterior - Masonry 300",
+        "AcousticRating": "Rw 52 dB"
+      },
+      "Pset_QuantityTakeOff": {
+        "Source": "Revit"
+      }
+    },
+    "quantities": {
+      "Qto_WallBaseQuantities": {
+        "Length": 6.2,
+        "Height": 3,
+        "Width": 0.3,
+        "NetSideArea": 17.48,
+        "NetVolume": 5.244
+      }
+    },
+    "classifications": [
+      {
+        "system": "Uniclass 2015",
+        "code": "EF_25_10",
+        "name": "Walls"
+      }
+    ],
+    "materials": [
+      "Brick",
+      "Insulation",
+      "Concrete block"
+    ],
+    "has_representation": true,
+    "geometry": {
+      "bbox_min": [
+        10.5,
+        0,
+        3.2
+      ],
+      "bbox_max": [
+        16.7,
+        0.3,
+        6.2
+      ],
+      "volume_m3": 5.244,
+      "area_m2": 17.48,
+      "triangle_count": 36
+    }
+  },
+  "2bFbMmDx80IJ5Pv2knOTw0": {
+    "global_id": "2bFbMmDx80IJ5Pv2knOTw0",
+    "step_id": 320,
+    "ifc_type": "IfcWall",
+    "ancestors": [
+      "IfcWall",
+      "IfcBuildingElement",
+      "IfcElement",
+      "IfcProduct",
+      "IfcObject",
+      "IfcObjectDefinition",
+      "IfcRoot"
+    ],
+    "predefined_type": "STANDARD",
+    "name": "Interior Partition 100",
+    "description": null,
+    "object_type": null,
+    "tag": "200117",
+    "type_name": "Basic Wall: Interior - Partition 100",
+    "storey": "Level 1",
+    "container": {
+      "global_id": "2gddZueDZNL888Z_$X5cpS",
+      "ifc_type": "IfcBuildingStorey",
+      "name": "Level 1"
+    },
+    "psets": {
+      "Pset_WallCommon": {
+        "IsExternal": false,
+        "FireRating": "30",
+        "LoadBearing": false,
+        "Reference": "Interior - Partition 100",
+        "AcousticRating": "Rw 44 dB"
+      },
+      "Pset_QuantityTakeOff": {
+        "Source": "Revit"
+      }
+    },
+    "quantities": {
+      "Qto_WallBaseQuantities": {
+        "Length": 3.8,
+        "Height": 3,
+        "Width": 0.1,
+        "NetSideArea": 10.72,
+        "NetVolume": 1.072
+      }
+    },
+    "classifications": [
+      {
+        "system": "Uniclass 2015",
+        "code": "EF_25_30",
+        "name": "Walls"
+      }
+    ],
+    "materials": [
+      "Gypsum board",
+      "Steel stud"
+    ],
+    "has_representation": true,
+    "geometry": {
+      "bbox_min": [
+        17,
+        6,
+        3.2
+      ],
+      "bbox_max": [
+        20.8,
+        6.1,
+        6.2
+      ],
+      "volume_m3": 1.072,
+      "area_m2": 10.72,
+      "triangle_count": 36
+    }
+  },
+  "0q$3RSf4cWMmVXQ1FjqB3n": {
+    "global_id": "0q$3RSf4cWMmVXQ1FjqB3n",
+    "step_id": 356,
+    "ifc_type": "IfcWall",
+    "ancestors": [
+      "IfcWall",
+      "IfcBuildingElement",
+      "IfcElement",
+      "IfcProduct",
+      "IfcObject",
+      "IfcObjectDefinition",
+      "IfcRoot"
+    ],
+    "predefined_type": "STANDARD",
+    "name": "Interior Partition 100",
+    "description": null,
+    "object_type": null,
+    "tag": "200130",
+    "type_name": "Basic Wall: Interior - Partition 100",
+    "storey": "Level 1",
+    "container": {
+      "global_id": "2gddZueDZNL888Z_$X5cpS",
+      "ifc_type": "IfcBuildingStorey",
+      "name": "Level 1"
+    },
+    "psets": {
+      "Pset_WallCommon": {
+        "IsExternal": false,
+        "FireRating": "30",
+        "LoadBearing": false,
+        "Reference": "Interior - Partition 100",
+        "AcousticRating": "Rw 44 dB"
+      },
+      "Pset_QuantityTakeOff": {
+        "Source": "Revit"
+      }
+    },
+    "quantities": {
+      "Qto_WallBaseQuantities": {
+        "Length": 3.8,
+        "Height": 3,
+        "Width": 0.1,
+        "NetSideArea": 10.72,
+        "NetVolume": 1.072
+      }
+    },
+    "classifications": [
+      {
+        "system": "Uniclass 2015",
+        "code": "EF_25_30",
+        "name": "Walls"
+      }
+    ],
+    "materials": [
+      "Gypsum board",
+      "Steel stud"
+    ],
+    "has_representation": true,
+    "geometry": {
+      "bbox_min": [
+        23.5,
+        6,
+        3.2
+      ],
+      "bbox_max": [
+        27.3,
+        6.1,
+        6.2
+      ],
+      "volume_m3": 1.072,
+      "area_m2": 10.72,
+      "triangle_count": 36
+    }
+  },
+  "1nmYVpkNnVa7mZaFpWNCO$": {
+    "global_id": "1nmYVpkNnVa7mZaFpWNCO$",
+    "step_id": 374,
+    "ifc_type": "IfcWall",
+    "ancestors": [
+      "IfcWall",
+      "IfcBuildingElement",
+      "IfcElement",
+      "IfcProduct",
+      "IfcObject",
+      "IfcObjectDefinition",
+      "IfcRoot"
+    ],
+    "predefined_type": "STANDARD",
+    "name": "Interior Partition 100",
+    "description": null,
+    "object_type": null,
+    "tag": "200143",
+    "type_name": "Basic Wall: Interior - Partition 100",
+    "storey": "Level 1",
+    "container": {
+      "global_id": "2gddZueDZNL888Z_$X5cpS",
+      "ifc_type": "IfcBuildingStorey",
+      "name": "Level 1"
+    },
+    "psets": {
+      "Pset_WallCommon": {
+        "IsExternal": false,
+        "FireRating": "30",
+        "LoadBearing": false,
+        "Reference": "Interior - Partition 100",
+        "AcousticRating": "Rw 44 dB"
+      },
+      "Pset_QuantityTakeOff": {
+        "Source": "Revit"
+      }
+    },
+    "quantities": {
+      "Qto_WallBaseQuantities": {
+        "Length": 5.1,
+        "Height": 3,
+        "Width": 0.1,
+        "NetSideArea": 14.38,
+        "NetVolume": 1.438
+      }
+    },
+    "classifications": [
+      {
+        "system": "Uniclass 2015",
+        "code": "EF_25_30",
+        "name": "Walls"
+      }
+    ],
+    "materials": [
+      "Gypsum board",
+      "Steel stud"
+    ],
+    "has_representation": true,
+    "geometry": {
+      "bbox_min": [
+        30,
+        6,
+        3.2
+      ],
+      "bbox_max": [
+        35.1,
+        6.1,
+        6.2
+      ],
+      "volume_m3": 1.438,
+      "area_m2": 14.38,
+      "triangle_count": 36
+    }
+  },
+  "1FZ0KcB$2Ojs81wK0Js6xI": {
+    "global_id": "1FZ0KcB$2Ojs81wK0Js6xI",
+    "step_id": 406,
+    "ifc_type": "IfcSlab",
+    "ancestors": [
+      "IfcSlab",
+      "IfcBuildingElement",
+      "IfcElement",
+      "IfcProduct",
+      "IfcObject",
+      "IfcObjectDefinition",
+      "IfcRoot"
+    ],
+    "predefined_type": "FLOOR",
+    "name": "SL-001 Ground Slab A",
+    "description": null,
+    "object_type": null,
+    "tag": "310000",
+    "type_name": "Floor: Concrete 200",
+    "storey": "Level 0",
+    "container": {
+      "global_id": "2vcXfRFMeC9Ux8WeYvIPM6",
+      "ifc_type": "IfcBuildingStorey",
+      "name": "Level 0"
+    },
+    "psets": {
+      "Pset_SlabCommon": {
+        "IsExternal": false,
+        "LoadBearing": true,
+        "FireRating": "90",
+        "Reference": "Floor: Concrete 200"
+      }
+    },
+    "quantities": {
+      "Qto_SlabBaseQuantities": {
+        "Width": 0.2,
+        "Perimeter": 28.98,
+        "GrossArea": 52.5,
+        "NetArea": 52.5,
+        "NetVolume": 10.5,
+        "GrossVolume": 10.5
+      }
+    },
+    "classifications": [
+      {
+        "system": "Uniclass 2015",
+        "code": "EF_20_30",
+        "name": "Floors"
+      }
+    ],
+    "materials": [
+      "Reinforced concrete C30/37"
+    ],
+    "has_representation": true,
+    "geometry": {
+      "bbox_min": [
+        0,
+        0,
+        -0.2
+      ],
+      "bbox_max": [
+        7.246,
+        7.246,
+        0
+      ],
+      "volume_m3": 10.5,
+      "area_m2": 52.5,
+      "triangle_count": 24
+    }
+  },
+  "12M$wQmTo6YRtuGvqGAb5f": {
+    "global_id": "12M$wQmTo6YRtuGvqGAb5f",
+    "step_id": 439,
+    "ifc_type": "IfcSlab",
+    "ancestors": [
+      "IfcSlab",
+      "IfcBuildingElement",
+      "IfcElement",
+      "IfcProduct",
+      "IfcObject",
+      "IfcObjectDefinition",
+      "IfcRoot"
+    ],
+    "predefined_type": "FLOOR",
+    "name": "SL-002 Ground Slab B",
+    "description": null,
+    "object_type": null,
+    "tag": "310017",
+    "type_name": "Floor: Concrete 200",
+    "storey": "Level 0",
+    "container": {
+      "global_id": "2vcXfRFMeC9Ux8WeYvIPM6",
+      "ifc_type": "IfcBuildingStorey",
+      "name": "Level 0"
+    },
+    "psets": {
+      "Pset_SlabCommon": {
+        "IsExternal": false,
+        "LoadBearing": true,
+        "FireRating": "90",
+        "Reference": "Floor: Concrete 200"
+      }
+    },
+    "quantities": {
+      "Qto_SlabBaseQuantities": {
+        "Width": 0.2,
+        "Perimeter": 24.72,
+        "GrossArea": 38.2,
+        "NetArea": 38.2,
+        "NetVolume": 7.64,
+        "GrossVolume": 7.64
+      }
+    },
+    "classifications": [],
+    "materials": [
+      "Reinforced concrete C30/37"
+    ],
+    "has_representation": true,
+    "geometry": {
+      "bbox_min": [
+        0,
+        0,
+        -0.2
+      ],
+      "bbox_max": [
+        6.181,
+        6.181,
+        0
+      ],
+      "volume_m3": 7.64,
+      "area_m2": 38.2,
+      "triangle_count": 24
+    }
+  },
+  "166Krxqs3mOc2CNXQCxpv_": {
+    "global_id": "166Krxqs3mOc2CNXQCxpv_",
+    "step_id": 459,
+    "ifc_type": "IfcSlab",
+    "ancestors": [
+      "IfcSlab",
+      "IfcBuildingElement",
+      "IfcElement",
+      "IfcProduct",
+      "IfcObject",
+      "IfcObjectDefinition",
+      "IfcRoot"
+    ],
+    "predefined_type": "FLOOR",
+    "name": "SL-003 Ground Slab C",
+    "description": null,
+    "object_type": null,
+    "tag": "310034",
+    "type_name": "Floor: Concrete 200",
+    "storey": "Level 0",
+    "container": {
+      "global_id": "2vcXfRFMeC9Ux8WeYvIPM6",
+      "ifc_type": "IfcBuildingStorey",
+      "name": "Level 0"
+    },
+    "psets": {
+      "Pset_SlabCommon": {
+        "IsExternal": false,
+        "LoadBearing": true,
+        "FireRating": "90",
+        "Reference": "Floor: Concrete 200"
+      }
+    },
+    "quantities": {
+      "Qto_SlabBaseQuantities": {
+        "Width": 0.2,
+        "Perimeter": 21.13,
+        "GrossArea": 27.9,
+        "NetArea": 27.9,
+        "NetVolume": 5.58,
+        "GrossVolume": 5.58
+      }
+    },
+    "classifications": [
+      {
+        "system": "Uniclass 2015",
+        "code": "EF_20_30",
+        "name": "Floors"
+      }
+    ],
+    "materials": [
+      "Reinforced concrete C30/37"
+    ],
+    "has_representation": true,
+    "geometry": {
+      "bbox_min": [
+        0,
+        0,
+        -0.2
+      ],
+      "bbox_max": [
+        5.282,
+        5.282,
+        0
+      ],
+      "volume_m3": 5.58,
+      "area_m2": 27.9,
+      "triangle_count": 24
+    }
+  },
+  "15U5n7_FxL986USp9klNEa": {
+    "global_id": "15U5n7_FxL986USp9klNEa",
+    "step_id": 485,
+    "ifc_type": "IfcSlab",
+    "ancestors": [
+      "IfcSlab",
+      "IfcBuildingElement",
+      "IfcElement",
+      "IfcProduct",
+      "IfcObject",
+      "IfcObjectDefinition",
+      "IfcRoot"
+    ],
+    "predefined_type": "FLOOR",
+    "name": "SL-101 First Floor A",
+    "description": null,
+    "object_type": null,
+    "tag": "310100",
+    "type_name": "Floor: Concrete 200",
+    "storey": "Level 1",
+    "container": {
+      "global_id": "2gddZueDZNL888Z_$X5cpS",
+      "ifc_type": "IfcBuildingStorey",
+      "name": "Level 1"
+    },
+    "psets": {
+      "Pset_SlabCommon": {
+        "IsExternal": false,
+        "LoadBearing": true,
+        "FireRating": "90",
+        "Reference": "Floor: Concrete 200"
+      }
+    },
+    "quantities": {
+      "Qto_SlabBaseQuantities": {
+        "Width": 0.2,
+        "Perimeter": 28.98,
+        "GrossArea": 52.5,
+        "NetArea": 52.5,
+        "NetVolume": 10.5,
+        "GrossVolume": 10.5
+      }
+    },
+    "classifications": [
+      {
+        "system": "Uniclass 2015",
+        "code": "EF_20_30",
+        "name": "Floors"
+      }
+    ],
+    "materials": [
+      "Reinforced concrete C30/37"
+    ],
+    "has_representation": true,
+    "geometry": {
+      "bbox_min": [
+        0,
+        0,
+        3
+      ],
+      "bbox_max": [
+        7.246,
+        7.246,
+        3.2
+      ],
+      "volume_m3": 10.5,
+      "area_m2": 52.5,
+      "triangle_count": 24
+    }
+  },
+  "1MbnCFQzZeOJp0yR78g9wF": {
+    "global_id": "1MbnCFQzZeOJp0yR78g9wF",
+    "step_id": 498,
+    "ifc_type": "IfcSlab",
+    "ancestors": [
+      "IfcSlab",
+      "IfcBuildingElement",
+      "IfcElement",
+      "IfcProduct",
+      "IfcObject",
+      "IfcObjectDefinition",
+      "IfcRoot"
+    ],
+    "predefined_type": "FLOOR",
+    "name": "SL-102 First Floor B",
+    "description": null,
+    "object_type": null,
+    "tag": "310117",
+    "type_name": "Floor: Concrete 200",
+    "storey": "Level 1",
+    "container": {
+      "global_id": "2gddZueDZNL888Z_$X5cpS",
+      "ifc_type": "IfcBuildingStorey",
+      "name": "Level 1"
+    },
+    "psets": {
+      "Pset_SlabCommon": {
+        "IsExternal": false,
+        "LoadBearing": true,
+        "FireRating": "90",
+        "Reference": "Floor: Concrete 200"
+      }
+    },
+    "quantities": {
+      "Qto_SlabBaseQuantities": {
+        "Width": 0.2,
+        "Perimeter": 24.72,
+        "GrossArea": 38.2,
+        "NetArea": 38.2,
+        "NetVolume": 7.64,
+        "GrossVolume": 7.64
+      }
+    },
+    "classifications": [
+      {
+        "system": "Uniclass 2015",
+        "code": "EF_20_30",
+        "name": "Floors"
+      }
+    ],
+    "materials": [
+      "Reinforced concrete C30/37"
+    ],
+    "has_representation": true,
+    "geometry": {
+      "bbox_min": [
+        0,
+        0,
+        3
+      ],
+      "bbox_max": [
+        6.181,
+        6.181,
+        3.2
+      ],
+      "volume_m3": 7.64,
+      "area_m2": 38.2,
+      "triangle_count": 24
+    }
+  },
+  "3PQ3WzhS7JuzGeGwIIK4qa": {
+    "global_id": "3PQ3WzhS7JuzGeGwIIK4qa",
+    "step_id": 518,
+    "ifc_type": "IfcSlab",
+    "ancestors": [
+      "IfcSlab",
+      "IfcBuildingElement",
+      "IfcElement",
+      "IfcProduct",
+      "IfcObject",
+      "IfcObjectDefinition",
+      "IfcRoot"
+    ],
+    "predefined_type": "ROOF",
+    "name": "SL-103 Roof Slab",
+    "description": null,
+    "object_type": null,
+    "tag": "310134",
+    "type_name": "Floor: Concrete 200",
+    "storey": "Level 1",
+    "container": {
+      "global_id": "2gddZueDZNL888Z_$X5cpS",
+      "ifc_type": "IfcBuildingStorey",
+      "name": "Level 1"
+    },
+    "psets": {
+      "Pset_SlabCommon": {
+        "IsExternal": false,
+        "LoadBearing": true,
+        "FireRating": "90",
+        "Reference": "Floor: Concrete 200"
+      }
+    },
+    "quantities": {
+      "Qto_SlabBaseQuantities": {
+        "Width": 0.2,
+        "Perimeter": 16.97,
+        "GrossArea": 18,
+        "NetArea": 18,
+        "NetVolume": 0,
+        "GrossVolume": 0
+      }
+    },
+    "classifications": [
+      {
+        "system": "Uniclass 2015",
+        "code": "EF_20_30",
+        "name": "Floors"
+      }
+    ],
+    "materials": [
+      "Reinforced concrete C30/37"
+    ],
+    "has_representation": true,
+    "geometry": {
+      "bbox_min": [
+        0,
+        0,
+        3
+      ],
+      "bbox_max": [
+        4.243,
+        4.243,
+        3.2
+      ],
+      "volume_m3": 0,
+      "area_m2": 18,
+      "triangle_count": 24
+    }
+  },
+  "2hdPjTbYxhnQzO_9VqPrg6": {
+    "global_id": "2hdPjTbYxhnQzO_9VqPrg6",
+    "step_id": 533,
+    "ifc_type": "IfcBeam",
+    "ancestors": [
+      "IfcBeam",
+      "IfcBuildingElement",
+      "IfcElement",
+      "IfcProduct",
+      "IfcObject",
+      "IfcObjectDefinition",
+      "IfcRoot"
+    ],
+    "predefined_type": "BEAM",
+    "name": "BM-201 Grid A",
+    "description": null,
+    "object_type": null,
+    "tag": "410000",
+    "type_name": "Concrete-Rectangular Beam: 300 x 600",
+    "storey": "Level 0",
+    "container": {
+      "global_id": "2vcXfRFMeC9Ux8WeYvIPM6",
+      "ifc_type": "IfcBuildingStorey",
+      "name": "Level 0"
+    },
+    "psets": {
+      "Pset_BeamCommon": {
+        "Reference": "300 x 600",
+        "LoadBearing": true,
+        "Span": 6.4,
+        "Slope": 0
+      }
+    },
+    "quantities": {
+      "Qto_BeamBaseQuantities": {
+        "Length": 6.4,
+        "CrossSectionArea": 0.06,
+        "NetVolume": 0.384,
+        "GrossWeight": 921.6
+      }
+    },
+    "classifications": [
+      {
+        "system": "Uniclass 2015",
+        "code": "Ss_25_10_30",
+        "name": "Beams"
+      }
+    ],
+    "materials": [
+      "Reinforced concrete C30/37"
+    ],
+    "has_representation": true,
+    "geometry": {
+      "bbox_min": [
+        4,
+        2,
+        2.7
+      ],
+      "bbox_max": [
+        10.4,
+        2.3,
+        3.3
+      ],
+      "volume_m3": 0.384,
+      "area_m2": 11.52,
+      "triangle_count": 12
+    }
+  },
+  "2oNLACeKQsS5h04e60ffP4": {
+    "global_id": "2oNLACeKQsS5h04e60ffP4",
+    "step_id": 564,
+    "ifc_type": "IfcBeam",
+    "ancestors": [
+      "IfcBeam",
+      "IfcBuildingElement",
+      "IfcElement",
+      "IfcProduct",
+      "IfcObject",
+      "IfcObjectDefinition",
+      "IfcRoot"
+    ],
+    "predefined_type": "BEAM",
+    "name": "BM-202 Grid B",
+    "description": null,
+    "object_type": null,
+    "tag": "410011",
+    "type_name": "Concrete-Rectangular Beam: 300 x 600",
+    "storey": "Level 0",
+    "container": {
+      "global_id": "2vcXfRFMeC9Ux8WeYvIPM6",
+      "ifc_type": "IfcBuildingStorey",
+      "name": "Level 0"
+    },
+    "psets": {
+      "Pset_BeamCommon": {
+        "Reference": "300 x 600",
+        "LoadBearing": true,
+        "Span": 6.4,
+        "Slope": 0
+      }
+    },
+    "quantities": {
+      "Qto_BeamBaseQuantities": {
+        "Length": 6.4,
+        "CrossSectionArea": 0.06,
+        "NetVolume": 0.384,
+        "GrossWeight": 921.6
+      }
+    },
+    "classifications": [
+      {
+        "system": "Uniclass 2015",
+        "code": "Ss_25_10_30",
+        "name": "Beams"
+      }
+    ],
+    "materials": [
+      "Reinforced concrete C30/37"
+    ],
+    "has_representation": true,
+    "geometry": {
+      "bbox_min": [
+        10.5,
+        2,
+        2.7
+      ],
+      "bbox_max": [
+        16.9,
+        2.3,
+        3.3
+      ],
+      "volume_m3": 0.384,
+      "area_m2": 11.52,
+      "triangle_count": 12
+    }
+  },
+  "0dXMTv4LWBtTxSTYs1$l1y": {
+    "global_id": "0dXMTv4LWBtTxSTYs1$l1y",
+    "step_id": 578,
+    "ifc_type": "IfcBeam",
+    "ancestors": [
+      "IfcBeam",
+      "IfcBuildingElement",
+      "IfcElement",
+      "IfcProduct",
+      "IfcObject",
+      "IfcObjectDefinition",
+      "IfcRoot"
+    ],
+    "predefined_type": "BEAM",
+    "name": "BM-203 Grid C",
+    "description": null,
+    "object_type": null,
+    "tag": "410022",
+    "type_name": "Concrete-Rectangular Beam: 300 x 600",
+    "storey": "Level 0",
+    "container": {
+      "global_id": "2vcXfRFMeC9Ux8WeYvIPM6",
+      "ifc_type": "IfcBuildingStorey",
+      "name": "Level 0"
+    },
+    "psets": {
+      "Pset_BeamCommon": {
+        "Reference": "",
+        "LoadBearing": true,
+        "Span": 5.1,
+        "Slope": 0
+      }
+    },
+    "quantities": {
+      "Qto_BeamBaseQuantities": {
+        "Length": 5.1,
+        "CrossSectionArea": 0.06,
+        "NetVolume": 0.306,
+        "GrossWeight": 734.4
+      }
+    },
+    "classifications": [
+      {
+        "system": "Uniclass 2015",
+        "code": "Ss_25_10_30",
+        "name": "Beams"
+      }
+    ],
+    "materials": [
+      "Reinforced concrete C30/37"
+    ],
+    "has_representation": true,
+    "geometry": {
+      "bbox_min": [
+        17,
+        2,
+        2.7
+      ],
+      "bbox_max": [
+        22.1,
+        2.3,
+        3.3
+      ],
+      "volume_m3": 0.306,
+      "area_m2": 9.18,
+      "triangle_count": 12
+    }
+  },
+  "2sGGtI9hOWpFmFpjg5ISky": {
+    "global_id": "2sGGtI9hOWpFmFpjg5ISky",
+    "step_id": 613,
+    "ifc_type": "IfcBeam",
+    "ancestors": [
+      "IfcBeam",
+      "IfcBuildingElement",
+      "IfcElement",
+      "IfcProduct",
+      "IfcObject",
+      "IfcObjectDefinition",
+      "IfcRoot"
+    ],
+    "predefined_type": "BEAM",
+    "name": "BM-301 Grid A",
+    "description": null,
+    "object_type": null,
+    "tag": "410050",
+    "type_name": "Concrete-Rectangular Beam: 300 x 600",
+    "storey": "Level 1",
+    "container": {
+      "global_id": "2gddZueDZNL888Z_$X5cpS",
+      "ifc_type": "IfcBuildingStorey",
+      "name": "Level 1"
+    },
+    "psets": {
+      "Pset_BeamCommon": {
+        "Reference": "300 x 600",
+        "LoadBearing": true,
+        "Span": 6.4,
+        "Slope": 0
+      }
+    },
+    "quantities": {
+      "Qto_BeamBaseQuantities": {
+        "Length": 6.4,
+        "CrossSectionArea": 0.06,
+        "NetVolume": 0.384,
+        "GrossWeight": 921.6
+      }
+    },
+    "classifications": [
+      {
+        "system": "Uniclass 2015",
+        "code": "Ss_25_10_30",
+        "name": "Beams"
+      }
+    ],
+    "materials": [
+      "Reinforced concrete C30/37"
+    ],
+    "has_representation": true,
+    "geometry": {
+      "bbox_min": [
+        4,
+        2,
+        5.9
+      ],
+      "bbox_max": [
+        10.4,
+        2.3,
+        6.5
+      ],
+      "volume_m3": 0.384,
+      "area_m2": 11.52,
+      "triangle_count": 12
+    }
+  },
+  "1Sl8a3y9LGNgxAczrslENP": {
+    "global_id": "1Sl8a3y9LGNgxAczrslENP",
+    "step_id": 637,
+    "ifc_type": "IfcBeam",
+    "ancestors": [
+      "IfcBeam",
+      "IfcBuildingElement",
+      "IfcElement",
+      "IfcProduct",
+      "IfcObject",
+      "IfcObjectDefinition",
+      "IfcRoot"
+    ],
+    "predefined_type": "BEAM",
+    "name": "BM-302 Grid B",
+    "description": null,
+    "object_type": null,
+    "tag": "410061",
+    "type_name": "Concrete-Rectangular Beam: 300 x 600",
+    "storey": "Level 1",
+    "container": {
+      "global_id": "2gddZueDZNL888Z_$X5cpS",
+      "ifc_type": "IfcBuildingStorey",
+      "name": "Level 1"
+    },
+    "psets": {
+      "Pset_BeamCommon": {
+        "Reference": "300 x 600",
+        "LoadBearing": true,
+        "Span": 6.4,
+        "Slope": 0
+      }
+    },
+    "quantities": {
+      "Qto_BeamBaseQuantities": {
+        "Length": 6.4,
+        "CrossSectionArea": 0.06,
+        "NetVolume": 0,
+        "GrossWeight": 0
+      }
+    },
+    "classifications": [
+      {
+        "system": "Uniclass 2015",
+        "code": "Ss_25_10_30",
+        "name": "Beams"
+      }
+    ],
+    "materials": [
+      "Reinforced concrete C30/37"
+    ],
+    "has_representation": true,
+    "geometry": {
+      "bbox_min": [
+        10.5,
+        2,
+        5.9
+      ],
+      "bbox_max": [
+        16.9,
+        2.3,
+        6.5
+      ],
+      "volume_m3": 0,
+      "area_m2": 11.52,
+      "triangle_count": 12
+    }
+  },
+  "1OP0QEEm_oQTO$CVJP1fBl": {
+    "global_id": "1OP0QEEm_oQTO$CVJP1fBl",
+    "step_id": 653,
+    "ifc_type": "IfcBeam",
+    "ancestors": [
+      "IfcBeam",
+      "IfcBuildingElement",
+      "IfcElement",
+      "IfcProduct",
+      "IfcObject",
+      "IfcObjectDefinition",
+      "IfcRoot"
+    ],
+    "predefined_type": "BEAM",
+    "name": "BM-303 Grid C",
+    "description": null,
+    "object_type": null,
+    "tag": "410072",
+    "type_name": "Concrete-Rectangular Beam: 300 x 600",
+    "storey": "Level 1",
+    "container": {
+      "global_id": "2gddZueDZNL888Z_$X5cpS",
+      "ifc_type": "IfcBuildingStorey",
+      "name": "Level 1"
+    },
+    "psets": {
+      "Pset_BeamCommon": {
+        "Reference": "300 x 600",
+        "LoadBearing": true,
+        "Span": 5.1,
+        "Slope": 0
+      }
+    },
+    "quantities": {
+      "Qto_BeamBaseQuantities": {
+        "Length": 5.1,
+        "CrossSectionArea": 0.06,
+        "NetVolume": 0.306,
+        "GrossWeight": 734.4
+      }
+    },
+    "classifications": [
+      {
+        "system": "Uniclass 2015",
+        "code": "Ss_25_10_30",
+        "name": "Beams"
+      }
+    ],
+    "materials": [
+      "Reinforced concrete C30/37"
+    ],
+    "has_representation": true,
+    "geometry": {
+      "bbox_min": [
+        17,
+        2,
+        5.9
+      ],
+      "bbox_max": [
+        22.1,
+        2.3,
+        6.5
+      ],
+      "volume_m3": 0.306,
+      "area_m2": 9.18,
+      "triangle_count": 12
+    }
+  },
+  "0eF5r8X4M60ZhKSwONpeGB": {
+    "global_id": "0eF5r8X4M60ZhKSwONpeGB",
+    "step_id": 678,
+    "ifc_type": "IfcDoor",
+    "ancestors": [
+      "IfcDoor",
+      "IfcBuildingElement",
+      "IfcElement",
+      "IfcProduct",
+      "IfcObject",
+      "IfcObjectDefinition",
+      "IfcRoot"
+    ],
+    "predefined_type": "DOOR",
+    "name": "DR-001 Entrance",
+    "description": null,
+    "object_type": null,
+    "tag": "520000",
+    "type_name": "Single-Flush: 900 x 2100",
+    "storey": "Level 0",
+    "container": {
+      "global_id": "2vcXfRFMeC9Ux8WeYvIPM6",
+      "ifc_type": "IfcBuildingStorey",
+      "name": "Level 0"
+    },
+    "psets": {
+      "Pset_DoorCommon": {
+        "FireRating": "30",
+        "IsExternal": false,
+        "SecurityRating": "",
+        "Reference": "Single-Flush 900 x 2100",
+        "HandicapAccessible": true
+      }
+    },
+    "quantities": {
+      "Qto_DoorBaseQuantities": {
+        "Width": 0.9,
+        "Height": 2.1,
+        "Area": 1.89
+      }
+    },
+    "classifications": [],
+    "materials": [
+      "Timber veneer",
+      "Steel frame"
+    ],
+    "has_representation": true,
+    "geometry": {
+      "bbox_min": [
+        4,
+        6,
+        0
+      ],
+      "bbox_max": [
+        4.9,
+        6.1,
+        2.1
+      ],
+      "volume_m3": 0.057,
+      "area_m2": 7.9,
+      "triangle_count": 48
+    }
+  },
+  "1MRlRU_s_aWM7jZJza0ojn": {
+    "global_id": "1MRlRU_s_aWM7jZJza0ojn",
+    "step_id": 686,
+    "ifc_type": "IfcDoor",
+    "ancestors": [
+      "IfcDoor",
+      "IfcBuildingElement",
+      "IfcElement",
+      "IfcProduct",
+      "IfcObject",
+      "IfcObjectDefinition",
+      "IfcRoot"
+    ],
+    "predefined_type": "DOOR",
+    "name": "DR-002 Ward A",
+    "description": null,
+    "object_type": null,
+    "tag": "520009",
+    "type_name": "Single-Flush: 900 x 2100",
+    "storey": "Level 0",
+    "container": {
+      "global_id": "2vcXfRFMeC9Ux8WeYvIPM6",
+      "ifc_type": "IfcBuildingStorey",
+      "name": "Level 0"
+    },
+    "psets": {
+      "Pset_DoorCommon": {
+        "FireRating": null,
+        "IsExternal": false,
+        "SecurityRating": "",
+        "Reference": "Single-Flush 900 x 2100",
+        "HandicapAccessible": true
+      }
+    },
+    "quantities": {
+      "Qto_DoorBaseQuantities": {
+        "Width": 0.9,
+        "Height": 2.1,
+        "Area": 1.89
+      }
+    },
+    "classifications": [],
+    "materials": [
+      "Timber veneer",
+      "Steel frame"
+    ],
+    "has_representation": true,
+    "geometry": {
+      "bbox_min": [
+        10.5,
+        6,
+        0
+      ],
+      "bbox_max": [
+        11.4,
+        6.1,
+        2.1
+      ],
+      "volume_m3": 0.057,
+      "area_m2": 7.9,
+      "triangle_count": 48
+    }
+  },
+  "2dNQtTEgnLIXuezSweuRH4": {
+    "global_id": "2dNQtTEgnLIXuezSweuRH4",
+    "step_id": 696,
+    "ifc_type": "IfcDoor",
+    "ancestors": [
+      "IfcDoor",
+      "IfcBuildingElement",
+      "IfcElement",
+      "IfcProduct",
+      "IfcObject",
+      "IfcObjectDefinition",
+      "IfcRoot"
+    ],
+    "predefined_type": "DOOR",
+    "name": "DR-003 Ward B",
+    "description": null,
+    "object_type": null,
+    "tag": "520018",
+    "type_name": "Single-Flush: 900 x 2100",
+    "storey": "Level 0",
+    "container": {
+      "global_id": "2vcXfRFMeC9Ux8WeYvIPM6",
+      "ifc_type": "IfcBuildingStorey",
+      "name": "Level 0"
+    },
+    "psets": {
+      "Pset_DoorCommon": {
+        "FireRating": "30",
+        "IsExternal": false,
+        "SecurityRating": "",
+        "Reference": "Single-Flush 900 x 2100",
+        "HandicapAccessible": true
+      }
+    },
+    "quantities": {
+      "Qto_DoorBaseQuantities": {
+        "Width": 0.9,
+        "Height": 2.1,
+        "Area": 1.89
+      }
+    },
+    "classifications": [],
+    "materials": [
+      "Timber veneer",
+      "Steel frame"
+    ],
+    "has_representation": true,
+    "geometry": {
+      "bbox_min": [
+        17,
+        6,
+        0
+      ],
+      "bbox_max": [
+        17.9,
+        6.1,
+        2.1
+      ],
+      "volume_m3": 0.057,
+      "area_m2": 7.9,
+      "triangle_count": 48
+    }
+  },
+  "1GeIo59LxB4u0DNJomzBfa": {
+    "global_id": "1GeIo59LxB4u0DNJomzBfa",
+    "step_id": 717,
+    "ifc_type": "IfcDoor",
+    "ancestors": [
+      "IfcDoor",
+      "IfcBuildingElement",
+      "IfcElement",
+      "IfcProduct",
+      "IfcObject",
+      "IfcObjectDefinition",
+      "IfcRoot"
+    ],
+    "predefined_type": "DOOR",
+    "name": "DR-004 Store",
+    "description": null,
+    "object_type": null,
+    "tag": "520027",
+    "type_name": "Single-Flush: 900 x 2100",
+    "storey": "Level 0",
+    "container": {
+      "global_id": "2vcXfRFMeC9Ux8WeYvIPM6",
+      "ifc_type": "IfcBuildingStorey",
+      "name": "Level 0"
+    },
+    "psets": {
+      "Pset_DoorCommon": {
+        "FireRating": "30",
+        "IsExternal": false,
+        "SecurityRating": "",
+        "Reference": "Single-Flush 900 x 2100",
+        "HandicapAccessible": true
+      }
+    },
+    "quantities": {
+      "Qto_DoorBaseQuantities": {
+        "Width": 0.9,
+        "Height": 2.1,
+        "Area": 1.89
+      }
+    },
+    "classifications": [
+      {
+        "system": "Uniclass 2015",
+        "code": "Pr_30_59_24",
+        "name": "Doors"
+      }
+    ],
+    "materials": [
+      "Timber veneer",
+      "Steel frame"
+    ],
+    "has_representation": true,
+    "geometry": {
+      "bbox_min": [
+        23.5,
+        6,
+        0
+      ],
+      "bbox_max": [
+        24.4,
+        6.1,
+        2.1
+      ],
+      "volume_m3": 0.057,
+      "area_m2": 7.9,
+      "triangle_count": 48
+    }
+  },
+  "2J$l8mtIeyv2gFTmkUMufV": {
+    "global_id": "2J$l8mtIeyv2gFTmkUMufV",
+    "step_id": 747,
+    "ifc_type": "IfcDoor",
+    "ancestors": [
+      "IfcDoor",
+      "IfcBuildingElement",
+      "IfcElement",
+      "IfcProduct",
+      "IfcObject",
+      "IfcObjectDefinition",
+      "IfcRoot"
+    ],
+    "predefined_type": "DOOR",
+    "name": "DR-101 Office 1",
+    "description": null,
+    "object_type": null,
+    "tag": "520040",
+    "type_name": "Single-Flush: 900 x 2100",
+    "storey": "Level 1",
+    "container": {
+      "global_id": "2gddZueDZNL888Z_$X5cpS",
+      "ifc_type": "IfcBuildingStorey",
+      "name": "Level 1"
+    },
+    "psets": {
+      "Pset_DoorCommon": {
+        "FireRating": "30",
+        "IsExternal": false,
+        "SecurityRating": "",
+        "Reference": "Single-Flush 900 x 2100",
+        "HandicapAccessible": true
+      }
+    },
+    "quantities": {
+      "Qto_DoorBaseQuantities": {
+        "Width": 0.9,
+        "Height": 2.1,
+        "Area": 0
+      }
+    },
+    "classifications": [
+      {
+        "system": "Uniclass 2015",
+        "code": "Pr_30_59_24",
+        "name": "Doors"
+      }
+    ],
+    "materials": [
+      "Timber veneer",
+      "Steel frame"
+    ],
+    "has_representation": true,
+    "geometry": {
+      "bbox_min": [
+        4,
+        6,
+        3.2
+      ],
+      "bbox_max": [
+        4.9,
+        6.1,
+        5.3
+      ],
+      "volume_m3": 0.057,
+      "area_m2": 7.9,
+      "triangle_count": 48
+    }
+  },
+  "3EEmiytiT$Ucd4LgCiogXw": {
+    "global_id": "3EEmiytiT$Ucd4LgCiogXw",
+    "step_id": 759,
+    "ifc_type": "IfcDoor",
+    "ancestors": [
+      "IfcDoor",
+      "IfcBuildingElement",
+      "IfcElement",
+      "IfcProduct",
+      "IfcObject",
+      "IfcObjectDefinition",
+      "IfcRoot"
+    ],
+    "predefined_type": "DOOR",
+    "name": "DR-102 Office 2",
+    "description": null,
+    "object_type": null,
+    "tag": "520049",
+    "type_name": "Single-Flush: 900 x 2100",
+    "storey": "Level 1",
+    "container": {
+      "global_id": "2gddZueDZNL888Z_$X5cpS",
+      "ifc_type": "IfcBuildingStorey",
+      "name": "Level 1"
+    },
+    "psets": {
+      "Pset_DoorCommon": {
+        "FireRating": "30",
+        "IsExternal": false,
+        "SecurityRating": "",
+        "Reference": "Single-Flush 900 x 2100",
+        "HandicapAccessible": true
+      }
+    },
+    "quantities": {
+      "Qto_DoorBaseQuantities": {
+        "Width": 0.9,
+        "Height": 2.1,
+        "Area": 0
+      }
+    },
+    "classifications": [
+      {
+        "system": "Uniclass 2015",
+        "code": "Pr_30_59_24",
+        "name": "Doors"
+      }
+    ],
+    "materials": [
+      "Timber veneer",
+      "Steel frame"
+    ],
+    "has_representation": true,
+    "geometry": {
+      "bbox_min": [
+        10.5,
+        6,
+        3.2
+      ],
+      "bbox_max": [
+        11.4,
+        6.1,
+        5.3
+      ],
+      "volume_m3": 0.057,
+      "area_m2": 7.9,
+      "triangle_count": 48
+    }
+  },
+  "24dZFaylC1aT$LbEPePCkS": {
+    "global_id": "24dZFaylC1aT$LbEPePCkS",
+    "step_id": 767,
+    "ifc_type": "IfcDoor",
+    "ancestors": [
+      "IfcDoor",
+      "IfcBuildingElement",
+      "IfcElement",
+      "IfcProduct",
+      "IfcObject",
+      "IfcObjectDefinition",
+      "IfcRoot"
+    ],
+    "predefined_type": "DOOR",
+    "name": "DR-103 Office 3",
+    "description": null,
+    "object_type": null,
+    "tag": "520058",
+    "type_name": "Single-Flush: 900 x 2100",
+    "storey": "Level 1",
+    "container": {
+      "global_id": "2gddZueDZNL888Z_$X5cpS",
+      "ifc_type": "IfcBuildingStorey",
+      "name": "Level 1"
+    },
+    "psets": {
+      "Pset_DoorCommon": {
+        "FireRating": "30",
+        "IsExternal": false,
+        "SecurityRating": "",
+        "Reference": "Single-Flush 900 x 2100",
+        "HandicapAccessible": true
+      }
+    },
+    "quantities": {
+      "Qto_DoorBaseQuantities": {
+        "Width": 0.9,
+        "Height": 2.1,
+        "Area": 0
+      }
+    },
+    "classifications": [
+      {
+        "system": "Uniclass 2015",
+        "code": "Pr_30_59_24",
+        "name": "Doors"
+      }
+    ],
+    "materials": [
+      "Timber veneer",
+      "Steel frame"
+    ],
+    "has_representation": true,
+    "geometry": {
+      "bbox_min": [
+        17,
+        6,
+        3.2
+      ],
+      "bbox_max": [
+        17.9,
+        6.1,
+        5.3
+      ],
+      "volume_m3": 0.057,
+      "area_m2": 7.9,
+      "triangle_count": 48
+    }
+  },
+  "1x2y3z-not-a-valid-gid": {
+    "global_id": "1x2y3z-not-a-valid-gid",
+    "step_id": 776,
+    "ifc_type": "IfcDoor",
+    "ancestors": [
+      "IfcDoor",
+      "IfcBuildingElement",
+      "IfcElement",
+      "IfcProduct",
+      "IfcObject",
+      "IfcObjectDefinition",
+      "IfcRoot"
+    ],
+    "predefined_type": "DOOR",
+    "name": "DR-104 Plant Room",
+    "description": null,
+    "object_type": null,
+    "tag": "520067",
+    "type_name": "Single-Flush: 900 x 2100",
+    "storey": "Level 1",
+    "container": {
+      "global_id": "2gddZueDZNL888Z_$X5cpS",
+      "ifc_type": "IfcBuildingStorey",
+      "name": "Level 1"
+    },
+    "psets": {
+      "Pset_DoorCommon": {
+        "FireRating": null,
+        "IsExternal": false,
+        "SecurityRating": "",
+        "Reference": "Single-Flush 900 x 2100",
+        "HandicapAccessible": true
+      }
+    },
+    "quantities": {
+      "Qto_DoorBaseQuantities": {
+        "Width": 0.9,
+        "Height": 2.1,
+        "Area": 1.89
+      }
+    },
+    "classifications": [
+      {
+        "system": "Uniclass 2015",
+        "code": "Pr_30_59_24",
+        "name": "Doors"
+      }
+    ],
+    "materials": [
+      "Timber veneer",
+      "Steel frame"
+    ],
+    "has_representation": true,
+    "geometry": {
+      "bbox_min": [
+        23.5,
+        6,
+        3.2
+      ],
+      "bbox_max": [
+        24.4,
+        6.1,
+        5.3
+      ],
+      "volume_m3": 0.057,
+      "area_m2": 7.9,
+      "triangle_count": 48
+    }
+  },
+  "0r0oEwqL$PWWEGC6JvwCHw": {
+    "global_id": "0r0oEwqL$PWWEGC6JvwCHw",
+    "step_id": 797,
+    "ifc_type": "IfcDuctSegment",
+    "ancestors": [
+      "IfcDuctSegment",
+      "IfcFlowSegment",
+      "IfcDistributionFlowElement",
+      "IfcDistributionElement",
+      "IfcElement",
+      "IfcProduct",
+      "IfcObject",
+      "IfcObjectDefinition",
+      "IfcRoot"
+    ],
+    "predefined_type": "RIGIDSEGMENT",
+    "name": "DU-001 Supply L0-1",
+    "description": null,
+    "object_type": null,
+    "tag": "630000",
+    "type_name": "Rectangular Duct: Mitered Elbows / Tees",
+    "storey": "Level 0",
+    "container": {
+      "global_id": "2vcXfRFMeC9Ux8WeYvIPM6",
+      "ifc_type": "IfcBuildingStorey",
+      "name": "Level 0"
+    },
+    "psets": {
+      "Pset_DuctSegmentTypeCommon": {
+        "Reference": "Rect 300x200"
+      },
+      "Pset_DuctSegmentOccurrence": {
+        "Insulated": true
+      }
+    },
+    "quantities": {},
+    "classifications": [
+      {
+        "system": "Uniclass 2015",
+        "code": "Ss_65_40_25",
+        "name": "Ventilation ducts"
+      }
+    ],
+    "materials": [
+      "Galvanised steel"
+    ],
+    "has_representation": true,
+    "geometry": {
+      "bbox_min": [
+        4,
+        3,
+        2.6
+      ],
+      "bbox_max": [
+        8.8,
+        3.3,
+        2.9
+      ],
+      "volume_m3": 0.432,
+      "area_m2": 4.8,
+      "triangle_count": 40
+    }
+  },
+  "0JihH1_bU_o4IBQmHPC9Xg": {
+    "global_id": "0JihH1_bU_o4IBQmHPC9Xg",
+    "step_id": 814,
+    "ifc_type": "IfcDuctSegment",
+    "ancestors": [
+      "IfcDuctSegment",
+      "IfcFlowSegment",
+      "IfcDistributionFlowElement",
+      "IfcDistributionElement",
+      "IfcElement",
+      "IfcProduct",
+      "IfcObject",
+      "IfcObjectDefinition",
+      "IfcRoot"
+    ],
+    "predefined_type": "RIGIDSEGMENT",
+    "name": "DU-002 Supply L0-2",
+    "description": null,
+    "object_type": null,
+    "tag": "630005",
+    "type_name": "Rectangular Duct: Mitered Elbows / Tees",
+    "storey": "Level 0",
+    "container": {
+      "global_id": "2vcXfRFMeC9Ux8WeYvIPM6",
+      "ifc_type": "IfcBuildingStorey",
+      "name": "Level 0"
+    },
+    "psets": {
+      "Pset_DuctSegmentTypeCommon": {
+        "Reference": "Rect 300x200"
+      },
+      "Pset_DuctSegmentOccurrence": {
+        "Insulated": true
+      }
+    },
+    "quantities": {},
+    "classifications": [
+      {
+        "system": "Uniclass 2015",
+        "code": "Ss_65_40_25",
+        "name": "Ventilation ducts"
+      }
+    ],
+    "materials": [
+      "Galvanised steel"
+    ],
+    "has_representation": true,
+    "geometry": {
+      "bbox_min": [
+        10.5,
+        3,
+        2.6
+      ],
+      "bbox_max": [
+        13.7,
+        3.3,
+        2.9
+      ],
+      "volume_m3": 0.288,
+      "area_m2": 3.2,
+      "triangle_count": 40
+    }
+  },
+  "2sHNTH3C7LskYhQ$6W8DKB": {
+    "global_id": "2sHNTH3C7LskYhQ$6W8DKB",
+    "step_id": 832,
+    "ifc_type": "IfcDuctSegment",
+    "ancestors": [
+      "IfcDuctSegment",
+      "IfcFlowSegment",
+      "IfcDistributionFlowElement",
+      "IfcDistributionElement",
+      "IfcElement",
+      "IfcProduct",
+      "IfcObject",
+      "IfcObjectDefinition",
+      "IfcRoot"
+    ],
+    "predefined_type": "RIGIDSEGMENT",
+    "name": "DU-003 Supply L0-3",
+    "description": null,
+    "object_type": null,
+    "tag": "630010",
+    "type_name": "Rectangular Duct: Mitered Elbows / Tees",
+    "storey": null,
+    "container": null,
+    "psets": {
+      "Pset_DuctSegmentTypeCommon": {
+        "Reference": "Rect 300x200"
+      },
+      "Pset_DuctSegmentOccurrence": {
+        "Insulated": true
+      }
+    },
+    "quantities": {
+      "Qto_DuctSegmentBaseQuantities": {
+        "Length": 5.6,
+        "CrossSectionArea": 0.09,
+        "GrossSurfaceArea": 5.6,
+        "NetVolume": 0.504
+      }
+    },
+    "classifications": [
+      {
+        "system": "Uniclass 2015",
+        "code": "Ss_65_40_25",
+        "name": "Ventilation ducts"
+      }
+    ],
+    "materials": [
+      "Galvanised steel"
+    ],
+    "has_representation": true,
+    "geometry": {
+      "bbox_min": [
+        17,
+        3,
+        2.6
+      ],
+      "bbox_max": [
+        22.6,
+        3.3,
+        2.9
+      ],
+      "volume_m3": 0.504,
+      "area_m2": 5.6,
+      "triangle_count": 40
+    }
+  },
+  "2u7LvBObeY_nk$dN$1RyCs": {
+    "global_id": "2u7LvBObeY_nk$dN$1RyCs",
+    "step_id": 839,
+    "ifc_type": "IfcDuctSegment",
+    "ancestors": [
+      "IfcDuctSegment",
+      "IfcFlowSegment",
+      "IfcDistributionFlowElement",
+      "IfcDistributionElement",
+      "IfcElement",
+      "IfcProduct",
+      "IfcObject",
+      "IfcObjectDefinition",
+      "IfcRoot"
+    ],
+    "predefined_type": "RIGIDSEGMENT",
+    "name": "DU-004 Return L0-1",
+    "description": null,
+    "object_type": null,
+    "tag": "630015",
+    "type_name": "Rectangular Duct: Mitered Elbows / Tees",
+    "storey": "Level 0",
+    "container": {
+      "global_id": "2vcXfRFMeC9Ux8WeYvIPM6",
+      "ifc_type": "IfcBuildingStorey",
+      "name": "Level 0"
+    },
+    "psets": {
+      "Pset_DuctSegmentTypeCommon": {
+        "Reference": "Rect 300x200"
+      },
+      "Pset_DuctSegmentOccurrence": {
+        "Insulated": true
+      }
+    },
+    "quantities": {
+      "Qto_DuctSegmentBaseQuantities": {
+        "Length": 2.4,
+        "CrossSectionArea": 0.09,
+        "GrossSurfaceArea": 2.4,
+        "NetVolume": 0.216
+      }
+    },
+    "classifications": [
+      {
+        "system": "Uniclass 2015",
+        "code": "Ss_65_40_25",
+        "name": "Ventilation ducts"
+      }
+    ],
+    "materials": [
+      "Galvanised steel"
+    ],
+    "has_representation": true,
+    "geometry": {
+      "bbox_min": [
+        23.5,
+        3,
+        2.6
+      ],
+      "bbox_max": [
+        25.9,
+        3.3,
+        2.9
+      ],
+      "volume_m3": 0.216,
+      "area_m2": 2.4,
+      "triangle_count": 40
+    }
+  },
+  "3I4X_Ei8E0$gT$fFXGAoRv": {
+    "global_id": "3I4X_Ei8E0$gT$fFXGAoRv",
+    "step_id": 855,
+    "ifc_type": "IfcDuctSegment",
+    "ancestors": [
+      "IfcDuctSegment",
+      "IfcFlowSegment",
+      "IfcDistributionFlowElement",
+      "IfcDistributionElement",
+      "IfcElement",
+      "IfcProduct",
+      "IfcObject",
+      "IfcObjectDefinition",
+      "IfcRoot"
+    ],
+    "predefined_type": "RIGIDSEGMENT",
+    "name": "DU-005 Return L0-2",
+    "description": null,
+    "object_type": null,
+    "tag": "630020",
+    "type_name": "Rectangular Duct: Mitered Elbows / Tees",
+    "storey": "Level 0",
+    "container": {
+      "global_id": "2vcXfRFMeC9Ux8WeYvIPM6",
+      "ifc_type": "IfcBuildingStorey",
+      "name": "Level 0"
+    },
+    "psets": {
+      "Pset_DuctSegmentTypeCommon": {
+        "Reference": "Rect 300x200"
+      },
+      "Pset_DuctSegmentOccurrence": {
+        "Insulated": true
+      }
+    },
+    "quantities": {},
+    "classifications": [
+      {
+        "system": "Uniclass 2015",
+        "code": "Ss_65_40_25",
+        "name": "Ventilation ducts"
+      }
+    ],
+    "materials": [
+      "Galvanised steel"
+    ],
+    "has_representation": false,
+    "geometry": null
+  },
+  "3WTUJmcni$BUIy$LTSxKY1": {
+    "global_id": "3WTUJmcni$BUIy$LTSxKY1",
+    "step_id": 874,
+    "ifc_type": "IfcDuctSegment",
+    "ancestors": [
+      "IfcDuctSegment",
+      "IfcFlowSegment",
+      "IfcDistributionFlowElement",
+      "IfcDistributionElement",
+      "IfcElement",
+      "IfcProduct",
+      "IfcObject",
+      "IfcObjectDefinition",
+      "IfcRoot"
+    ],
+    "predefined_type": "RIGIDSEGMENT",
+    "name": "DU-006 Return L1-1",
+    "description": null,
+    "object_type": null,
+    "tag": "630030",
+    "type_name": "Rectangular Duct: Mitered Elbows / Tees",
+    "storey": "Level 1",
+    "container": {
+      "global_id": "2gddZueDZNL888Z_$X5cpS",
+      "ifc_type": "IfcBuildingStorey",
+      "name": "Level 1"
+    },
+    "psets": {
+      "Pset_DuctSegmentTypeCommon": {
+        "Reference": "Rect 300x200"
+      },
+      "Pset_DuctSegmentOccurrence": {
+        "Insulated": true
+      }
+    },
+    "quantities": {},
+    "classifications": [
+      {
+        "system": "Uniclass 2015",
+        "code": "Ss_65_40_25",
+        "name": "Ventilation ducts"
+      }
+    ],
+    "materials": [
+      "Galvanised steel"
+    ],
+    "has_representation": false,
+    "geometry": null
+  },
+  "1Ou8g$wnTjA0Do6u9NSiCw": {
+    "global_id": "1Ou8g$wnTjA0Do6u9NSiCw",
+    "step_id": 896,
+    "ifc_type": "IfcDuctSegment",
+    "ancestors": [
+      "IfcDuctSegment",
+      "IfcFlowSegment",
+      "IfcDistributionFlowElement",
+      "IfcDistributionElement",
+      "IfcElement",
+      "IfcProduct",
+      "IfcObject",
+      "IfcObjectDefinition",
+      "IfcRoot"
+    ],
+    "predefined_type": "RIGIDSEGMENT",
+    "name": "DU-007 Supply L1-1",
+    "description": null,
+    "object_type": null,
+    "tag": "630035",
+    "type_name": "Rectangular Duct: Mitered Elbows / Tees",
+    "storey": null,
+    "container": null,
+    "psets": {
+      "Pset_DuctSegmentTypeCommon": {
+        "Reference": "Rect 300x200"
+      },
+      "Pset_DuctSegmentOccurrence": {
+        "Insulated": true
+      }
+    },
+    "quantities": {
+      "Qto_DuctSegmentBaseQuantities": {
+        "Length": 6,
+        "CrossSectionArea": 0.09,
+        "GrossSurfaceArea": 6,
+        "NetVolume": 0.54
+      }
+    },
+    "classifications": [
+      {
+        "system": "Uniclass 2015",
+        "code": "Ss_65_40_25",
+        "name": "Ventilation ducts"
+      }
+    ],
+    "materials": [
+      "Galvanised steel"
+    ],
+    "has_representation": true,
+    "geometry": {
+      "bbox_min": [
+        10.5,
+        3,
+        5.8
+      ],
+      "bbox_max": [
+        16.5,
+        3.3,
+        6.1
+      ],
+      "volume_m3": 0.54,
+      "area_m2": 6,
+      "triangle_count": 40
+    }
+  },
+  "2b67GbJqffFtzAf1IauJMO": {
+    "global_id": "2b67GbJqffFtzAf1IauJMO",
+    "step_id": 923,
+    "ifc_type": "IfcDuctSegment",
+    "ancestors": [
+      "IfcDuctSegment",
+      "IfcFlowSegment",
+      "IfcDistributionFlowElement",
+      "IfcDistributionElement",
+      "IfcElement",
+      "IfcProduct",
+      "IfcObject",
+      "IfcObjectDefinition",
+      "IfcRoot"
+    ],
+    "predefined_type": "RIGIDSEGMENT",
+    "name": "DU-008 Supply L1-2",
+    "description": null,
+    "object_type": null,
+    "tag": "630040",
+    "type_name": "Rectangular Duct: Mitered Elbows / Tees",
+    "storey": "Level 1",
+    "container": {
+      "global_id": "2gddZueDZNL888Z_$X5cpS",
+      "ifc_type": "IfcBuildingStorey",
+      "name": "Level 1"
+    },
+    "psets": {
+      "Pset_DuctSegmentTypeCommon": {
+        "Reference": "Rect 300x200"
+      },
+      "Pset_DuctSegmentOccurrence": {
+        "Insulated": true
+      }
+    },
+    "quantities": {
+      "Qto_DuctSegmentBaseQuantities": {
+        "Length": 3.6,
+        "CrossSectionArea": 0.09,
+        "GrossSurfaceArea": 3.6,
+        "NetVolume": 0.324
+      }
+    },
+    "classifications": [
+      {
+        "system": "Uniclass 2015",
+        "code": "Ss_65_40_25",
+        "name": "Ventilation ducts"
+      }
+    ],
+    "materials": [
+      "Galvanised steel"
+    ],
+    "has_representation": true,
+    "geometry": {
+      "bbox_min": [
+        18450,
+        3,
+        5.8
+      ],
+      "bbox_max": [
+        18453.6,
+        3.3,
+        6.1
+      ],
+      "volume_m3": 0.324,
+      "area_m2": 3.6,
+      "triangle_count": 40
+    }
+  }
+}

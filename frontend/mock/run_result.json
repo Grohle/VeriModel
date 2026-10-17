@@ -1,0 +1,65 @@
+{
+  "files": [
+    {
+      "name": "report.html",
+      "kind": "report_html",
+      "bytes": 184320
+    },
+    {
+      "name": "failures.csv",
+      "kind": "failures_csv",
+      "bytes": 6144
+    },
+    {
+      "name": "issues.bcf",
+      "kind": "bcf",
+      "bytes": 212992
+    },
+    {
+      "name": "issues.csv",
+      "kind": "issues_csv",
+      "bytes": 5120
+    },
+    {
+      "name": "qto.xlsx",
+      "kind": "qto_xlsx",
+      "bytes": 17408
+    },
+    {
+      "name": "qto.csv",
+      "kind": "qto_csv",
+      "bytes": 1536
+    },
+    {
+      "name": "qto.json",
+      "kind": "qto_json",
+      "bytes": 9216
+    },
+    {
+      "name": "report.json",
+      "kind": "report_json",
+      "bytes": 98304
+    },
+    {
+      "name": "project.yaml",
+      "kind": "config",
+      "bytes": 812
+    },
+    {
+      "name": "run.json",
+      "kind": "run_json",
+      "bytes": 1620
+    },
+    {
+      "name": "audit.log",
+      "kind": "audit_log",
+      "bytes": 3480
+    }
+  ],
+  "bcf": {
+    "topics": 24,
+    "with_viewpoint": 22,
+    "version": "2.1"
+  },
+  "out_dir": "/home/anna/VeriModel/out/Clinic_Block_A_2026-10-16_0942"
+}

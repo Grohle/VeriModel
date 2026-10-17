@@ -1,0 +1,30 @@
+{
+  "file_name": "Clinic_Block_A.ifc",
+  "path": "/home/anna/Projects/Clinic/Clinic_Block_A.ifc",
+  "size_bytes": 1248912,
+  "sha256": "c4f1a09e7b2d58a3e6f0172b94d8c5a1e3f7b6d02a98c14e5d7f3b0a6c92e841",
+  "sha256_short": "c4f1a09e7b2d",
+  "schema": "IFC4",
+  "element_count": 40,
+  "units": {
+    "system": "metric",
+    "length_unit": "MILLIMETRE"
+  },
+  "disciplines": [
+    "architecture",
+    "structure",
+    "mep"
+  ],
+  "storeys": [
+    "Level 0",
+    "Level 1"
+  ],
+  "type_counts": {
+    "IfcBeam": 6,
+    "IfcDoor": 8,
+    "IfcDuctSegment": 8,
+    "IfcSlab": 6,
+    "IfcWall": 12
+  },
+  "reader_warnings": []
+}

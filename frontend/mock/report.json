@@ -1,0 +1,1350 @@
+{
+  "tool": {
+    "name": "verimodel",
+    "version": "0.1.0"
+  },
+  "model": {
+    "file_name": "Clinic_Block_A.ifc",
+    "file_size_bytes": 1248912,
+    "sha256": "c4f1a09e7b2d58a3e6f0172b94d8c5a1e3f7b6d02a98c14e5d7f3b0a6c92e841",
+    "schema": "IFC4",
+    "mvd": "ReferenceView_V1.2",
+    "authoring_tool": "Autodesk Revit 2024",
+    "project_name": "Clinic Block A",
+    "units": {
+      "length_unit": "MILLIMETRE",
+      "length_to_m": 0.001,
+      "area_unit": "SQUARE_METRE",
+      "area_to_m2": 1,
+      "volume_unit": "CUBIC_METRE",
+      "volume_to_m3": 1,
+      "system": "metric"
+    },
+    "element_count": 40,
+    "spatial_tree": [
+      {
+        "global_id": "3aefiBTwta_nv8b0OBPRYm",
+        "ifc_type": "IfcSite",
+        "name": "Site",
+        "elevation_m": null,
+        "children": [
+          {
+            "global_id": "1Jh1bgZZ6JvUB6sFME_en2",
+            "ifc_type": "IfcBuilding",
+            "name": "Clinic Block A",
+            "elevation_m": null,
+            "children": [
+              {
+                "global_id": "2vcXfRFMeC9Ux8WeYvIPM6",
+                "ifc_type": "IfcBuildingStorey",
+                "name": "Level 0",
+                "elevation_m": 0,
+                "children": []
+              },
+              {
+                "global_id": "2gddZueDZNL888Z_$X5cpS",
+                "ifc_type": "IfcBuildingStorey",
+                "name": "Level 1",
+                "elevation_m": 3.2,
+                "children": []
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "type_counts": {
+      "IfcBeam": 6,
+      "IfcDoor": 8,
+      "IfcDuctSegment": 8,
+      "IfcSlab": 6,
+      "IfcWall": 12
+    },
+    "storeys": [
+      "Level 0",
+      "Level 1"
+    ],
+    "disciplines": [
+      "architecture",
+      "structure",
+      "mep"
+    ],
+    "reader_warnings": [],
+    "geometry_available": true
+  },
+  "config": {
+    "project": {
+      "name": "Clinic Block A",
+      "language": "en",
+      "units": "auto",
+      "classification_system": "Uniclass",
+      "ifc_versions": [
+        "IFC2X3",
+        "IFC4",
+        "IFC4X3"
+      ]
+    },
+    "requirements": {
+      "ids_file": "clinic_requirements.ids",
+      "rule_pack": "generic",
+      "required_psets": []
+    },
+    "tolerances": {
+      "clash_hard_mm": 10,
+      "clash_clearance_mm": 50,
+      "far_from_origin_m": 10000,
+      "geometry": {
+        "min_volume_m3": 0.000001,
+        "min_area_m2": 0.000001,
+        "max_extent_m": 5000
+      }
+    },
+    "qto": {
+      "group_by": [
+        "type",
+        "storey"
+      ],
+      "unit_rates_file": "rates_2024.csv",
+      "currency": "EUR",
+      "sample_count": 5
+    },
+    "clash": {
+      "enabled": false
+    },
+    "output": {
+      "language": "en",
+      "include_3d_snapshot": true,
+      "bcf_version": "2.1",
+      "bcf_author": "verimodel@local"
+    },
+    "classification": {
+      "required": true,
+      "applies_to": [],
+      "allowed_codes": [],
+      "allowed_codes_file": null,
+      "code_pattern": null
+    }
+  },
+  "summary": {
+    "score": 97,
+    "verdict": "FAIL",
+    "elements_checked": 40,
+    "element_checks": 510,
+    "errors": 12,
+    "warnings": 12,
+    "infos": 3,
+    "rules_total": 17,
+    "rules_passed": 5,
+    "rules_failed": 10,
+    "rules_skipped": 1,
+    "rules_not_applicable": 1,
+    "verdict_rule": "FAIL = at least one ERROR. PASS WITH WARNINGS = no errors, at least one WARNING. PASS = no errors and no warnings. Score = 100 × (1 − (errors + 0.25 × warnings) / element checks). Skipped rules are never counted as passed."
+  },
+  "rules": [
+    {
+      "rule_id": "CL-001",
+      "category": "classification",
+      "description": "Elements must carry a classification reference from the configured system",
+      "severity": "ERROR",
+      "status": "FAIL",
+      "elements_checked": 40,
+      "failures": 7,
+      "skipped_reason": null,
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "CL-002",
+      "category": "classification",
+      "description": "Classification codes must belong to the configured classification list or pattern",
+      "severity": "WARNING",
+      "status": "SKIPPED",
+      "elements_checked": 0,
+      "failures": 0,
+      "skipped_reason": "No allowed classification codes or code pattern are configured. Add classification.allowed_codes or classification.code_pattern to project.yaml to enable this check.",
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "GEO-001",
+      "category": "geometry",
+      "description": "Physical elements must have a geometric representation",
+      "severity": "WARNING",
+      "status": "FAIL",
+      "elements_checked": 40,
+      "failures": 2,
+      "skipped_reason": null,
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "GEO-002",
+      "category": "geometry",
+      "description": "Elements with a representation must produce a non-degenerate shape (volume or area above tolerance)",
+      "severity": "ERROR",
+      "status": "FAIL",
+      "elements_checked": 38,
+      "failures": 2,
+      "skipped_reason": null,
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "GEO-003",
+      "category": "geometry",
+      "description": "Element bounding boxes must stay within the configured project bounds",
+      "severity": "WARNING",
+      "status": "PASS",
+      "elements_checked": 38,
+      "failures": 0,
+      "skipped_reason": null,
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "ID-001",
+      "category": "identity",
+      "description": "Every element must have a unique GlobalId",
+      "severity": "ERROR",
+      "status": "PASS",
+      "elements_checked": 40,
+      "failures": 0,
+      "skipped_reason": null,
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "ID-002",
+      "category": "identity",
+      "description": "Every GlobalId must be a valid 22-character IFC identifier",
+      "severity": "ERROR",
+      "status": "FAIL",
+      "elements_checked": 40,
+      "failures": 1,
+      "skipped_reason": null,
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "ID-003",
+      "category": "identity",
+      "description": "Element names must be unique within the same type and storey",
+      "severity": "WARNING",
+      "status": "FAIL",
+      "elements_checked": 40,
+      "failures": 3,
+      "skipped_reason": null,
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "NAM-001",
+      "category": "naming",
+      "description": "Element names must follow the project naming convention",
+      "severity": "WARNING",
+      "status": "NOT_APPLICABLE",
+      "elements_checked": 0,
+      "failures": 0,
+      "skipped_reason": null,
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "PR-001",
+      "category": "properties",
+      "description": "Properties that exist must carry a value (no empty or null values)",
+      "severity": "WARNING",
+      "status": "FAIL",
+      "elements_checked": 40,
+      "failures": 4,
+      "skipped_reason": null,
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "QT-001",
+      "category": "sanity",
+      "description": "Elements that report a volume must report a positive volume",
+      "severity": "WARNING",
+      "status": "FAIL",
+      "elements_checked": 38,
+      "failures": 2,
+      "skipped_reason": null,
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "QT-002",
+      "category": "sanity",
+      "description": "Elements that report an area must report a positive area",
+      "severity": "INFO",
+      "status": "FAIL",
+      "elements_checked": 38,
+      "failures": 3,
+      "skipped_reason": null,
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "SCH-001",
+      "category": "schema",
+      "description": "The IFC schema of the file must be one the project accepts",
+      "severity": "ERROR",
+      "status": "PASS",
+      "elements_checked": 1,
+      "failures": 0,
+      "skipped_reason": null,
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "SP-001",
+      "category": "spatial",
+      "description": "Every element must be contained in a spatial structure element (storey, space, site, facility part)",
+      "severity": "ERROR",
+      "status": "FAIL",
+      "elements_checked": 40,
+      "failures": 2,
+      "skipped_reason": null,
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "SP-002",
+      "category": "spatial",
+      "description": "The container of every element must exist in the spatial hierarchy",
+      "severity": "ERROR",
+      "status": "PASS",
+      "elements_checked": 38,
+      "failures": 0,
+      "skipped_reason": null,
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "SP-003",
+      "category": "spatial",
+      "description": "The model must declare a site, a building or facility, and at least one storey or facility part",
+      "severity": "WARNING",
+      "status": "PASS",
+      "elements_checked": 1,
+      "failures": 0,
+      "skipped_reason": null,
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "SP-004",
+      "category": "spatial",
+      "description": "Elements must not be far from the project origin",
+      "severity": "WARNING",
+      "status": "FAIL",
+      "elements_checked": 38,
+      "failures": 1,
+      "skipped_reason": null,
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    }
+  ],
+  "findings": [
+    {
+      "rule_id": "ID-002",
+      "severity": "ERROR",
+      "global_id": "1x2y3z-not-a-valid-gid",
+      "step_id": 776,
+      "ifc_type": "IfcDoor",
+      "name": "DR-104 Plant Room",
+      "storey": "Level 1",
+      "message": "The GlobalId is not a valid 22-character IFC identifier.",
+      "expected": "22 characters from the IFC base-64 alphabet",
+      "actual": "\"1x2y3z-not-a-valid-gid\" (22 characters, contains \"-\")",
+      "fix_hint": "Re-export the model so the authoring tool regenerates its GlobalIds; do not edit them by hand.",
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "SP-001",
+      "severity": "ERROR",
+      "global_id": "2sHNTH3C7LskYhQ$6W8DKB",
+      "step_id": 832,
+      "ifc_type": "IfcDuctSegment",
+      "name": "DU-003 Supply L0-3",
+      "storey": null,
+      "message": "The element is not contained in any storey, space or site.",
+      "expected": "Contained in a spatial structure element",
+      "actual": "No IfcRelContainedInSpatialStructure",
+      "fix_hint": "Assign the element to its level in the authoring tool, then re-export.",
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "SP-001",
+      "severity": "ERROR",
+      "global_id": "1Ou8g$wnTjA0Do6u9NSiCw",
+      "step_id": 896,
+      "ifc_type": "IfcDuctSegment",
+      "name": "DU-007 Supply L1-1",
+      "storey": null,
+      "message": "The element is not contained in any storey, space or site.",
+      "expected": "Contained in a spatial structure element",
+      "actual": "No IfcRelContainedInSpatialStructure",
+      "fix_hint": "Assign the element to its level in the authoring tool, then re-export.",
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "GEO-002",
+      "severity": "ERROR",
+      "global_id": "3PQ3WzhS7JuzGeGwIIK4qa",
+      "step_id": 518,
+      "ifc_type": "IfcSlab",
+      "name": "SL-103 Roof Slab",
+      "storey": "Level 1",
+      "message": "The shape is degenerate: its volume is zero.",
+      "expected": "Volume above 0.000001 m³",
+      "actual": "Volume 0 m³",
+      "fix_hint": "Open the element in the authoring tool and check for a zero-thickness or collapsed profile.",
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "GEO-002",
+      "severity": "ERROR",
+      "global_id": "1Sl8a3y9LGNgxAczrslENP",
+      "step_id": 637,
+      "ifc_type": "IfcBeam",
+      "name": "BM-302 Grid B",
+      "storey": "Level 1",
+      "message": "The shape is degenerate: its volume is zero.",
+      "expected": "Volume above 0.000001 m³",
+      "actual": "Volume 0 m³",
+      "fix_hint": "Check the beam section and length; a beam with no cross-section exports as an empty shape.",
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "CL-001",
+      "severity": "ERROR",
+      "global_id": "37ywwydDJaxVRNshe9riMd",
+      "step_id": 191,
+      "ifc_type": "IfcWall",
+      "name": "WL-004 Exterior West",
+      "storey": "Level 0",
+      "message": "The element has no classification reference.",
+      "expected": "A reference from Uniclass 2015",
+      "actual": "No classification",
+      "fix_hint": "Assign a Uniclass 2015 code (e.g. EF_25_10 for walls) to the type, not to each instance.",
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "CL-001",
+      "severity": "ERROR",
+      "global_id": "1QhgU9tRgsCPTUrqKqmVBQ",
+      "step_id": 203,
+      "ifc_type": "IfcWall",
+      "name": "WL-005 Corridor Partition",
+      "storey": "Level 0",
+      "message": "The element has no classification reference.",
+      "expected": "A reference from Uniclass 2015",
+      "actual": "No classification",
+      "fix_hint": "Assign a Uniclass 2015 code (e.g. EF_25_10 for walls) to the type, not to each instance.",
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "CL-001",
+      "severity": "ERROR",
+      "global_id": "0Su5vpiqehHyl133Yx1RPL",
+      "step_id": 227,
+      "ifc_type": "IfcWall",
+      "name": "WL-006 Ward Partition A",
+      "storey": "Level 0",
+      "message": "The element has no classification reference.",
+      "expected": "A reference from Uniclass 2015",
+      "actual": "No classification",
+      "fix_hint": "Assign a Uniclass 2015 code (e.g. EF_25_10 for walls) to the type, not to each instance.",
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "CL-001",
+      "severity": "ERROR",
+      "global_id": "12M$wQmTo6YRtuGvqGAb5f",
+      "step_id": 439,
+      "ifc_type": "IfcSlab",
+      "name": "SL-002 Ground Slab B",
+      "storey": "Level 0",
+      "message": "The element has no classification reference.",
+      "expected": "A reference from Uniclass 2015",
+      "actual": "No classification",
+      "fix_hint": "Assign a Uniclass 2015 code (e.g. EF_20_30 for floors) to the type.",
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "CL-001",
+      "severity": "ERROR",
+      "global_id": "0eF5r8X4M60ZhKSwONpeGB",
+      "step_id": 678,
+      "ifc_type": "IfcDoor",
+      "name": "DR-001 Entrance",
+      "storey": "Level 0",
+      "message": "The element has no classification reference.",
+      "expected": "A reference from Uniclass 2015",
+      "actual": "No classification",
+      "fix_hint": "Assign a Uniclass 2015 code (e.g. Pr_30_59_24 for doors) to the door type.",
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "CL-001",
+      "severity": "ERROR",
+      "global_id": "1MRlRU_s_aWM7jZJza0ojn",
+      "step_id": 686,
+      "ifc_type": "IfcDoor",
+      "name": "DR-002 Ward A",
+      "storey": "Level 0",
+      "message": "The element has no classification reference.",
+      "expected": "A reference from Uniclass 2015",
+      "actual": "No classification",
+      "fix_hint": "Assign a Uniclass 2015 code (e.g. Pr_30_59_24 for doors) to the door type.",
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "CL-001",
+      "severity": "ERROR",
+      "global_id": "2dNQtTEgnLIXuezSweuRH4",
+      "step_id": 696,
+      "ifc_type": "IfcDoor",
+      "name": "DR-003 Ward B",
+      "storey": "Level 0",
+      "message": "The element has no classification reference.",
+      "expected": "A reference from Uniclass 2015",
+      "actual": "No classification",
+      "fix_hint": "Assign a Uniclass 2015 code (e.g. Pr_30_59_24 for doors) to the door type.",
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "ID-003",
+      "severity": "WARNING",
+      "global_id": "2bFbMmDx80IJ5Pv2knOTw0",
+      "step_id": 320,
+      "ifc_type": "IfcWall",
+      "name": "Interior Partition 100",
+      "storey": "Level 1",
+      "message": "Another IfcWall on Level 1 has the same name.",
+      "expected": "A name unique within IfcWall and Level 1",
+      "actual": "\"Interior Partition 100\" used by 3 elements",
+      "fix_hint": "Give each wall a distinct mark (e.g. WL-103, WL-104, WL-105) so it can be found in schedules and issues.",
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "ID-003",
+      "severity": "WARNING",
+      "global_id": "0q$3RSf4cWMmVXQ1FjqB3n",
+      "step_id": 356,
+      "ifc_type": "IfcWall",
+      "name": "Interior Partition 100",
+      "storey": "Level 1",
+      "message": "Another IfcWall on Level 1 has the same name.",
+      "expected": "A name unique within IfcWall and Level 1",
+      "actual": "\"Interior Partition 100\" used by 3 elements",
+      "fix_hint": "Give each wall a distinct mark (e.g. WL-103, WL-104, WL-105) so it can be found in schedules and issues.",
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "ID-003",
+      "severity": "WARNING",
+      "global_id": "1nmYVpkNnVa7mZaFpWNCO$",
+      "step_id": 374,
+      "ifc_type": "IfcWall",
+      "name": "Interior Partition 100",
+      "storey": "Level 1",
+      "message": "Another IfcWall on Level 1 has the same name.",
+      "expected": "A name unique within IfcWall and Level 1",
+      "actual": "\"Interior Partition 100\" used by 3 elements",
+      "fix_hint": "Give each wall a distinct mark (e.g. WL-103, WL-104, WL-105) so it can be found in schedules and issues.",
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "SP-004",
+      "severity": "WARNING",
+      "global_id": "2b67GbJqffFtzAf1IauJMO",
+      "step_id": 923,
+      "ifc_type": "IfcDuctSegment",
+      "name": "DU-008 Supply L1-2",
+      "storey": "Level 1",
+      "message": "The element is far from the project origin.",
+      "expected": "Within 10000 m of the origin",
+      "actual": "18,452 m from the origin",
+      "fix_hint": "Check the element was not moved or copied from a model with a different coordinate system.",
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "PR-001",
+      "severity": "WARNING",
+      "global_id": "0DWyutvRulH3U9$Pumo8hu",
+      "step_id": 148,
+      "ifc_type": "IfcWall",
+      "name": "WL-002 Exterior East",
+      "storey": "Level 0",
+      "message": "Property Pset_WallCommon.FireRating exists but is empty.",
+      "expected": "A value for FireRating",
+      "actual": "\"\" (empty text)",
+      "fix_hint": "Fill in the fire rating, or remove the property if it does not apply.",
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "PR-001",
+      "severity": "WARNING",
+      "global_id": "1MRlRU_s_aWM7jZJza0ojn",
+      "step_id": 686,
+      "ifc_type": "IfcDoor",
+      "name": "DR-002 Ward A",
+      "storey": "Level 0",
+      "message": "Property Pset_DoorCommon.FireRating exists but is empty.",
+      "expected": "A value for FireRating",
+      "actual": "<null>",
+      "fix_hint": "Fill in the fire rating of the door type.",
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "PR-001",
+      "severity": "WARNING",
+      "global_id": "1x2y3z-not-a-valid-gid",
+      "step_id": 776,
+      "ifc_type": "IfcDoor",
+      "name": "DR-104 Plant Room",
+      "storey": "Level 1",
+      "message": "Property Pset_DoorCommon.FireRating exists but is empty.",
+      "expected": "A value for FireRating",
+      "actual": "<null>",
+      "fix_hint": "Fill in the fire rating of the door type.",
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "PR-001",
+      "severity": "WARNING",
+      "global_id": "0dXMTv4LWBtTxSTYs1$l1y",
+      "step_id": 578,
+      "ifc_type": "IfcBeam",
+      "name": "BM-203 Grid C",
+      "storey": "Level 0",
+      "message": "Property Pset_BeamCommon.Reference exists but is empty.",
+      "expected": "A value for Reference",
+      "actual": "\"\" (empty text)",
+      "fix_hint": "Fill in the type reference, or remove the property.",
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "GEO-001",
+      "severity": "WARNING",
+      "global_id": "3I4X_Ei8E0$gT$fFXGAoRv",
+      "step_id": 855,
+      "ifc_type": "IfcDuctSegment",
+      "name": "DU-005 Return L0-2",
+      "storey": "Level 0",
+      "message": "The element has no geometric representation.",
+      "expected": "An IfcProductRepresentation",
+      "actual": "No representation",
+      "fix_hint": "Check that the element is visible in the 3D view of the authoring tool and not hidden at export.",
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "GEO-001",
+      "severity": "WARNING",
+      "global_id": "3WTUJmcni$BUIy$LTSxKY1",
+      "step_id": 874,
+      "ifc_type": "IfcDuctSegment",
+      "name": "DU-006 Return L1-1",
+      "storey": "Level 1",
+      "message": "The element has no geometric representation.",
+      "expected": "An IfcProductRepresentation",
+      "actual": "No representation",
+      "fix_hint": "Check that the element is visible in the 3D view of the authoring tool and not hidden at export.",
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "QT-001",
+      "severity": "WARNING",
+      "global_id": "3PQ3WzhS7JuzGeGwIIK4qa",
+      "step_id": 518,
+      "ifc_type": "IfcSlab",
+      "name": "SL-103 Roof Slab",
+      "storey": "Level 1",
+      "message": "The element reports a volume of zero.",
+      "expected": "A volume above 0",
+      "actual": "NetVolume = 0",
+      "fix_hint": "Fix the geometry first (see GEO-002); quantities follow from it.",
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "QT-001",
+      "severity": "WARNING",
+      "global_id": "1Sl8a3y9LGNgxAczrslENP",
+      "step_id": 637,
+      "ifc_type": "IfcBeam",
+      "name": "BM-302 Grid B",
+      "storey": "Level 1",
+      "message": "The element reports a volume of zero.",
+      "expected": "A volume above 0",
+      "actual": "NetVolume = 0",
+      "fix_hint": "Fix the geometry first (see GEO-002); quantities follow from it.",
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "QT-002",
+      "severity": "INFO",
+      "global_id": "2J$l8mtIeyv2gFTmkUMufV",
+      "step_id": 747,
+      "ifc_type": "IfcDoor",
+      "name": "DR-101 Office 1",
+      "storey": "Level 1",
+      "message": "The element reports an area of zero.",
+      "expected": "An area above 0",
+      "actual": "Area = 0",
+      "fix_hint": "Check the door width and height parameters in the family.",
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "QT-002",
+      "severity": "INFO",
+      "global_id": "3EEmiytiT$Ucd4LgCiogXw",
+      "step_id": 759,
+      "ifc_type": "IfcDoor",
+      "name": "DR-102 Office 2",
+      "storey": "Level 1",
+      "message": "The element reports an area of zero.",
+      "expected": "An area above 0",
+      "actual": "Area = 0",
+      "fix_hint": "Check the door width and height parameters in the family.",
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "QT-002",
+      "severity": "INFO",
+      "global_id": "24dZFaylC1aT$LbEPePCkS",
+      "step_id": 767,
+      "ifc_type": "IfcDoor",
+      "name": "DR-103 Office 3",
+      "storey": "Level 1",
+      "message": "The element reports an area of zero.",
+      "expected": "An area above 0",
+      "actual": "Area = 0",
+      "fix_hint": "Check the door width and height parameters in the family.",
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    }
+  ],
+  "qto": {
+    "group_by": [
+      "type",
+      "storey"
+    ],
+    "rows": [
+      {
+        "group": [
+          "IfcBeam",
+          "Level 0"
+        ],
+        "count": 3,
+        "volume_m3": 1.07,
+        "area_m2": 32.22,
+        "length_m": 17.9,
+        "weight_kg": 2577.6,
+        "volume_sources": {
+          "base_quantity": 3
+        },
+        "area_sources": {
+          "geometry": 3
+        },
+        "length_sources": {
+          "base_quantity": 3
+        },
+        "cost": null
+      },
+      {
+        "group": [
+          "IfcBeam",
+          "Level 1"
+        ],
+        "count": 3,
+        "volume_m3": 0.69,
+        "area_m2": 32.22,
+        "length_m": 17.9,
+        "weight_kg": 1656,
+        "volume_sources": {
+          "base_quantity": 3
+        },
+        "area_sources": {
+          "geometry": 3
+        },
+        "length_sources": {
+          "base_quantity": 3
+        },
+        "cost": null
+      },
+      {
+        "group": [
+          "IfcDoor",
+          "Level 0"
+        ],
+        "count": 4,
+        "volume_m3": 0.23,
+        "area_m2": 7.56,
+        "length_m": 8.4,
+        "weight_kg": 0,
+        "volume_sources": {
+          "geometry": 4
+        },
+        "area_sources": {
+          "base_quantity": 4
+        },
+        "length_sources": {
+          "geometry": 4
+        },
+        "cost": {
+          "rate_code": "DR-INT-900",
+          "rate_description": "Interior door set 900 x 2100",
+          "unit": "nr",
+          "rate": 420,
+          "quantity": 4,
+          "amount": 1680,
+          "currency": "EUR",
+          "source": "rates_2024.csv"
+        }
+      },
+      {
+        "group": [
+          "IfcDoor",
+          "Level 1"
+        ],
+        "count": 4,
+        "volume_m3": 0.23,
+        "area_m2": 1.89,
+        "length_m": 8.4,
+        "weight_kg": 0,
+        "volume_sources": {
+          "geometry": 4
+        },
+        "area_sources": {
+          "base_quantity": 4
+        },
+        "length_sources": {
+          "geometry": 4
+        },
+        "cost": {
+          "rate_code": "DR-INT-900",
+          "rate_description": "Interior door set 900 x 2100",
+          "unit": "nr",
+          "rate": 420,
+          "quantity": 4,
+          "amount": 1680,
+          "currency": "EUR",
+          "source": "rates_2024.csv"
+        }
+      },
+      {
+        "group": [
+          "IfcDuctSegment",
+          "(no storey)"
+        ],
+        "count": 2,
+        "volume_m3": 1.04,
+        "area_m2": 11.6,
+        "length_m": 11.6,
+        "weight_kg": 0,
+        "volume_sources": {
+          "base_quantity": 2
+        },
+        "area_sources": {
+          "base_quantity": 2
+        },
+        "length_sources": {
+          "base_quantity": 2
+        },
+        "cost": {
+          "rate_code": "HV-RECT",
+          "rate_description": "Rectangular sheet-metal duct",
+          "unit": "m",
+          "rate": 54.2,
+          "quantity": 11.6,
+          "amount": 628.72,
+          "currency": "EUR",
+          "source": "rates_2024.csv"
+        }
+      },
+      {
+        "group": [
+          "IfcDuctSegment",
+          "Level 0"
+        ],
+        "count": 4,
+        "volume_m3": 0.94,
+        "area_m2": 10.4,
+        "length_m": 10.4,
+        "weight_kg": 0,
+        "volume_sources": {
+          "geometry": 2,
+          "base_quantity": 1,
+          "none": 1
+        },
+        "area_sources": {
+          "geometry": 2,
+          "base_quantity": 1,
+          "none": 1
+        },
+        "length_sources": {
+          "geometry": 2,
+          "base_quantity": 1,
+          "none": 1
+        },
+        "cost": {
+          "rate_code": "HV-RECT",
+          "rate_description": "Rectangular sheet-metal duct",
+          "unit": "m",
+          "rate": 54.2,
+          "quantity": 10.4,
+          "amount": 563.68,
+          "currency": "EUR",
+          "source": "rates_2024.csv"
+        }
+      },
+      {
+        "group": [
+          "IfcDuctSegment",
+          "Level 1"
+        ],
+        "count": 2,
+        "volume_m3": 0.32,
+        "area_m2": 3.6,
+        "length_m": 3.6,
+        "weight_kg": 0,
+        "volume_sources": {
+          "none": 1,
+          "base_quantity": 1
+        },
+        "area_sources": {
+          "none": 1,
+          "base_quantity": 1
+        },
+        "length_sources": {
+          "none": 1,
+          "base_quantity": 1
+        },
+        "cost": {
+          "rate_code": "HV-RECT",
+          "rate_description": "Rectangular sheet-metal duct",
+          "unit": "m",
+          "rate": 54.2,
+          "quantity": 3.6,
+          "amount": 195.12,
+          "currency": "EUR",
+          "source": "rates_2024.csv"
+        }
+      },
+      {
+        "group": [
+          "IfcSlab",
+          "Level 0"
+        ],
+        "count": 3,
+        "volume_m3": 23.72,
+        "area_m2": 118.6,
+        "length_m": 18.71,
+        "weight_kg": 0,
+        "volume_sources": {
+          "base_quantity": 3
+        },
+        "area_sources": {
+          "base_quantity": 3
+        },
+        "length_sources": {
+          "geometry": 3
+        },
+        "cost": {
+          "rate_code": "SL-RC-200",
+          "rate_description": "Reinforced concrete slab, in situ",
+          "unit": "m3",
+          "rate": 245,
+          "quantity": 23.72,
+          "amount": 5811.4,
+          "currency": "EUR",
+          "source": "rates_2024.csv"
+        }
+      },
+      {
+        "group": [
+          "IfcSlab",
+          "Level 1"
+        ],
+        "count": 3,
+        "volume_m3": 18.14,
+        "area_m2": 108.7,
+        "length_m": 17.67,
+        "weight_kg": 0,
+        "volume_sources": {
+          "base_quantity": 3
+        },
+        "area_sources": {
+          "base_quantity": 3
+        },
+        "length_sources": {
+          "geometry": 3
+        },
+        "cost": {
+          "rate_code": "SL-RC-200",
+          "rate_description": "Reinforced concrete slab, in situ",
+          "unit": "m3",
+          "rate": 245,
+          "quantity": 18.14,
+          "amount": 4444.3,
+          "currency": "EUR",
+          "source": "rates_2024.csv"
+        }
+      },
+      {
+        "group": [
+          "IfcWall",
+          "Level 0"
+        ],
+        "count": 7,
+        "volume_m3": 28.56,
+        "area_m2": 120.97,
+        "length_m": 42.9,
+        "weight_kg": 0,
+        "volume_sources": {
+          "base_quantity": 7
+        },
+        "area_sources": {
+          "base_quantity": 7
+        },
+        "length_sources": {
+          "base_quantity": 7
+        },
+        "cost": {
+          "rate_code": "WL-MAS-300",
+          "rate_description": "Masonry wall, supply and install",
+          "unit": "m2",
+          "rate": 118.5,
+          "quantity": 120.97,
+          "amount": 14334.95,
+          "currency": "EUR",
+          "source": "rates_2024.csv"
+        }
+      },
+      {
+        "group": [
+          "IfcWall",
+          "Level 1"
+        ],
+        "count": 5,
+        "volume_m3": 15.93,
+        "area_m2": 76.99,
+        "length_m": 27.3,
+        "weight_kg": 0,
+        "volume_sources": {
+          "base_quantity": 5
+        },
+        "area_sources": {
+          "base_quantity": 5
+        },
+        "length_sources": {
+          "base_quantity": 5
+        },
+        "cost": {
+          "rate_code": "WL-MAS-300",
+          "rate_description": "Masonry wall, supply and install",
+          "unit": "m2",
+          "rate": 118.5,
+          "quantity": 76.99,
+          "amount": 9123.31,
+          "currency": "EUR",
+          "source": "rates_2024.csv"
+        }
+      }
+    ],
+    "total_count": 40,
+    "total_volume_m3": 90.87,
+    "total_area_m2": 524.75,
+    "total_length_m": 184.78,
+    "total_weight_kg": 4233.6,
+    "total_cost": 38461.48,
+    "currency": "EUR",
+    "elements_without_quantities": 2,
+    "method": "For each element the takeoff uses the quantity written in the file (IfcElementQuantity / BaseQuantities) when it exists. Only when it is missing is the quantity computed from the element's 3D geometry, and the source is recorded for every row. Elements are grouped by type and storey; volumes, areas and lengths are summed per group. Cost = matched unit rate × the quantity in the rate's unit. Groups with no matching rate have no cost. Elements with no usable quantity are counted but add nothing.",
+    "samples": [
+      {
+        "global_id": "1kh8rjgveXY7q2FCraWfaf",
+        "ifc_type": "IfcWall",
+        "name": "WL-001 Exterior North",
+        "storey": "Level 0",
+        "volume_m3": 7.107,
+        "volume_source": "base_quantity",
+        "area_m2": 23.69,
+        "area_source": "base_quantity",
+        "length_m": 8.4,
+        "length_source": "base_quantity",
+        "quantity_sets": [
+          "Qto_WallBaseQuantities"
+        ]
+      },
+      {
+        "global_id": "1FZ0KcB$2Ojs81wK0Js6xI",
+        "ifc_type": "IfcSlab",
+        "name": "SL-001 Ground Slab A",
+        "storey": "Level 0",
+        "volume_m3": 10.5,
+        "volume_source": "base_quantity",
+        "area_m2": 52.5,
+        "area_source": "base_quantity",
+        "length_m": 7.246,
+        "length_source": "geometry",
+        "quantity_sets": [
+          "Qto_SlabBaseQuantities"
+        ]
+      },
+      {
+        "global_id": "2hdPjTbYxhnQzO_9VqPrg6",
+        "ifc_type": "IfcBeam",
+        "name": "BM-201 Grid A",
+        "storey": "Level 0",
+        "volume_m3": 0.384,
+        "volume_source": "base_quantity",
+        "area_m2": 11.52,
+        "area_source": "geometry",
+        "length_m": 6.4,
+        "length_source": "base_quantity",
+        "quantity_sets": [
+          "Qto_BeamBaseQuantities"
+        ]
+      },
+      {
+        "global_id": "1GeIo59LxB4u0DNJomzBfa",
+        "ifc_type": "IfcDoor",
+        "name": "DR-004 Store",
+        "storey": "Level 0",
+        "volume_m3": 0.057,
+        "volume_source": "geometry",
+        "area_m2": 1.89,
+        "area_source": "base_quantity",
+        "length_m": 2.1,
+        "length_source": "geometry",
+        "quantity_sets": [
+          "Qto_DoorBaseQuantities"
+        ]
+      },
+      {
+        "global_id": "2u7LvBObeY_nk$dN$1RyCs",
+        "ifc_type": "IfcDuctSegment",
+        "name": "DU-004 Return L0-1",
+        "storey": "Level 0",
+        "volume_m3": 0.216,
+        "volume_source": "base_quantity",
+        "area_m2": 2.4,
+        "area_source": "base_quantity",
+        "length_m": 2.4,
+        "length_source": "base_quantity",
+        "quantity_sets": [
+          "Qto_DuctSegmentBaseQuantities"
+        ]
+      }
+    ]
+  },
+  "ids": {
+    "ids_file": "clinic_requirements.ids",
+    "title": "Clinic Block A - information requirements",
+    "specifications_total": 2,
+    "specifications_passed": 0,
+    "specifications": [
+      {
+        "name": "Walls declare fire rating and external status",
+        "description": "Every wall needs a fire rating for the fire-safety review.",
+        "instructions": "Fill Pset_WallCommon from the wall type.",
+        "applicability": [
+          "All IfcWall entities"
+        ],
+        "cardinality": "required",
+        "applicable_count": 12,
+        "passed": false,
+        "requirements": [
+          {
+            "description": "Property Pset_WallCommon.FireRating must be present and have a value",
+            "facet": "property",
+            "passed": false,
+            "failed_entities": [
+              {
+                "global_id": "0DWyutvRulH3U9$Pumo8hu",
+                "ifc_type": "IfcWall",
+                "name": "WL-002 Exterior East",
+                "reason": "Property FireRating in Pset_WallCommon is empty"
+              }
+            ]
+          },
+          {
+            "description": "Property Pset_WallCommon.IsExternal must be present (true or false)",
+            "facet": "property",
+            "passed": true,
+            "failed_entities": []
+          }
+        ]
+      },
+      {
+        "name": "Doors are made of a declared material",
+        "description": "Doors must name their material so hardware schedules can be produced.",
+        "instructions": null,
+        "applicability": [
+          "All IfcDoor entities",
+          "On the storeys Level 0 and Level 1"
+        ],
+        "cardinality": "required",
+        "applicable_count": 8,
+        "passed": false,
+        "requirements": [
+          {
+            "description": "Doors must have a material assigned",
+            "facet": "material",
+            "passed": true,
+            "failed_entities": []
+          },
+          {
+            "description": "Doors must carry a classification from Uniclass 2015",
+            "facet": "classification",
+            "passed": false,
+            "failed_entities": [
+              {
+                "global_id": "0eF5r8X4M60ZhKSwONpeGB",
+                "ifc_type": "IfcDoor",
+                "name": "DR-001 Entrance",
+                "reason": "No classification reference found"
+              },
+              {
+                "global_id": "1MRlRU_s_aWM7jZJza0ojn",
+                "ifc_type": "IfcDoor",
+                "name": "DR-002 Ward A",
+                "reason": "No classification reference found"
+              },
+              {
+                "global_id": "2dNQtTEgnLIXuezSweuRH4",
+                "ifc_type": "IfcDoor",
+                "name": "DR-003 Ward B",
+                "reason": "No classification reference found"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "clash": {
+    "enabled": false,
+    "implemented": false,
+    "message": "Clash detection is planned for phase 2. This version checks quality, quantities and IDS requirements only.",
+    "clashes": []
+  }
+}

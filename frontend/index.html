@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>VeriModel</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%277%27 fill=%27%234338ca%27/%3E%3Cpath d=%27M9 16.5l4.5 4.5L23 11%27 fill=%27none%27 stroke=%27white%27 stroke-width=%273.2%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/%3E%3C/svg%3E">
+  <script src="js/theme-init.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main" data-i18n="a11y.skip"></a>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <span class="wordmark">VeriModel</span>
+        <span class="tagline" data-i18n="app.tagline"></span>
+      </div>
+
+      <nav class="stepper" id="stepper" data-i18n-attr="aria-label:stepper.label">
+        <ol>
+          <li><button type="button" class="step" data-step="1"><span class="step-num" aria-hidden="true">1</span><span class="step-label" data-i18n="stepper.load"></span></button></li>
+          <li><button type="button" class="step" data-step="2"><span class="step-num" aria-hidden="true">2</span><span class="step-label" data-i18n="stepper.review"></span></button></li>
+          <li><button type="button" class="step" data-step="3"><span class="step-num" aria-hidden="true">3</span><span class="step-label" data-i18n="stepper.export"></span></button></li>
+        </ol>
+      </nav>
+
+      <div class="toggles">
+        <div class="segmented" role="group" data-i18n-attr="aria-label:toggle.theme">
+          <button type="button" data-theme-set="light" data-i18n="toggle.theme.light"></button>
+          <button type="button" data-theme-set="dark" data-i18n="toggle.theme.dark"></button>
+        </div>
+        <div class="segmented" role="group" data-i18n-attr="aria-label:toggle.lang">
+          <button type="button" data-lang-set="en" lang="en" data-i18n="toggle.lang.en"></button>
+          <button type="button" data-lang-set="es" lang="es" data-i18n="toggle.lang.es"></button>
+        </div>
+        <div class="segmented" role="group" data-i18n-attr="aria-label:toggle.units">
+          <button type="button" data-units-set="metric" data-i18n="toggle.units.metric"></button>
+          <button type="button" data-units-set="imperial" data-i18n="toggle.units.imperial"></button>
+        </div>
+      </div>
+    </div>
+    <div class="busy-bar" id="busy" hidden><span></span></div>
+  </header>
+
+  <main id="main" class="page">
+
+    <!-- ===================== STEP 1: LOAD ===================== -->
+    <section id="view-load" class="view" aria-labelledby="load-title">
+      <div class="view-head">
+        <h1 id="load-title" tabindex="-1" data-i18n="load.title"></h1>
+        <p class="lede" data-i18n="load.lede"></p>
+      </div>
+
+      <div id="load-error" class="notice notice-error" role="alert" hidden></div>
+
+      <div id="dropzone" class="dropzone">
+        <div class="dz-body">
+          <div class="dz-copy">
+            <h2 class="dz-title" id="dz-title" data-i18n="load.drop.title"></h2>
+            <p class="dz-sub" id="dz-sub" data-i18n="load.drop.sub"></p>
+          </div>
+          <button type="button" class="btn btn-secondary btn-lg" id="btn-browse-ifc" data-i18n="load.browse.ifc"></button>
+        </div>
+        <div class="dz-extras">
+          <div class="extra">
+            <div class="extra-text">
+              <span class="extra-title"><span class="term" data-i18n="term.ids" data-tip-key="tip.ids"></span> <span class="optional" data-i18n="common.optional"></span></span>
+              <span class="extra-desc" data-i18n="load.ids.desc"></span>
+            </div>
+            <div class="extra-actions">
+              <span id="ids-name" class="file-pill mono" hidden></span>
+              <button type="button" class="btn btn-ghost" id="btn-clear-ids" hidden data-i18n="common.remove"></button>
+              <button type="button" class="btn btn-secondary" id="btn-browse-ids" data-i18n="load.browse.ids"></button>
+            </div>
+          </div>
+          <div class="extra">
+            <div class="extra-text">
+              <span class="extra-title"><span class="term" data-i18n="term.config" data-tip-key="tip.config"></span> <span class="optional" data-i18n="common.optional"></span></span>
+              <span class="extra-desc" data-i18n="load.config.desc"></span>
+            </div>
+            <div class="extra-actions">
+              <span id="yaml-name" class="file-pill mono" hidden></span>
+              <button type="button" class="btn btn-ghost" id="btn-clear-yaml" hidden data-i18n="common.remove"></button>
+              <button type="button" class="btn btn-secondary" id="btn-browse-yaml" data-i18n="load.browse.config"></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <section class="samples" aria-labelledby="samples-title">
+        <div class="section-head">
+          <h2 id="samples-title" data-i18n="load.samples.title"></h2>
+          <p class="muted" data-i18n="load.samples.sub"></p>
+        </div>
+        <div id="sample-list" class="sample-grid"></div>
+      </section>
+
+      <div id="file-section" hidden></div>
+
+      <details id="settings" class="panel settings">
+        <summary>
+          <span class="summary-title" data-i18n="settings.title"></span>
+          <span class="summary-hint" data-i18n="settings.hint"></span>
+          <span id="settings-badge" class="badge-count" hidden></span>
+        </summary>
+        <div id="settings-body" class="settings-body"></div>
+      </details>
+
+      <div class="runbar" id="runbar">
+        <div class="runbar-text">
+          <strong id="run-status-title"></strong>
+          <span id="run-status-sub"></span>
+        </div>
+        <button type="button" class="btn btn-primary btn-lg" id="btn-run" data-i18n="load.run" disabled></button>
+        <div class="progress" id="run-progress" hidden>
+          <div class="progress-track" role="progressbar" data-i18n-attr="aria-label:run.running"><div class="progress-bar"></div></div>
+          <p id="run-stage" role="status"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== STEP 2: REVIEW ===================== -->
+    <section id="view-review" class="view" hidden aria-labelledby="review-title">
+      <h1 id="review-title" class="sr-only" tabindex="-1" data-i18n="review.title"></h1>
+      <div id="review-head" class="review-head card"></div>
+      <div class="review-sticky">
+        <div id="tablist" class="tabs" role="tablist" data-i18n-attr="aria-label:review.tabs"></div>
+        <div id="filterbar" class="filterbar"></div>
+      </div>
+      <div id="tabpanel" class="tabpanel" role="tabpanel" tabindex="0"></div>
+    </section>
+
+    <!-- ===================== STEP 3: EXPORT ===================== -->
+    <section id="view-export" class="view" hidden aria-labelledby="export-title">
+      <div class="view-head">
+        <h1 id="export-title" tabindex="-1" data-i18n="export.title"></h1>
+        <p class="lede" data-i18n="export.lede"></p>
+      </div>
+      <div id="export-root" class="stack"></div>
+    </section>
+  </main>
+
+  <aside id="detail" class="detail" hidden aria-labelledby="detail-title">
+    <header class="detail-head">
+      <div>
+        <p class="eyebrow" id="detail-sub"></p>
+        <h2 id="detail-title"></h2>
+      </div>
+      <button type="button" class="btn btn-secondary" id="detail-close"><span data-i18n="common.close"></span> <kbd>Esc</kbd></button>
+    </header>
+    <div id="detail-body" class="detail-body"></div>
+  </aside>
+
+  <footer class="footer"><span data-i18n="app.privacy"></span></footer>
+  <div id="toasts" class="toasts" aria-live="polite"></div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
