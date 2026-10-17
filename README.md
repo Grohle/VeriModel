@@ -50,6 +50,7 @@ Not a bot that clicks. Not a flow builder. A quality gate a model must cross wit
 | Need | Why | Install |
 |---|---|---|
 | Rust 1.80+ | engine, CLI, desktop shell | <https://rustup.rs> |
+| x86-64 CPU with AVX2 (2013+) or Apple Silicon | the assistant's inference kernels (`.cargo/config.toml` targets x86-64-v3) | — |
 | Python 3.9+ with `ifcopenshell` and `ifctester` | the IFC reader bridge (parsing, geometry, IDS) | `pip install ifcopenshell ifctester` |
 | Tauri v2 system deps (Linux only) | desktop app | `libwebkit2gtk-4.1-dev libayatana-appindicator3-dev librsvg2-dev patchelf` |
 | `cargo tauri` CLI (only to build the desktop app) | bundling | `cargo install tauri-cli --version "^2" --locked` |
@@ -330,7 +331,7 @@ Standards interpretations made where the specification leaves room, also listed 
 - Base quantities are trusted as declared; VeriModel does not recompute them when they disagree with the geometry (it reports the source of every value so you can).
 - BCF snapshots (PNG) are not generated.
 - The UI has been exercised in a browser with mock data and through the Tauri commands' tests; a full packaged-app UI test harness is not included.
-- The assistant is a 0.5B-parameter model: good at finding, explaining and drafting from the retrieved context, not a substitute for reading the report. It runs on CPU at a few tokens per second per core; larger GGUF models can be dropped into the same folder.
+- The assistant is a 0.5B-parameter model: good at finding, explaining and drafting from the retrieved context, not a substitute for reading the report. Measured on a 4-core CPU with the default build flags (AVX2 kernels): model load 1.5 s, prompt processing 33–38 tokens/s, generation 12–15 tokens/s, so a question takes roughly 30–50 s, almost all of it reading the prompt (Candle processes prompts one token row at a time; caching the fixed prefix is the planned fix). RAM: about 1.0 GB resident, 1.4 GB peak. Builds without AVX2 (`-C target-cpu`, see `.cargo/config.toml`) are 3–4× slower. Larger GGUF models can be dropped into the same folder.
 
 ## License
 

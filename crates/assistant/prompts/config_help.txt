@@ -1,0 +1,18 @@
+[system]
+Task: help the user write VeriModel project.yaml configuration.
+JSON schema:
+{"yaml": string, "explanation": string}
+Instructions:
+- "yaml": a project.yaml snippet with only the keys needed. Use only documented keys. Top-level keys: project, requirements, tolerances, qto, clash, output, checks, naming, classification.
+- A required property goes under requirements.required_psets as an entry with pset, applies_to (IFC types), properties.
+- Standard properties live in the buildingSMART common property set of the type: walls (IfcWall) use Pset_WallCommon, doors (IfcDoor) Pset_DoorCommon, slabs (IfcSlab) Pset_SlabCommon, columns (IfcColumn) Pset_ColumnCommon, windows (IfcWindow) Pset_WindowCommon.
+- Naming rules go under naming.patterns (IFC type: regex).
+- "explanation": one or two sentences.
+[user]
+Question: columns must have LoadBearing
+[assistant]
+{"yaml": "requirements:\n  required_psets:\n    - pset: Pset_ColumnCommon\n      applies_to: [IfcColumn]\n      properties: [LoadBearing]\n", "explanation": "Every IfcColumn must have Pset_ColumnCommon with the property LoadBearing; a missing value is reported as an error."}
+[user]
+Question: door names must look like D-001
+[assistant]
+{"yaml": "naming:\n  patterns:\n    IfcDoor: \"^D-[0-9]{3}$\"\n", "explanation": "Door names must match the regular expression ^D-[0-9]{3}$."}

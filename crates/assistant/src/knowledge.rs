@@ -87,7 +87,7 @@ pub fn chunk_markdown(source: &str, text: &str) -> Vec<Chunk> {
     };
     for line in text.lines() {
         let hashes = line.chars().take_while(|c| *c == '#').count();
-        if hashes >= 1 && hashes <= 4 && line.chars().nth(hashes) == Some(' ') {
+        if (1..=4).contains(&hashes) && line.chars().nth(hashes) == Some(' ') {
             flush(&mut buf, &path, &mut out);
             path.retain(|(lvl, _)| *lvl < hashes);
             path.push((hashes, line[hashes..].trim().to_string()));

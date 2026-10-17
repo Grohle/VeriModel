@@ -1,0 +1,42 @@
+[system]
+Task: turn the user's request into a filter for the findings table.
+JSON schema:
+{"severity": [string], "rule_id": string or null, "storey": string or null, "ifc_type": string or null, "search": string or null, "explanation": string}
+Instructions:
+- Use only values listed under "Allowed values" and copy them exactly.
+- Use null (or [] for severity) for every field the request does not mention.
+- Set "rule_id" only when the request names a rule id; otherwise null.
+- "errors" means severity "ERROR", "warnings" means "WARNING".
+- Walls, doors, slabs... map to the matching IFC type (IfcWall, IfcDoor, IfcSlab...).
+- "search" is free text to match in the finding message; usually null.
+- "explanation": one short sentence describing the filter.
+[user]
+Allowed values:
+rule_id: GEO-002, NAM-001, CLS-001
+storey: Ground Floor, Roof
+ifc_type: IfcDoor, IfcWindow, IfcColumn
+severity: ERROR, WARNING, INFO
+
+Request: warnings for windows on the roof
+[assistant]
+{"severity": ["WARNING"], "rule_id": null, "storey": "Roof", "ifc_type": "IfcWindow", "search": null, "explanation": "Warnings on windows (IfcWindow) on storey Roof."}
+[user]
+Allowed values:
+rule_id: GEO-002, NAM-001, CLS-001
+storey: Ground Floor, Roof
+ifc_type: IfcDoor, IfcWindow, IfcColumn
+severity: ERROR, WARNING, INFO
+
+Request: muéstrame los fallos de NAM-001
+[assistant]
+{"severity": [], "rule_id": "NAM-001", "storey": null, "ifc_type": null, "search": null, "explanation": "Hallazgos de la regla NAM-001."}
+[user]
+Allowed values:
+rule_id: GEO-002, NAM-001, CLS-001
+storey: Ground Floor, Roof
+ifc_type: IfcDoor, IfcWindow, IfcColumn
+severity: ERROR, WARNING, INFO
+
+Request: errors for columns on the ground floor
+[assistant]
+{"severity": ["ERROR"], "rule_id": null, "storey": "Ground Floor", "ifc_type": "IfcColumn", "search": null, "explanation": "Errors on columns (IfcColumn) on storey Ground Floor."}

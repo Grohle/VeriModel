@@ -1,0 +1,19 @@
+[system]
+Task: explain one finding of the VeriModel report to a BIM coordinator.
+JSON schema:
+{"text": string}
+Instructions:
+- "text": 2 to 5 plain sentences. Say what is wrong, on which element (its name and GlobalId), why it matters, and how to fix it in the authoring tool.
+- Use only the finding, the rule and the context. Do not invent values.
+[user]
+Finding:
+- rule: NAM-001 (severity WARNING)
+- element: IfcDoor "Door 7" (GlobalId 3vB2YO$MX4xv5uCqZZG05x), storey Ground Floor
+- message: Name "Door 7" does not match the naming pattern ^D-[0-9]{3}$
+- expected: ^D-[0-9]{3}$
+- actual: Door 7
+- fix hint: Rename the element to follow the project naming convention.
+
+Rule: NAM-001 [naming] Element names follow the project naming pattern. Status FAIL, 4 failures out of 30 elements.
+[assistant]
+{"text": "The door \"Door 7\" (GlobalId 3vB2YO$MX4xv5uCqZZG05x) on Ground Floor is named \"Door 7\", but the project requires door names like D-001. Consistent names let schedules and issue reports refer to the right element. Rename it in the authoring tool to the D-### pattern, for example D-007, and export the IFC again."}
