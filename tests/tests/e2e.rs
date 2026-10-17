@@ -278,3 +278,33 @@ fn write_demo_outputs() {
         eprintln!("{name}: score {} verdict {:?} errors {} warnings {} -> {}", o.report.summary.score, o.report.summary.verdict, o.report.summary.errors, o.report.summary.warnings, dir.display());
     }
 }
+
+#[test]
+fn demo_building_shows_a_realistic_mixed_review() {
+    if skip_ifc() {
+        return;
+    }
+    let cfg_path = example("demo/project.yaml");
+    let cfg = Config::from_file(&cfg_path).unwrap();
+    let ids = cfg.ids_path(cfg_path.parent()).unwrap();
+    let path = example("demo/demo_building.ifc");
+    let model = verimodel_ifc_reader::read_model(&path, &verimodel_ifc_reader::ReadOptions { ids_path: Some(ids.clone()), ..Default::default() }).unwrap();
+    assert_eq!(model.info.storeys, vec!["Level 1", "Level 2", "Roof"]);
+    let dir = tempfile::tempdir().unwrap();
+    let o = run(&model, &cfg, cfg_path.parent(), Some(&ids), dir.path());
+    let s = &o.report.summary;
+    assert_eq!(s.verdict, Some(Verdict::Fail), "{:#?}", o.report.findings);
+    assert!(s.score >= 85 && s.score < 100, "score {}", s.score);
+    let by_rule = |id: &str| o.report.findings.iter().filter(|f| f.rule_id == id).map(|f| f.name.clone().unwrap_or_default()).collect::<Vec<_>>();
+    assert_eq!(by_rule("SP-001"), vec!["C-205"]);
+    assert_eq!(by_rule("CFG-PSET-002-01"), vec!["D-103"]);
+    assert_eq!(by_rule("PR-001"), vec!["W-204"]);
+    assert_eq!(by_rule("CL-001"), vec!["MEP-102"]);
+    assert_eq!(by_rule("ID-003").len(), 2);
+    assert!(o.report.findings.iter().all(|f| f.rule_id != "ID-001" && f.rule_id != "ID-002"));
+    // quantities come from base quantities, not geometry
+    let walls = o.report.qto.rows.iter().filter(|r| r.group[0] == "IfcWall").map(|r| r.count).sum::<usize>();
+    assert_eq!(walls, 9);
+    assert!(o.report.qto.rows.iter().filter(|r| r.group[0] == "IfcWall").all(|r| r.volume_sources.get("base_quantity") == Some(&r.count)));
+    assert!(o.report.qto.total_cost.unwrap_or(0.0) > 0.0);
+}

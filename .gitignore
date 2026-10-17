@@ -31,6 +31,7 @@ out/
 *.ifc
 *.ifczip
 !tests/fixtures/*.ifc
+!examples/demo/*.ifc
 
 # OS / editors
 .DS_Store
@@ -41,3 +42,4 @@ Thumbs.db
 *.swo
 .env
 .env.local
+src-tauri/gen/
