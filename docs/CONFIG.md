@@ -28,10 +28,12 @@ truth for the schema. If this page and the code disagree, the code wins.
   `classification.code_pattern` compiles; every `required_psets` entry has a
   non-empty `pset` and a valid `severity`; `checks.unique_name_within` values
   are `type` or `storey`.
-- **Not validated at read time:** rule ids and category names in `checks.rules`
-  and `checks.categories` are not checked against the rule packs, so a
-  misspelled id is accepted and has no effect. `allowed_codes_file` is read
-  only when the checks run.
+- **Validated when the checks run:** every rule id in `checks.rules` must exist
+  in the active rule pack (or be an `IDS-*` id) and every name in
+  `checks.categories` must be a category of the pack or one of the standard
+  categories (identity, spatial, properties, geometry, classification, naming,
+  sanity, schema, ids); otherwise the run stops with a message naming the key.
+  `allowed_codes_file` is read only when the checks run.
 - **Check the file:** `verimodel validate-config --config project.yaml`.
   `verimodel validate-config --schema` prints the JSON schema, which editors
   can use for autocompletion.
@@ -68,7 +70,7 @@ it yet.
 
 | Key | Type | Default | Status | Meaning |
 | --- | --- | --- | --- | --- |
-| `requirements.ids_file` | text (path) | none | declared | IDS file to audit against. The current command line reads the IDS only from `--ids`. |
+| `requirements.ids_file` | text (path) | none | used | IDS file to audit against, relative to the config file. `--ids` on the command line (or the IDS picked in the app) takes precedence. |
 | `requirements.rule_pack` | text | `generic` | read | `generic` for the built-in pack, or a path to a custom rule pack YAML (relative to this file). See [RULES.md](RULES.md). |
 | `requirements.required_psets` | list of `RequiredPset` | `[]` | read | Property sets, and optionally properties, that must exist. Each entry creates generated rules (see below). |
 
@@ -174,7 +176,7 @@ rules, once IDS checks run).
 | Key | Type | Default | Status | Meaning |
 | --- | --- | --- | --- | --- |
 | `classification.required` | boolean | `false` | read | `true` turns on rule CL-001: every element in scope must carry a classification reference from `project.classification_system`. |
-| `classification.applies_to` | list of text | `[]` | declared | Intended list of element types that must be classified. No code reads it yet; rule CL-001 currently uses the rule's own scope (`IfcElement`). |
+| `classification.applies_to` | list of text | `[]` | used | Element types (or supertypes) that must be classified, e.g. `[IfcWall, IfcSlab]`. Empty means every element in the rule's scope (`IfcElement`). Read by the `classification_exists` check (rule CL-001). |
 | `classification.allowed_codes` | list of text | `[]` | read | Codes accepted inline. Read by rule CL-002. |
 | `classification.allowed_codes_file` | text (path) | none | read | File of accepted codes: either a CSV with a `code` column (the first line is the header), or one code per line. Lines starting with `#` are ignored. Read when the checks run. |
 | `classification.code_pattern` | regular expression | none | read | Every classification code must match it (rule CL-002). Checks shape, not existence in a table. |
