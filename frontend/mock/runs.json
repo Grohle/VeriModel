@@ -2,7 +2,7 @@
   {
     "tool": {
       "name": "verimodel",
-      "version": "0.1.0"
+      "version": "1.0.0"
     },
     "timestamp": "2026-10-16T09:42:17Z",
     "duration_ms": 1486,
@@ -30,7 +30,7 @@
   {
     "tool": {
       "name": "verimodel",
-      "version": "0.1.0"
+      "version": "1.0.0"
     },
     "timestamp": "2026-10-14T15:03:51Z",
     "duration_ms": 1391,
@@ -58,7 +58,7 @@
   {
     "tool": {
       "name": "verimodel",
-      "version": "0.1.0"
+      "version": "1.0.0"
     },
     "timestamp": "2026-10-09T11:20:05Z",
     "duration_ms": 902,

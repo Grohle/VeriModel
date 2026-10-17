@@ -3,9 +3,9 @@ resolver = "2"
 members = ["crates/core", "crates/ifc_reader", "crates/assistant", "crates/cli", "src-tauri", "tests"]
 
 [workspace.package]
-version = "0.1.0"
+version = "1.0.0"
 edition = "2021"
-license = "MIT"
+license = "PolyForm-Noncommercial-1.0.0"
 authors = ["VeriModel contributors"]
 repository = "https://github.com/grohle/verimodel"
 

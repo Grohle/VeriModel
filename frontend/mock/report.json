@@ -1,7 +1,7 @@
 {
   "tool": {
     "name": "verimodel",
-    "version": "0.1.0"
+    "version": "1.0.0"
   },
   "model": {
     "file_name": "Clinic_Block_A.ifc",

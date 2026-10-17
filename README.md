@@ -31,6 +31,7 @@ Not a bot that clicks. Not a flow builder. A quality gate a model must cross wit
 - [Tests](#tests)
 - [Assumptions](#assumptions)
 - [Limitations](#limitations)
+- [License](#license)
 - [Dependencies and licenses](#dependencies-and-licenses)
 
 ## Why VeriModel
@@ -40,6 +41,7 @@ Not a bot that clicks. Not a flow builder. A quality gate a model must cross wit
 - **Pluggable rules.** A rule is data: `{id, description, scope, check, severity, fix_hint}` in YAML. New rules are added by adding a YAML entry, not by editing the engine.
 - **Local-first.** No accounts, no cloud, no telemetry, no CDN at run time. All data stays on the machine.
 - **Standards-based.** IFC, buildingSMART IDS 1.0, BCF 2.1 and 3.0 (validated against the official XSDs).
+- **Source-available.** PolyForm Noncommercial 1.0.0: free for any noncommercial purpose; commercial licences on request (see [License](#license)).
 
 ## Quickstart
 
@@ -293,9 +295,21 @@ Standards interpretations made where the specification leaves room, also listed 
 - BCF snapshots (PNG) are not generated.
 - The UI has been exercised in a browser with mock data and through the Tauri commands' tests; a full packaged-app UI test harness is not included.
 
+## License
+
+VeriModel is **source-available** under the [PolyForm Noncommercial License 1.0.0](LICENSE). It is not open source in the OSI sense, on purpose:
+
+- **Allowed, for free:** any **noncommercial** purpose: education and teaching, personal study, research and experiments for public knowledge, hobby projects, and use by educational institutions, public research organisations, charities and government bodies. You may study, change and share the code for those purposes, keeping the licence and the `Required Notice` line.
+- **Not allowed:** any **commercial** use of any kind, including inside a company, in a paid product or service, or to produce commercial work, without a separate licence.
+- **The author** keeps every right: distributing VeriModel, selling it, or licensing it commercially to others is up to the copyright holder. Commercial licences are available on request.
+
+Required Notice: Copyright 2026 Grohle (https://github.com/Grohle/VeriModel)
+
+This is a summary for convenience; the [LICENSE](LICENSE) text is what applies.
+
 ## Dependencies and licenses
 
-VeriModel is MIT licensed. Runtime and build dependencies and their licenses:
+Runtime and build dependencies and their licences (all permissive; none restricts VeriModel's own terms):
 
 | Dependency | License | Role |
 |---|---|---|
@@ -308,7 +322,7 @@ VeriModel is MIT licensed. Runtime and build dependencies and their licenses:
 | clap | MIT / Apache-2.0 | CLI |
 | Sample IFC files (buildingSMART International) | CC BY 4.0 | test fixtures |
 
-IfcOpenShell is invoked as an external interpreter process via its public Python API and is not statically or dynamically linked into the MIT binaries; its LGPL terms apply to IfcOpenShell itself. Users install it separately.
+IfcOpenShell is invoked as an external interpreter process via its public Python API and is not statically or dynamically linked into the VeriModel binaries; its LGPL terms apply to IfcOpenShell itself. Users install it separately. The optional assistant model (Qwen2.5 0.5B Instruct, Apache-2.0) is downloaded by the user on demand and keeps its own licence, shown before download.
 
 ---
 
