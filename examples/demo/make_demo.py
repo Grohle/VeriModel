@@ -6,13 +6,14 @@ A small two-storey office pavilion written with the IfcOpenShell API (IFC4,
 millimetres): walls, slabs, columns, beams, doors, windows, a roof, spaces, a
 duct run, with property sets, base quantities, Uniclass classification and
 materials. It is deliberately *almost* clean so a first run shows what a real
-review looks like: a healthy score, a few warnings and two real errors.
+review looks like: a healthy score, three warnings and three real errors
+(with examples/demo/project.yaml, where classification is required).
 
 Deliberate defects:
   * ground-floor door D-003 has Pset_DoorCommon but no FireRating   -> IDS / CFG-PSET
   * column C-005 is not contained in any storey                     -> SP-001 (error)
   * window W-004 carries an empty Pset_WindowCommon.Reference       -> PR-001 (warning)
-  * duct segment MEP-002 has no classification                      -> CL-001 when required (warning in demo config)
+  * duct segment MEP-002 has no classification                      -> CL-001 (error: the demo config requires classification)
   * two walls on level 2 share the name "WL-201"                    -> ID-003 (warning)
 
 Run:  python3 examples/demo/make_demo.py

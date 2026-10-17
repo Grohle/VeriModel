@@ -1,7 +1,7 @@
 # VeriModel demo project — used by "Load the demo" in the app and by the README walkthrough.
 # A small two-storey office pavilion (examples/demo/demo_building.ifc) with a handful of
-# deliberate defects so a first run shows a realistic review: a good score, a few warnings
-# and two real errors. Everything below is ordinary project.yaml; copy it for your own project.
+# deliberate defects so a first run shows a realistic review: a good score, three warnings
+# and three real errors (missing FireRating on a door, an orphan column, an unclassified duct). Everything below is ordinary project.yaml; copy it for your own project.
 project:
   name: "VeriModel demo pavilion"
   language: en

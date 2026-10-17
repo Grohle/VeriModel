@@ -279,6 +279,14 @@ verimodel/
 
 **Why vanilla HTML/JS?** No build step, no bundler fragility, no CDN, fully auditable static files that Tauri serves as-is; the UI contains no business logic, so a framework buys little.
 
+**The assistant: Rust-native, read-only by construction.** The optional copilot lives in `crates/assistant` and runs a small quantized GGUF model (default Qwen2.5-0.5B-Instruct, Q4_K_M, about 0.5 GB, Apache-2.0) with [Candle](https://github.com/huggingface/candle), Hugging Face's pure-Rust ML framework: no Python, no C++ toolchain, no GPU required, one binary. Guardrails are architectural, not prompt-based:
+
+- The model gets **text in, text out**. It has no tools, no file-system or network access, and the Tauri command layer never gives it one. Downloading the model is a separate, explicit user action with the size and licence shown first.
+- It **never takes part in a verdict**: pass/fail, scores, quantities and BCF issues are computed by `verimodel-core` before the assistant exists; the assistant only reads the finished report.
+- Every answer is **structured and validated**. A filter may only name rule ids, storeys, types and severities that exist in the current report (anything else is dropped and shown as "ignored"); a `project.yaml` suggestion is run through the real config parser and shown as Valid/Invalid before "Use in settings" is offered; an answer that does not fit its schema is shown as plain text and marked as unstructured, never applied.
+- **Retrieval, not invention.** Prompts are built from BM25-retrieved chunks of the built-in docs, the rule pack, the current report and any documentation you import; the model is asked to answer from those chunks. Decoding is greedy, so the same question with the same context gives the same answer.
+- **Documentation → YAML.** `verimodel docs-to-yaml --in <files or folders> --out knowledge.yaml` (also "Import documentation…" in the panel) converts Markdown, text, YAML, JSON, Word (.docx) and PDF into a readable `knowledge.yaml` of chunks that the assistant indexes, so a BIM execution plan or an employer's information requirements can be asked about, and turned into draft `project.yaml` rules, offline.
+
 **Size.** Elements are streamed from the extractor and the geometry kernel runs multi-threaded; the UI paginates every table. The core keeps a compact model in memory (a 100k-element model is a few hundred MB), which is the trade-off for whole-model checks such as duplicate GlobalIds.
 
 ## Demo script
@@ -322,6 +330,7 @@ Standards interpretations made where the specification leaves room, also listed 
 - Base quantities are trusted as declared; VeriModel does not recompute them when they disagree with the geometry (it reports the source of every value so you can).
 - BCF snapshots (PNG) are not generated.
 - The UI has been exercised in a browser with mock data and through the Tauri commands' tests; a full packaged-app UI test harness is not included.
+- The assistant is a 0.5B-parameter model: good at finding, explaining and drafting from the retrieved context, not a substitute for reading the report. It runs on CPU at a few tokens per second per core; larger GGUF models can be dropped into the same folder.
 
 ## License
 
