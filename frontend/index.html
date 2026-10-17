@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>VeriModel</title>
+  <link rel="icon" type="image/svg+xml" href="assets/logo-mark.svg">
+  <script src="js/theme-init.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main" data-i18n="a11y.skip"></a>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <svg class="logo-mark" viewBox="0 0 64 64" width="28" height="28" aria-hidden="true" focusable="false">
+          <defs><linearGradient id="vm-plate" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1f2937"/><stop offset="1" stop-color="#0b1220"/></linearGradient></defs>
+          <path d="M10 2h44l8 8v44l-8 8H10l-8-8V10z" fill="url(#vm-plate)"/>
+          <path d="M10 2h44l8 8v44l-8 8H10l-8-8V10z" fill="none" stroke="#374151" stroke-width="1.5"/>
+          <circle cx="9" cy="9" r="1.6" fill="#4b5563"/><circle cx="55" cy="9" r="1.6" fill="#4b5563"/>
+          <circle cx="9" cy="55" r="1.6" fill="#4b5563"/><circle cx="55" cy="55" r="1.6" fill="#4b5563"/>
+          <path d="M14 17l12 30" fill="none" stroke="#e5e7eb" stroke-width="7" stroke-linecap="round"/>
+          <path d="M26 47l24-28" fill="none" stroke="#f59e0b" stroke-width="7" stroke-linecap="round"/>
+        </svg>
+        <span class="wordmark">Veri<span class="wordmark-model">Model</span></span>
+        <span class="tagline" data-i18n="app.tagline"></span>
+      </div>
+
+      <nav class="stepper" id="stepper" data-i18n-attr="aria-label:stepper.label">
+        <ol>
+          <li><button type="button" class="step" data-step="1"><span class="step-num" aria-hidden="true">1</span><span class="step-label" data-i18n="stepper.load"></span></button></li>
+          <li><button type="button" class="step" data-step="2"><span class="step-num" aria-hidden="true">2</span><span class="step-label" data-i18n="stepper.review"></span></button></li>
+          <li><button type="button" class="step" data-step="3"><span class="step-num" aria-hidden="true">3</span><span class="step-label" data-i18n="stepper.export"></span></button></li>
+        </ol>
+      </nav>
+
+      <div class="header-right">
+        <div class="toggles">
+          <div class="segmented" role="group" data-i18n-attr="aria-label:toggle.theme">
+            <button type="button" data-theme-set="light" data-i18n="toggle.theme.light"></button>
+            <button type="button" data-theme-set="dark" data-i18n="toggle.theme.dark"></button>
+          </div>
+          <div class="segmented" role="group" data-i18n-attr="aria-label:toggle.lang">
+            <button type="button" data-lang-set="en" lang="en" data-i18n="toggle.lang.en"></button>
+            <button type="button" data-lang-set="es" lang="es" data-i18n="toggle.lang.es"></button>
+          </div>
+          <div class="segmented" role="group" data-i18n-attr="aria-label:toggle.units">
+            <button type="button" data-units-set="metric" data-i18n="toggle.units.metric"></button>
+            <button type="button" data-units-set="imperial" data-i18n="toggle.units.imperial"></button>
+          </div>
+        </div>
+        <button type="button" class="btn btn-secondary assistant-btn" id="btn-assistant" aria-expanded="false" aria-controls="assistant" data-i18n-attr="aria-label:header.assistant_aria">
+          <svg class="spark" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4z" fill="currentColor"/><path d="M19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9z" fill="currentColor" opacity=".7"/></svg>
+          <span data-i18n="header.assistant"></span>
+        </button>
+        <span class="version-pill mono" id="version-pill" hidden></span>
+      </div>
+    </div>
+    <div class="busy-bar" id="busy" hidden><span></span></div>
+  </header>
+
+  <main id="main" class="page">
+
+    <!-- ===================== STEP 1: LOAD ===================== -->
+    <section id="view-load" class="view" aria-labelledby="load-title">
+      <div class="view-head">
+        <h1 id="load-title" tabindex="-1" data-i18n="load.title"></h1>
+        <p class="lede" data-i18n="load.lede"></p>
+      </div>
+
+      <div id="load-error" class="notice notice-error" role="alert" hidden></div>
+
+      <div id="dropzone" class="dropzone">
+        <div class="dz-body">
+          <div class="dz-copy">
+            <h2 class="dz-title" id="dz-title" data-i18n="load.drop.title"></h2>
+            <p class="dz-sub" id="dz-sub" data-i18n="load.drop.sub"></p>
+          </div>
+          <div class="dz-actions">
+            <button type="button" class="btn btn-secondary btn-lg" id="btn-browse-ifc" data-i18n="load.browse.ifc"></button>
+            <div class="demo-cta" id="demo-cta" hidden>
+              <button type="button" class="btn btn-secondary btn-lg btn-demo" id="btn-demo" data-i18n-attr="aria-label:load.demo.aria">
+                <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><path d="M7 4.5v15l12-7.5z" fill="currentColor"/></svg>
+                <span data-i18n="load.demo.btn"></span>
+              </button>
+              <span class="demo-hint" data-i18n="load.demo.hint"></span>
+            </div>
+          </div>
+        </div>
+        <div class="dz-extras">
+          <div class="extra">
+            <div class="extra-text">
+              <span class="extra-title"><span class="term" data-i18n="term.ids" data-tip-key="tip.ids"></span> <span class="optional" data-i18n="common.optional"></span></span>
+              <span class="extra-desc" data-i18n="load.ids.desc"></span>
+            </div>
+            <div class="extra-actions">
+              <span id="ids-name" class="file-pill mono" hidden></span>
+              <button type="button" class="btn btn-ghost" id="btn-clear-ids" hidden data-i18n="common.remove"></button>
+              <button type="button" class="btn btn-secondary" id="btn-browse-ids" data-i18n="load.browse.ids"></button>
+            </div>
+          </div>
+          <div class="extra">
+            <div class="extra-text">
+              <span class="extra-title"><span class="term" data-i18n="term.config" data-tip-key="tip.config"></span> <span class="optional" data-i18n="common.optional"></span></span>
+              <span class="extra-desc" data-i18n="load.config.desc"></span>
+            </div>
+            <div class="extra-actions">
+              <span id="yaml-name" class="file-pill mono" hidden></span>
+              <button type="button" class="btn btn-ghost" id="btn-clear-yaml" hidden data-i18n="common.remove"></button>
+              <button type="button" class="btn btn-secondary" id="btn-browse-yaml" data-i18n="load.browse.config"></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <section class="samples" aria-labelledby="samples-title">
+        <div class="section-head">
+          <h2 id="samples-title" data-i18n="load.samples.title"></h2>
+          <p class="muted" data-i18n="load.samples.sub"></p>
+        </div>
+        <div id="sample-list" class="sample-grid"></div>
+      </section>
+
+      <div id="file-section" hidden></div>
+
+      <details id="settings" class="panel settings">
+        <summary>
+          <span class="summary-title" data-i18n="settings.title"></span>
+          <span class="summary-hint" data-i18n="settings.hint"></span>
+          <span id="settings-badge" class="badge-count" hidden></span>
+        </summary>
+        <div id="settings-body" class="settings-body"></div>
+      </details>
+
+      <div class="runbar" id="runbar">
+        <div class="runbar-text">
+          <strong id="run-status-title"></strong>
+          <span id="run-status-sub"></span>
+        </div>
+        <button type="button" class="btn btn-primary btn-lg" id="btn-run" data-i18n="load.run" disabled></button>
+        <div class="progress" id="run-progress" hidden>
+          <div class="progress-track" role="progressbar" data-i18n-attr="aria-label:run.running"><div class="progress-bar"></div></div>
+          <p id="run-stage" role="status"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== STEP 2: REVIEW ===================== -->
+    <section id="view-review" class="view" hidden aria-labelledby="review-title">
+      <h1 id="review-title" class="sr-only" tabindex="-1" data-i18n="review.title"></h1>
+      <div id="review-head" class="review-head card"></div>
+      <div class="review-sticky">
+        <div id="tablist" class="tabs" role="tablist" data-i18n-attr="aria-label:review.tabs"></div>
+        <div id="filterbar" class="filterbar"></div>
+      </div>
+      <div id="tabpanel" class="tabpanel" role="tabpanel" tabindex="0"></div>
+    </section>
+
+    <!-- ===================== STEP 3: EXPORT ===================== -->
+    <section id="view-export" class="view" hidden aria-labelledby="export-title">
+      <div class="view-head">
+        <h1 id="export-title" tabindex="-1" data-i18n="export.title"></h1>
+        <p class="lede" data-i18n="export.lede"></p>
+      </div>
+      <div id="export-root" class="stack"></div>
+    </section>
+  </main>
+
+  <aside id="detail" class="detail" hidden aria-labelledby="detail-title">
+    <header class="detail-head">
+      <div>
+        <p class="eyebrow" id="detail-sub"></p>
+        <h2 id="detail-title"></h2>
+      </div>
+      <button type="button" class="btn btn-secondary" id="detail-close"><span data-i18n="common.close"></span> <kbd>Esc</kbd></button>
+    </header>
+    <div id="detail-body" class="detail-body"></div>
+  </aside>
+
+  <aside id="assistant" class="assistant" hidden role="dialog" aria-modal="false" aria-labelledby="assistant-title">
+    <header class="assistant-head">
+      <div>
+        <p class="eyebrow" data-i18n="assistant.eyebrow"></p>
+        <h2 id="assistant-title" data-i18n="assistant.title"></h2>
+      </div>
+      <button type="button" class="btn btn-secondary" id="assistant-close"><span data-i18n="common.close"></span> <kbd>Esc</kbd></button>
+    </header>
+    <div class="assistant-scroll" id="assistant-scroll">
+      <section id="as-status" class="as-card" aria-live="polite"></section>
+      <section class="as-section" aria-labelledby="as-quick-title">
+        <h3 class="as-label" id="as-quick-title" data-i18n="assistant.quick"></h3>
+        <div id="as-chips" class="as-chips"></div>
+      </section>
+      <section class="as-section" aria-labelledby="as-convo-title">
+        <h3 class="sr-only" id="as-convo-title" data-i18n="assistant.convo"></h3>
+        <div id="as-convo" class="as-convo" role="log" aria-live="polite"></div>
+      </section>
+    </div>
+    <form id="as-composer" class="as-composer">
+      <p id="as-mode" class="as-mode"></p>
+      <div class="as-input-row">
+        <label class="sr-only" for="as-input" data-i18n="assistant.input.label"></label>
+        <textarea id="as-input" rows="2" data-i18n-attr="placeholder:assistant.input.placeholder"></textarea>
+        <button type="submit" class="btn btn-primary" id="as-send" data-i18n="assistant.send"></button>
+      </div>
+      <p id="as-hint" class="as-hint" hidden></p>
+    </form>
+    <footer class="assistant-foot">
+      <div class="as-import-row">
+        <button type="button" class="btn btn-secondary btn-sm" id="as-import-files" data-i18n="assistant.import.files" data-i18n-attr="title:assistant.import.hint"></button>
+        <button type="button" class="btn btn-ghost btn-sm" id="as-import-folder" data-i18n="assistant.import.folder" data-i18n-attr="title:assistant.import.hint"></button>
+      </div>
+      <div id="as-import-result" class="as-import-result" role="status"></div>
+      <p class="as-disclaimer" data-i18n="assistant.disclaimer"></p>
+    </footer>
+  </aside>
+
+  <footer class="footer"><span data-i18n="app.privacy"></span><span class="footer-about" data-i18n="app.about"></span></footer>
+  <div id="toasts" class="toasts" aria-live="polite"></div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

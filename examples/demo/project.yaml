@@ -1,0 +1,48 @@
+# VeriModel demo project — used by "Load the demo" in the app and by the README walkthrough.
+# A small two-storey office pavilion (examples/demo/demo_building.ifc) with a handful of
+# deliberate defects so a first run shows a realistic review: a good score, three warnings
+# and three real errors (missing FireRating on a door, an orphan column, an unclassified duct). Everything below is ordinary project.yaml; copy it for your own project.
+project:
+  name: "VeriModel demo pavilion"
+  language: en
+  units: auto
+  classification_system: Uniclass
+  ifc_versions: [IFC2X3, IFC4, IFC4X3]
+requirements:
+  ids_file: ../sample.ids
+  rule_pack: generic
+  required_psets:
+    - pset: Pset_WallCommon
+      applies_to: [IfcWall]
+      properties: [FireRating, IsExternal]
+    - pset: Pset_DoorCommon
+      applies_to: [IfcDoor]
+      properties: [FireRating]
+tolerances:
+  far_from_origin_m: 10000
+  geometry:
+    min_volume_m3: 0.000001
+    min_area_m2: 0.000001
+    max_extent_m: 5000
+qto:
+  group_by: [type, storey]
+  unit_rates_file: ../rates.csv
+  currency: EUR
+  sample_count: 5
+classification:
+  required: true
+  applies_to: [IfcElement]
+  code_pattern: '^[A-Za-z]{2}_[0-9]{2}(_[0-9]{2}){0,3}$'
+naming:
+  patterns:
+    IfcWall: '^WL-[0-9]{3}$'
+    IfcDoor: '^D-[0-9]{3}$'
+    IfcWindow: '^W-[0-9]{3}$'
+    IfcColumn: '^C-[0-9]{3}$'
+    IfcBeam: '^B-[0-9]{3}$'
+checks:
+  rules:
+    CL-001: true   # classification is required in this demo (severity error); set to false to relax
+output:
+  language: en
+  bcf_version: "2.1"

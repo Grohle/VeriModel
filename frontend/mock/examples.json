@@ -1,0 +1,34 @@
+[
+  {
+    "id": "demo",
+    "name": "Demo pavilion (start here)",
+    "description": "Two-storey office pavilion with properties, quantities, classification and five deliberate defects — the fastest way to see VeriModel at work.",
+    "ifc_path": "examples/demo/demo_building.ifc",
+    "config_path": "examples/demo/project.yaml",
+    "ids_path": "examples/sample.ids"
+  },
+  {
+    "id": "residential",
+    "name": "Residential building",
+    "description": "Architecture model in IFC2X3 with an IDS file and a unit rates table: walls, doors, windows and slabs.",
+    "ifc_path": "tests/fixtures/bsi_ifc2x3_building_architecture.ifc",
+    "config_path": "examples/residential/project.yaml",
+    "ids_path": "examples/sample.ids"
+  },
+  {
+    "id": "office",
+    "name": "Office building",
+    "description": "Structural model in IFC4: columns, beams and slabs checked against load-bearing and classification requirements.",
+    "ifc_path": "tests/fixtures/bsi_ifc4_building_structural.ifc",
+    "config_path": "examples/office/project.yaml",
+    "ids_path": "examples/sample.ids"
+  },
+  {
+    "id": "infrastructure",
+    "name": "Infrastructure (bridge)",
+    "description": "Bridge in IFC4X3: shows the checks on a non-building model with its own spatial structure.",
+    "ifc_path": "tests/fixtures/bsi_ifc4x3_infra_bridge.ifc",
+    "config_path": "examples/infrastructure/project.yaml",
+    "ids_path": "examples/sample.ids"
+  }
+]

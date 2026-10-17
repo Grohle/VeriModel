@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  test:
+    name: Rust tests (core, reader, end-to-end)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy, rustfmt
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install IfcOpenShell + IfcTester (the IFC reader bridge)
+        run: python -m pip install --upgrade pip && python -m pip install ifcopenshell "ifctester" --no-deps && python -m pip install lxml xmlschema
+      - name: Install Tauri system dependencies (Linux)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libayatana-appindicator3-dev librsvg2-dev patchelf
+      - uses: Swatinem/rust-cache@v2
+      - name: Format
+        run: cargo fmt --all -- --check
+      - name: Clippy
+        run: cargo clippy --workspace --all-targets -- -D warnings
+      - name: Test
+        run: cargo test --workspace
+      - name: CLI smoke run on the broken fixture (expected exit code 1 = FAIL)
+        run: |
+          cargo run -q -p verimodel-cli -- check --ifc tests/fixtures/broken_building.ifc --ids examples/sample.ids --config examples/residential/project.yaml --out out/broken || test $? -eq 1
+          ls -la out/broken
+
+  bundle:
+    name: Desktop bundle (${{ matrix.os }})
+    needs: test
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Install Tauri system dependencies (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libayatana-appindicator3-dev librsvg2-dev patchelf
+      - uses: Swatinem/rust-cache@v2
+      - name: Install Tauri CLI
+        run: cargo install tauri-cli --version "^2" --locked
+      - name: Build installers
+        run: cargo tauri build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: verimodel-${{ matrix.os }}
+          path: |
+            target/release/bundle/**/*.msi
+            target/release/bundle/**/*.exe
+            target/release/bundle/**/*.dmg
+            target/release/bundle/**/*.AppImage
+            target/release/bundle/**/*.deb
+          if-no-files-found: warn

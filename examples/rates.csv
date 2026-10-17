@@ -1,0 +1,13 @@
+code,description,unit,rate,currency,match_type,match_storey,match_classification
+WALL-01,Wall construction supply and install excl finishes,m3,310.00,EUR,IfcWall,,
+SLAB-01,Reinforced concrete slab supply and place excl formwork,m3,290.00,EUR,IfcSlab,,
+BEAM-01,Reinforced concrete beam supply and place,m3,420.00,EUR,IfcBeam,,
+COL-01,Reinforced concrete column supply and place,m3,460.00,EUR,IfcColumn,,
+FTG-01,Strip or pad footing in concrete supply and place,m3,240.00,EUR,IfcFooting,,
+DOOR-01,Internal door set supply and fit leaf frame and ironmongery,nr,650.00,EUR,IfcDoor,,
+WIN-01,Window unit supply and install double glazed,nr,780.00,EUR,IfcWindow,,
+ROOF-01,Roof covering system supply and install,m2,95.00,EUR,IfcRoof,,
+COV-01,Floor covering supply and lay,m2,38.00,EUR,IfcCovering,,
+DUCT-01,Rectangular ductwork supply and install,m,145.00,EUR,IfcDuctSegment,,
+PIPE-01,Pipework supply and install mixed diameters,m,85.00,EUR,IfcPipeSegment,,
+RAIL-01,Balustrade or railing supply and install,m,260.00,EUR,IfcRailing,,

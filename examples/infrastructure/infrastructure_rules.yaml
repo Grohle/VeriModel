@@ -1,0 +1,124 @@
+# VeriModel example: custom rule pack for bridge and road models (IFC4X3).
+#
+# This is a CUSTOM rule pack. It has the same format as the built-in
+# crates/core/rule_packs/generic.yaml, and project.yaml points to it with:
+#   requirements:
+#     rule_pack: infrastructure_rules.yaml
+# The path is relative to the project.yaml file. Adding or changing a rule
+# here needs no change to the engine code.
+#
+# Rule anatomy (every rule needs all of these):
+#   id          stable identifier shown in reports and BCF titles
+#   category    identity | spatial | properties | geometry | classification | naming | sanity | schema
+#               (a category can be switched off in project.yaml, under checks.categories)
+#   description what the rule checks, in plain language
+#   severity    error | warning | info
+#   scope       which elements the rule looks at (IFC type or supertype, exclusions)
+#   check       one check kind from docs/RULES.md, with its parameters
+#   fix_hint    plain-language advice for the modeller
+#
+# "$config.<path>" reads a value from project.yaml, so thresholds live in one place.
+name: infrastructure_rules
+version: 1
+description: Quality gate for bridge and road models (IFC4X3). Long linear projects, no storeys.
+rules:
+  # --- Identity -------------------------------------------------------------
+  - id: ID-001
+    category: identity
+    description: Every element must have a unique GlobalId
+    severity: error
+    scope: { ifc_types: [IfcProduct], include_spatial: true }
+    check: { kind: unique_global_id }
+    fix_hint: Regenerate the GlobalId of the duplicated element in the authoring tool, or remove the duplicate copy.
+
+  - id: ID-002
+    category: identity
+    description: Every GlobalId must be a valid 22-character IFC identifier
+    severity: error
+    scope: { ifc_types: [IfcProduct], include_spatial: true }
+    check: { kind: valid_global_id }
+    fix_hint: Re-export the model; a malformed GlobalId usually comes from a hand-edited or truncated file.
+
+  # --- Spatial structure ------------------------------------------------------
+  - id: SP-001
+    category: spatial
+    description: Every element must be contained in a spatial structure element (bridge part, road part, site, facility part)
+    severity: error
+    scope: { ifc_types: [IfcElement], exclude_types: [IfcFeatureElement, IfcVirtualElement] }
+    check: { kind: contained_in_spatial_structure }
+    fix_hint: Assign the element to a bridge part, road part or facility part in the authoring tool before exporting.
+
+  - id: SP-002
+    category: spatial
+    description: The model must declare a site, a bridge, road, railway or facility, and at least one matching part
+    severity: warning
+    scope: { include_spatial: true }
+    check:
+      kind: spatial_hierarchy
+      require:
+        - [IfcSite]
+        - [IfcBridge, IfcRoad, IfcRailway, IfcFacility]
+        - [IfcBridgePart, IfcRoadPart, IfcRailwayPart, IfcFacilityPart]
+    fix_hint: Export with the Site > Bridge (or Road, Railway, Facility) > Part structure enabled.
+
+  - id: SP-003
+    category: spatial
+    description: Elements must not be far from the project origin
+    severity: warning
+    scope: { ifc_types: [IfcElement] }
+    check: { kind: distance_from_origin, max_m: "$config.tolerances.far_from_origin_m" }
+    fix_hint: Long infrastructure is often placed on national coordinates. Set the shared coordinates correctly, or raise tolerances.far_from_origin_m if this is expected.
+
+  - id: SP-004
+    category: spatial
+    description: The model must contain at least one bridge element
+    severity: warning
+    scope: { include_spatial: true }
+    check: { kind: types_present, ifc_types: [IfcBridge] }
+    fix_hint: This pack is for bridge models. If the file is a road or railway model, disable this rule in project.yaml under checks.rules.
+
+  # --- Geometry ---------------------------------------------------------------
+  - id: GEO-001
+    category: geometry
+    description: Physical elements must have a geometric representation
+    severity: warning
+    scope: { ifc_types: [IfcElement], exclude_types: [IfcFeatureElement, IfcVirtualElement, IfcAnnotation] }
+    check: { kind: has_geometry }
+    fix_hint: The element has no 3D body; check that its geometry is not hidden or filtered out of the export.
+
+  - id: GEO-002
+    category: geometry
+    description: Elements with a representation must produce a non-degenerate shape (volume or area above tolerance)
+    severity: error
+    scope: { ifc_types: [IfcElement], exclude_types: [IfcFeatureElement, IfcVirtualElement, IfcAnnotation] }
+    check:
+      kind: non_degenerate_geometry
+      min_volume_m3: "$config.tolerances.geometry.min_volume_m3"
+      min_area_m2: "$config.tolerances.geometry.min_area_m2"
+    fix_hint: The element's solid collapsed to zero volume or area. Fix the geometry in the authoring tool.
+
+  - id: GEO-003
+    category: geometry
+    description: Element bounding boxes must stay within the configured project extent
+    severity: warning
+    scope: { ifc_types: [IfcElement] }
+    check: { kind: bbox_within_bounds, max_extent_m: "$config.tolerances.geometry.max_extent_m" }
+    fix_hint: An element longer than the whole project usually means a unit mismatch or a stray stretched solid. Raise tolerances.geometry.max_extent_m only if the length is real.
+
+  # --- Properties -------------------------------------------------------------
+  - id: INF-PSET-001
+    category: properties
+    description: Beams and columns must carry the concrete element property set Pset_ConcreteElementGeneral
+    severity: warning
+    scope: { ifc_types: [IfcBeam, IfcColumn] }
+    check: { kind: pset_exists, pset: Pset_ConcreteElementGeneral }
+    fix_hint: Add Pset_ConcreteElementGeneral to the concrete beams and columns, or assign the material and property set in the authoring tool.
+
+  # --- Schema -----------------------------------------------------------------
+  - id: SCH-001
+    category: schema
+    description: The IFC schema of the file must be one the project accepts
+    severity: error
+    scope: { include_spatial: true }
+    check: { kind: schema_allowed }
+    fix_hint: Export in one of the schemas listed in project.ifc_versions (IFC4X3 for this pack), or add the schema to the list.

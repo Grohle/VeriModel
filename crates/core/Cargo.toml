@@ -1,0 +1,32 @@
+[package]
+name = "verimodel-core"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "VeriModel engine: rule engine, QTO, BCF, report, audit. Pure Rust, no IFC dependency."
+
+[lib]
+name = "verimodel_core"
+path = "src/lib.rs"
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+serde_yaml.workspace = true
+schemars.workspace = true
+thiserror.workspace = true
+regex.workspace = true
+sha2.workspace = true
+hex.workspace = true
+chrono.workspace = true
+csv.workspace = true
+zip.workspace = true
+quick-xml.workspace = true
+rust_xlsxwriter.workspace = true
+uuid.workspace = true
+indexmap.workspace = true
+log.workspace = true
+html-escape.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true

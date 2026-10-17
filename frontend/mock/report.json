@@ -1,0 +1,1301 @@
+{
+  "tool": {
+    "name": "VeriModel",
+    "version": "1.0.0"
+  },
+  "model": {
+    "file_name": "demo_building.ifc",
+    "file_size_bytes": 69674,
+    "sha256": "c64a0cb3e46fc24539d8e67df4a3243029bef6ce92b741006119cfe0f4a1c582",
+    "schema": "IFC4",
+    "mvd": "ViewDefinition[DesignTransferView]",
+    "authoring_tool": "IfcOpenShell 0.9.0.post1",
+    "project_name": "VeriModel demo pavilion",
+    "units": {
+      "length_unit": "MILLIMETRE",
+      "length_to_m": 0.001,
+      "area_unit": "SQUARE_METRE",
+      "area_to_m2": 1.0,
+      "volume_unit": "CUBIC_METRE",
+      "volume_to_m3": 1.0,
+      "system": "metric"
+    },
+    "element_count": 46,
+    "spatial_tree": [
+      {
+        "global_id": "1EpypJIb12CfdN9VsEREsE",
+        "ifc_type": "IfcSite",
+        "name": "Demo site",
+        "elevation_m": null,
+        "children": [
+          {
+            "global_id": "3QbDo1yX9DbvOtppP64ZlL",
+            "ifc_type": "IfcBuilding",
+            "name": "Demo pavilion",
+            "elevation_m": null,
+            "children": [
+              {
+                "global_id": "1IGd$4nYXElgZB4GTNmdPP",
+                "ifc_type": "IfcBuildingStorey",
+                "name": "Level 1",
+                "elevation_m": 0.0,
+                "children": [
+                  {
+                    "global_id": "3yKaPu4HD4ExAZm$NkAkAb",
+                    "ifc_type": "IfcSpace",
+                    "name": "Office 1.01",
+                    "elevation_m": null,
+                    "children": []
+                  },
+                  {
+                    "global_id": "1Xh9cXiZb1BxwABhznR7IJ",
+                    "ifc_type": "IfcSpace",
+                    "name": "Office 1.02",
+                    "elevation_m": null,
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "global_id": "0e5UlLDXfEv9G8siqzjE$o",
+                "ifc_type": "IfcBuildingStorey",
+                "name": "Level 2",
+                "elevation_m": 3.5,
+                "children": [
+                  {
+                    "global_id": "2k_XPRK0H7MBwX$trTsnKu",
+                    "ifc_type": "IfcSpace",
+                    "name": "Meeting 2.01",
+                    "elevation_m": null,
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "global_id": "0hBDJ75zX6vhkU0IfkK4eR",
+                "ifc_type": "IfcBuildingStorey",
+                "name": "Roof",
+                "elevation_m": 7.0,
+                "children": []
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "type_counts": {
+      "IfcBeam": 3,
+      "IfcBuilding": 1,
+      "IfcBuildingStorey": 3,
+      "IfcColumn": 10,
+      "IfcDoor": 4,
+      "IfcDuctSegment": 2,
+      "IfcRoof": 1,
+      "IfcSite": 1,
+      "IfcSlab": 2,
+      "IfcSpace": 3,
+      "IfcWall": 9,
+      "IfcWindow": 7
+    },
+    "storeys": [
+      "Level 1",
+      "Level 2",
+      "Roof"
+    ],
+    "disciplines": [
+      "architecture",
+      "mep",
+      "structure"
+    ],
+    "reader_warnings": [],
+    "geometry_available": true
+  },
+  "config": {
+    "project": {
+      "name": "VeriModel demo pavilion",
+      "language": "en",
+      "units": "auto",
+      "classification_system": "Uniclass",
+      "ifc_versions": [
+        "IFC2X3",
+        "IFC4",
+        "IFC4X3"
+      ]
+    },
+    "requirements": {
+      "ids_file": "../sample.ids",
+      "rule_pack": "generic",
+      "required_psets": [
+        {
+          "pset": "Pset_WallCommon",
+          "applies_to": [
+            "IfcWall"
+          ],
+          "properties": [
+            "FireRating",
+            "IsExternal"
+          ],
+          "severity": null
+        },
+        {
+          "pset": "Pset_DoorCommon",
+          "applies_to": [
+            "IfcDoor"
+          ],
+          "properties": [
+            "FireRating"
+          ],
+          "severity": null
+        }
+      ]
+    },
+    "tolerances": {
+      "clash_hard_mm": 10.0,
+      "clash_clearance_mm": 50.0,
+      "far_from_origin_m": 10000.0,
+      "geometry": {
+        "min_volume_m3": 1e-06,
+        "min_area_m2": 1e-06,
+        "max_extent_m": 5000.0
+      }
+    },
+    "qto": {
+      "group_by": [
+        "type",
+        "storey"
+      ],
+      "unit_rates_file": "../rates.csv",
+      "currency": "EUR",
+      "sample_count": 5
+    },
+    "clash": {
+      "enabled": false,
+      "set_a_filter": {
+        "ifc_type": null,
+        "name_pattern": null,
+        "storey": null,
+        "property_equals": {}
+      },
+      "set_b_filter": {
+        "ifc_type": null,
+        "name_pattern": null,
+        "storey": null,
+        "property_equals": {}
+      }
+    },
+    "output": {
+      "language": "en",
+      "include_3d_snapshot": true,
+      "bcf_version": "2.1",
+      "bcf_author": "verimodel@local"
+    },
+    "checks": {
+      "rules": {
+        "CL-001": true
+      },
+      "categories": {},
+      "unique_name_within": []
+    },
+    "naming": {
+      "patterns": {
+        "IfcBeam": "^B-[0-9]{3}$",
+        "IfcColumn": "^C-[0-9]{3}$",
+        "IfcDoor": "^D-[0-9]{3}$",
+        "IfcWall": "^WL-[0-9]{3}$",
+        "IfcWindow": "^W-[0-9]{3}$"
+      }
+    },
+    "classification": {
+      "required": true,
+      "applies_to": [
+        "IfcElement"
+      ],
+      "allowed_codes": [],
+      "allowed_codes_file": null,
+      "code_pattern": "^[A-Za-z]{2}_[0-9]{2}(_[0-9]{2}){0,3}$"
+    }
+  },
+  "summary": {
+    "score": 99,
+    "verdict": "FAIL",
+    "elements_checked": 46,
+    "element_checks": 734,
+    "errors": 3,
+    "warnings": 3,
+    "infos": 0,
+    "rules_total": 25,
+    "rules_passed": 20,
+    "rules_failed": 5,
+    "rules_skipped": 0,
+    "rules_not_applicable": 0,
+    "verdict_rule": "FAIL = at least one ERROR. PASS WITH WARNINGS = no errors, at least one WARNING. PASS = no errors and no warnings. Score = 100 × (1 − (errors + 0.25 × warnings) / element checks). Skipped rules are never counted as passed."
+  },
+  "rules": [
+    {
+      "rule_id": "CFG-PSET-001",
+      "category": "properties",
+      "description": "Property set Pset_WallCommon must exist on IfcWall",
+      "severity": "ERROR",
+      "status": "PASS",
+      "elements_checked": 9,
+      "failures": 0,
+      "skipped_reason": null,
+      "source": {
+        "kind": "project_config"
+      }
+    },
+    {
+      "rule_id": "CFG-PSET-001-01",
+      "category": "properties",
+      "description": "Property Pset_WallCommon.FireRating must exist and have a value on IfcWall",
+      "severity": "ERROR",
+      "status": "PASS",
+      "elements_checked": 9,
+      "failures": 0,
+      "skipped_reason": null,
+      "source": {
+        "kind": "project_config"
+      }
+    },
+    {
+      "rule_id": "CFG-PSET-001-02",
+      "category": "properties",
+      "description": "Property Pset_WallCommon.IsExternal must exist and have a value on IfcWall",
+      "severity": "ERROR",
+      "status": "PASS",
+      "elements_checked": 9,
+      "failures": 0,
+      "skipped_reason": null,
+      "source": {
+        "kind": "project_config"
+      }
+    },
+    {
+      "rule_id": "CFG-PSET-002",
+      "category": "properties",
+      "description": "Property set Pset_DoorCommon must exist on IfcDoor",
+      "severity": "ERROR",
+      "status": "PASS",
+      "elements_checked": 4,
+      "failures": 0,
+      "skipped_reason": null,
+      "source": {
+        "kind": "project_config"
+      }
+    },
+    {
+      "rule_id": "CFG-PSET-002-01",
+      "category": "properties",
+      "description": "Property Pset_DoorCommon.FireRating must exist and have a value on IfcDoor",
+      "severity": "ERROR",
+      "status": "FAIL",
+      "elements_checked": 4,
+      "failures": 1,
+      "skipped_reason": null,
+      "source": {
+        "kind": "project_config"
+      }
+    },
+    {
+      "rule_id": "CL-001",
+      "category": "classification",
+      "description": "Elements must carry a classification reference from the configured system",
+      "severity": "ERROR",
+      "status": "FAIL",
+      "elements_checked": 38,
+      "failures": 1,
+      "skipped_reason": null,
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "CL-002",
+      "category": "classification",
+      "description": "Classification codes must belong to the configured classification list or pattern",
+      "severity": "WARNING",
+      "status": "PASS",
+      "elements_checked": 38,
+      "failures": 0,
+      "skipped_reason": null,
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "GEO-001",
+      "category": "geometry",
+      "description": "Physical elements must have a geometric representation",
+      "severity": "WARNING",
+      "status": "PASS",
+      "elements_checked": 38,
+      "failures": 0,
+      "skipped_reason": null,
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "GEO-002",
+      "category": "geometry",
+      "description": "Elements with a representation must produce a non-degenerate shape (volume or area above tolerance)",
+      "severity": "ERROR",
+      "status": "PASS",
+      "elements_checked": 38,
+      "failures": 0,
+      "skipped_reason": null,
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "GEO-003",
+      "category": "geometry",
+      "description": "Element bounding boxes must stay within the configured project bounds",
+      "severity": "WARNING",
+      "status": "PASS",
+      "elements_checked": 38,
+      "failures": 0,
+      "skipped_reason": null,
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "ID-001",
+      "category": "identity",
+      "description": "Every element must have a unique GlobalId",
+      "severity": "ERROR",
+      "status": "PASS",
+      "elements_checked": 46,
+      "failures": 0,
+      "skipped_reason": null,
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "ID-002",
+      "category": "identity",
+      "description": "Every GlobalId must be a valid 22-character IFC identifier",
+      "severity": "ERROR",
+      "status": "PASS",
+      "elements_checked": 46,
+      "failures": 0,
+      "skipped_reason": null,
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "ID-003",
+      "category": "identity",
+      "description": "Element names must be unique within the same type and storey",
+      "severity": "WARNING",
+      "status": "FAIL",
+      "elements_checked": 38,
+      "failures": 2,
+      "skipped_reason": null,
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "IDS-01-01",
+      "category": "ids",
+      "description": "Walls have a fire rating: FireRating data shall be provided in the dataset Pset_WallCommon",
+      "severity": "ERROR",
+      "status": "PASS",
+      "elements_checked": 9,
+      "failures": 0,
+      "skipped_reason": null,
+      "source": {
+        "kind": "ids",
+        "specification": "Walls have a fire rating",
+        "requirement": "FireRating data shall be provided in the dataset Pset_WallCommon"
+      }
+    },
+    {
+      "rule_id": "IDS-02-01",
+      "category": "ids",
+      "description": "Walls state IsExternal: IsExternal data shall be provided in the dataset Pset_WallCommon",
+      "severity": "ERROR",
+      "status": "PASS",
+      "elements_checked": 9,
+      "failures": 0,
+      "skipped_reason": null,
+      "source": {
+        "kind": "ids",
+        "specification": "Walls state IsExternal",
+        "requirement": "IsExternal data shall be provided in the dataset Pset_WallCommon"
+      }
+    },
+    {
+      "rule_id": "IDS-03-01",
+      "category": "ids",
+      "description": "Beams have a material: Shall have a material",
+      "severity": "ERROR",
+      "status": "PASS",
+      "elements_checked": 3,
+      "failures": 0,
+      "skipped_reason": null,
+      "source": {
+        "kind": "ids",
+        "specification": "Beams have a material",
+        "requirement": "Shall have a material"
+      }
+    },
+    {
+      "rule_id": "NAM-001",
+      "category": "naming",
+      "description": "Element names must follow the project naming convention",
+      "severity": "WARNING",
+      "status": "PASS",
+      "elements_checked": 38,
+      "failures": 0,
+      "skipped_reason": null,
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "PR-001",
+      "category": "properties",
+      "description": "Properties that exist must carry a value (no empty or null values)",
+      "severity": "WARNING",
+      "status": "FAIL",
+      "elements_checked": 38,
+      "failures": 1,
+      "skipped_reason": null,
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "QT-001",
+      "category": "sanity",
+      "description": "Elements that report a volume must report a positive volume",
+      "severity": "WARNING",
+      "status": "PASS",
+      "elements_checked": 38,
+      "failures": 0,
+      "skipped_reason": null,
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "QT-002",
+      "category": "sanity",
+      "description": "Elements that report an area must report a positive area",
+      "severity": "WARNING",
+      "status": "PASS",
+      "elements_checked": 38,
+      "failures": 0,
+      "skipped_reason": null,
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "SCH-001",
+      "category": "schema",
+      "description": "The IFC schema of the file must be one the project accepts",
+      "severity": "ERROR",
+      "status": "PASS",
+      "elements_checked": 46,
+      "failures": 0,
+      "skipped_reason": null,
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "SP-001",
+      "category": "spatial",
+      "description": "Every element must be contained in a spatial structure element (storey, space, site, facility part)",
+      "severity": "ERROR",
+      "status": "FAIL",
+      "elements_checked": 38,
+      "failures": 1,
+      "skipped_reason": null,
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "SP-002",
+      "category": "spatial",
+      "description": "The container of every element must exist in the spatial hierarchy",
+      "severity": "ERROR",
+      "status": "PASS",
+      "elements_checked": 38,
+      "failures": 0,
+      "skipped_reason": null,
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "SP-003",
+      "category": "spatial",
+      "description": "The model must declare a site, a building or facility, and at least one storey or facility part",
+      "severity": "WARNING",
+      "status": "PASS",
+      "elements_checked": 46,
+      "failures": 0,
+      "skipped_reason": null,
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "SP-004",
+      "category": "spatial",
+      "description": "Elements must not be far from the project origin",
+      "severity": "WARNING",
+      "status": "PASS",
+      "elements_checked": 38,
+      "failures": 0,
+      "skipped_reason": null,
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    }
+  ],
+  "findings": [
+    {
+      "rule_id": "CFG-PSET-002-01",
+      "severity": "ERROR",
+      "global_id": "1Y0DLMcffBEfFN6$xe3kNn",
+      "step_id": 568,
+      "ifc_type": "IfcDoor",
+      "name": "D-103",
+      "storey": "Level 1",
+      "message": "IfcDoor 'D-103' is missing property Pset_DoorCommon.FireRating",
+      "expected": "property Pset_DoorCommon.FireRating present",
+      "actual": "missing",
+      "fix_hint": "Fill in Pset_DoorCommon.FireRating on the element.",
+      "source": {
+        "kind": "project_config"
+      }
+    },
+    {
+      "rule_id": "CL-001",
+      "severity": "ERROR",
+      "global_id": "1a1bw1G7XEggO8ac3NDh54",
+      "step_id": 801,
+      "ifc_type": "IfcDuctSegment",
+      "name": "MEP-102",
+      "storey": "Level 1",
+      "message": "IfcDuctSegment 'MEP-102' has no Uniclass classification",
+      "expected": "classification from system 'Uniclass'",
+      "actual": "none",
+      "fix_hint": "Assign a classification code (Uniclass, OmniClass, CCI, DIN 276...) to the element or its type.",
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "SP-001",
+      "severity": "ERROR",
+      "global_id": "2FcEqYZEfBshSa5L3eGdFF",
+      "step_id": 1153,
+      "ifc_type": "IfcColumn",
+      "name": "C-205",
+      "storey": null,
+      "message": "IfcColumn 'C-205' is not contained in any storey, space, site or other spatial element",
+      "expected": "IfcRelContainedInSpatialStructure to a spatial element",
+      "actual": "no spatial container",
+      "fix_hint": "Assign the element to a level / storey in the authoring tool before exporting.",
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "ID-003",
+      "severity": "WARNING",
+      "global_id": "1K2ps1qyDEaAKz1F2vNd4l",
+      "step_id": 943,
+      "ifc_type": "IfcWall",
+      "name": "WL-201",
+      "storey": "Level 2",
+      "message": "Name 'WL-201' is shared by 2 elements of the same type and storey",
+      "expected": "unique name",
+      "actual": "2 elements named 'WL-201'",
+      "fix_hint": "Give each element a distinct name (type + number), or disable this rule in project.yaml if names are intentionally shared.",
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "ID-003",
+      "severity": "WARNING",
+      "global_id": "1niwtJeqDDOhds1z$gNC_r",
+      "step_id": 869,
+      "ifc_type": "IfcWall",
+      "name": "WL-201",
+      "storey": "Level 2",
+      "message": "Name 'WL-201' is shared by 2 elements of the same type and storey",
+      "expected": "unique name",
+      "actual": "2 elements named 'WL-201'",
+      "fix_hint": "Give each element a distinct name (type + number), or disable this rule in project.yaml if names are intentionally shared.",
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    },
+    {
+      "rule_id": "PR-001",
+      "severity": "WARNING",
+      "global_id": "24YJW4Vaj5cxAkwVPB9F0r",
+      "step_id": 1344,
+      "ifc_type": "IfcWindow",
+      "name": "W-204",
+      "storey": "Level 2",
+      "message": "IfcWindow 'W-204' has 1 empty property: Pset_WindowCommon.Reference",
+      "expected": "every property carries a value",
+      "actual": "1 empty",
+      "fix_hint": "Fill in the empty property or remove it from the export mapping.",
+      "source": {
+        "kind": "rule_pack",
+        "pack": "generic"
+      }
+    }
+  ],
+  "qto": {
+    "group_by": [
+      "type",
+      "storey"
+    ],
+    "rows": [
+      {
+        "group": [
+          "IfcBeam",
+          "Level 1"
+        ],
+        "count": 2,
+        "volume_m3": 3.3,
+        "area_m2": 35.8,
+        "length_m": 22.0,
+        "weight_kg": 0.0,
+        "volume_sources": {
+          "base_quantity": 2
+        },
+        "area_sources": {
+          "geometry": 2
+        },
+        "length_sources": {
+          "base_quantity": 2
+        },
+        "cost": {
+          "rate_code": "BEAM-01",
+          "rate_description": "Reinforced concrete beam supply and place",
+          "unit": "m3",
+          "rate": 420.0,
+          "quantity": 3.3,
+          "amount": 1386.0,
+          "currency": "EUR",
+          "source": "rates.csv"
+        }
+      },
+      {
+        "group": [
+          "IfcBeam",
+          "Level 2"
+        ],
+        "count": 1,
+        "volume_m3": 1.65,
+        "area_m2": 17.9,
+        "length_m": 11.0,
+        "weight_kg": 0.0,
+        "volume_sources": {
+          "base_quantity": 1
+        },
+        "area_sources": {
+          "geometry": 1
+        },
+        "length_sources": {
+          "base_quantity": 1
+        },
+        "cost": {
+          "rate_code": "BEAM-01",
+          "rate_description": "Reinforced concrete beam supply and place",
+          "unit": "m3",
+          "rate": 420.0,
+          "quantity": 1.65,
+          "amount": 693.0,
+          "currency": "EUR",
+          "source": "rates.csv"
+        }
+      },
+      {
+        "group": [
+          "IfcColumn",
+          "(no storey)"
+        ],
+        "count": 1,
+        "volume_m3": 0.56,
+        "area_m2": 5.920000000000005,
+        "length_m": 3.5,
+        "weight_kg": 0.0,
+        "volume_sources": {
+          "base_quantity": 1
+        },
+        "area_sources": {
+          "geometry": 1
+        },
+        "length_sources": {
+          "base_quantity": 1
+        },
+        "cost": {
+          "rate_code": "COL-01",
+          "rate_description": "Reinforced concrete column supply and place",
+          "unit": "m3",
+          "rate": 460.0,
+          "quantity": 0.56,
+          "amount": 257.6,
+          "currency": "EUR",
+          "source": "rates.csv"
+        }
+      },
+      {
+        "group": [
+          "IfcColumn",
+          "Level 1"
+        ],
+        "count": 5,
+        "volume_m3": 2.8000000000000003,
+        "area_m2": 29.60000000000001,
+        "length_m": 17.5,
+        "weight_kg": 0.0,
+        "volume_sources": {
+          "base_quantity": 5
+        },
+        "area_sources": {
+          "geometry": 5
+        },
+        "length_sources": {
+          "base_quantity": 5
+        },
+        "cost": {
+          "rate_code": "COL-01",
+          "rate_description": "Reinforced concrete column supply and place",
+          "unit": "m3",
+          "rate": 460.0,
+          "quantity": 2.8000000000000003,
+          "amount": 1288.0,
+          "currency": "EUR",
+          "source": "rates.csv"
+        }
+      },
+      {
+        "group": [
+          "IfcColumn",
+          "Level 2"
+        ],
+        "count": 4,
+        "volume_m3": 2.24,
+        "area_m2": 23.680000000000007,
+        "length_m": 14.0,
+        "weight_kg": 0.0,
+        "volume_sources": {
+          "base_quantity": 4
+        },
+        "area_sources": {
+          "geometry": 4
+        },
+        "length_sources": {
+          "base_quantity": 4
+        },
+        "cost": {
+          "rate_code": "COL-01",
+          "rate_description": "Reinforced concrete column supply and place",
+          "unit": "m3",
+          "rate": 460.0,
+          "quantity": 2.24,
+          "amount": 1030.4,
+          "currency": "EUR",
+          "source": "rates.csv"
+        }
+      },
+      {
+        "group": [
+          "IfcDoor",
+          "Level 1"
+        ],
+        "count": 3,
+        "volume_m3": 0.6300000000000008,
+        "area_m2": 6.300000000000001,
+        "length_m": 6.300000000000001,
+        "weight_kg": 0.0,
+        "volume_sources": {
+          "geometry": 3
+        },
+        "area_sources": {
+          "base_quantity": 3
+        },
+        "length_sources": {
+          "base_quantity": 3
+        },
+        "cost": {
+          "rate_code": "DOOR-01",
+          "rate_description": "Internal door set supply and fit leaf frame and ironmongery",
+          "unit": "nr",
+          "rate": 650.0,
+          "quantity": 3.0,
+          "amount": 1950.0,
+          "currency": "EUR",
+          "source": "rates.csv"
+        }
+      },
+      {
+        "group": [
+          "IfcDoor",
+          "Level 2"
+        ],
+        "count": 1,
+        "volume_m3": 0.21,
+        "area_m2": 2.1,
+        "length_m": 2.1,
+        "weight_kg": 0.0,
+        "volume_sources": {
+          "geometry": 1
+        },
+        "area_sources": {
+          "base_quantity": 1
+        },
+        "length_sources": {
+          "base_quantity": 1
+        },
+        "cost": {
+          "rate_code": "DOOR-01",
+          "rate_description": "Internal door set supply and fit leaf frame and ironmongery",
+          "unit": "nr",
+          "rate": 650.0,
+          "quantity": 1.0,
+          "amount": 650.0,
+          "currency": "EUR",
+          "source": "rates.csv"
+        }
+      },
+      {
+        "group": [
+          "IfcDuctSegment",
+          "Level 1"
+        ],
+        "count": 2,
+        "volume_m3": 1.1699999999999828,
+        "area_m2": 15.6,
+        "length_m": 13.0,
+        "weight_kg": 0.0,
+        "volume_sources": {
+          "geometry": 2
+        },
+        "area_sources": {
+          "base_quantity": 2
+        },
+        "length_sources": {
+          "base_quantity": 2
+        },
+        "cost": {
+          "rate_code": "DUCT-01",
+          "rate_description": "Rectangular ductwork supply and install",
+          "unit": "m",
+          "rate": 145.0,
+          "quantity": 13.0,
+          "amount": 1885.0,
+          "currency": "EUR",
+          "source": "rates.csv"
+        }
+      },
+      {
+        "group": [
+          "IfcRoof",
+          "Roof"
+        ],
+        "count": 1,
+        "volume_m3": 31.247999999999905,
+        "area_m2": 104.16,
+        "length_m": 12.399999999999999,
+        "weight_kg": 0.0,
+        "volume_sources": {
+          "geometry": 1
+        },
+        "area_sources": {
+          "base_quantity": 1
+        },
+        "length_sources": {
+          "geometry": 1
+        },
+        "cost": {
+          "rate_code": "ROOF-01",
+          "rate_description": "Roof covering system supply and install",
+          "unit": "m2",
+          "rate": 95.0,
+          "quantity": 104.16,
+          "amount": 9895.2,
+          "currency": "EUR",
+          "source": "rates.csv"
+        }
+      },
+      {
+        "group": [
+          "IfcSlab",
+          "Level 1"
+        ],
+        "count": 1,
+        "volume_m3": 24.0,
+        "area_m2": 96.0,
+        "length_m": 0.25,
+        "weight_kg": 0.0,
+        "volume_sources": {
+          "base_quantity": 1
+        },
+        "area_sources": {
+          "base_quantity": 1
+        },
+        "length_sources": {
+          "base_quantity": 1
+        },
+        "cost": {
+          "rate_code": "SLAB-01",
+          "rate_description": "Reinforced concrete slab supply and place excl formwork",
+          "unit": "m3",
+          "rate": 290.0,
+          "quantity": 24.0,
+          "amount": 6960.0,
+          "currency": "EUR",
+          "source": "rates.csv"
+        }
+      },
+      {
+        "group": [
+          "IfcSlab",
+          "Level 2"
+        ],
+        "count": 1,
+        "volume_m3": 24.0,
+        "area_m2": 96.0,
+        "length_m": 0.25,
+        "weight_kg": 0.0,
+        "volume_sources": {
+          "base_quantity": 1
+        },
+        "area_sources": {
+          "base_quantity": 1
+        },
+        "length_sources": {
+          "base_quantity": 1
+        },
+        "cost": {
+          "rate_code": "SLAB-01",
+          "rate_description": "Reinforced concrete slab supply and place excl formwork",
+          "unit": "m3",
+          "rate": 290.0,
+          "quantity": 24.0,
+          "amount": 6960.0,
+          "currency": "EUR",
+          "source": "rates.csv"
+        }
+      },
+      {
+        "group": [
+          "IfcWall",
+          "Level 1"
+        ],
+        "count": 5,
+        "volume_m3": 38.15,
+        "area_m2": 161.0,
+        "length_m": 46.0,
+        "weight_kg": 0.0,
+        "volume_sources": {
+          "base_quantity": 5
+        },
+        "area_sources": {
+          "base_quantity": 5
+        },
+        "length_sources": {
+          "base_quantity": 5
+        },
+        "cost": {
+          "rate_code": "WALL-01",
+          "rate_description": "Wall construction supply and install excl finishes",
+          "unit": "m3",
+          "rate": 310.0,
+          "quantity": 38.15,
+          "amount": 11826.5,
+          "currency": "EUR",
+          "source": "rates.csv"
+        }
+      },
+      {
+        "group": [
+          "IfcWall",
+          "Level 2"
+        ],
+        "count": 4,
+        "volume_m3": 35.0,
+        "area_m2": 140.0,
+        "length_m": 40.0,
+        "weight_kg": 0.0,
+        "volume_sources": {
+          "base_quantity": 4
+        },
+        "area_sources": {
+          "base_quantity": 4
+        },
+        "length_sources": {
+          "base_quantity": 4
+        },
+        "cost": {
+          "rate_code": "WALL-01",
+          "rate_description": "Wall construction supply and install excl finishes",
+          "unit": "m3",
+          "rate": 310.0,
+          "quantity": 35.0,
+          "amount": 10850.0,
+          "currency": "EUR",
+          "source": "rates.csv"
+        }
+      },
+      {
+        "group": [
+          "IfcWindow",
+          "Level 1"
+        ],
+        "count": 3,
+        "volume_m3": 0.43199999999994865,
+        "area_m2": 5.4,
+        "length_m": 3.5999999999999996,
+        "weight_kg": 0.0,
+        "volume_sources": {
+          "geometry": 3
+        },
+        "area_sources": {
+          "base_quantity": 3
+        },
+        "length_sources": {
+          "base_quantity": 3
+        },
+        "cost": {
+          "rate_code": "WIN-01",
+          "rate_description": "Window unit supply and install double glazed",
+          "unit": "nr",
+          "rate": 780.0,
+          "quantity": 3.0,
+          "amount": 2340.0,
+          "currency": "EUR",
+          "source": "rates.csv"
+        }
+      },
+      {
+        "group": [
+          "IfcWindow",
+          "Level 2"
+        ],
+        "count": 4,
+        "volume_m3": 0.575999999999963,
+        "area_m2": 7.2,
+        "length_m": 4.8,
+        "weight_kg": 0.0,
+        "volume_sources": {
+          "geometry": 4
+        },
+        "area_sources": {
+          "base_quantity": 4
+        },
+        "length_sources": {
+          "base_quantity": 4
+        },
+        "cost": {
+          "rate_code": "WIN-01",
+          "rate_description": "Window unit supply and install double glazed",
+          "unit": "nr",
+          "rate": 780.0,
+          "quantity": 4.0,
+          "amount": 3120.0,
+          "currency": "EUR",
+          "source": "rates.csv"
+        }
+      }
+    ],
+    "total_count": 38,
+    "total_volume_m3": 165.9659999999998,
+    "total_area_m2": 746.66,
+    "total_length_m": 196.7,
+    "total_weight_kg": 0.0,
+    "total_cost": 61091.7,
+    "currency": "EUR",
+    "elements_without_quantities": 0,
+    "method": "38 element(s) were measured and grouped by IFC entity type, then by building storey; 15 groups resulted. Spatial elements (sites, buildings, storeys, spaces) and non-physical elements (openings and other feature elements, virtual elements, annotations, grids) are not takeoff items; 8 such entries were left out. For each element, volume, area, length and weight were taken first from the base quantities stored in the IFC file (IfcElementQuantity, e.g. NetVolume, NetArea, Length, NetWeight). When a base quantity was missing, volume and area were computed from the tessellated geometry and length was taken as the longest side of the bounding box; weight is only reported when the file provides it. All values are in SI units, converted from the units declared in the file: cubic metres (m³), square metres (m²), metres (m) and kilograms (kg). Volume: 24 from base quantities, 14 from geometry, 0 not available. Area: 25 from base quantities, 13 from geometry, 0 not available. Length: 37 from base quantities, 1 from geometry, 0 not available. Weight was available for 0 element(s). 0 element(s) had no quantity at all; they are counted in their group but add nothing to the totals. Cost was estimated with the unit rates in rates.csv (12 rates): for each group the first rate, in file order, whose match columns all apply (match_type: the IFC type or one of its supertypes; match_storey: the exact storey name; match_classification: a prefix of the classification code; an empty column matches anything) was used. Amount = group quantity in the rate's unit (nr = element count) × rate, rounded to 2 decimals. 15 of 15 groups matched a rate; groups without a rate have no cost. Total estimated cost: 61091.70 EUR.",
+    "samples": [
+      {
+        "global_id": "0Ijn$vDv50fxv5Tp0EsZjv",
+        "ifc_type": "IfcRoof",
+        "name": "RF-301",
+        "storey": "Roof",
+        "volume_m3": 31.247999999999905,
+        "volume_source": "geometry",
+        "area_m2": 104.16,
+        "area_source": "base_quantity",
+        "length_m": 12.399999999999999,
+        "length_source": "geometry",
+        "quantity_sets": [
+          "Qto_RoofBaseQuantities"
+        ]
+      },
+      {
+        "global_id": "0Mkh683Qf2DAmyOPGNzkvr",
+        "ifc_type": "IfcColumn",
+        "name": "C-105",
+        "storey": "Level 1",
+        "volume_m3": 0.56,
+        "volume_source": "base_quantity",
+        "area_m2": 5.920000000000005,
+        "area_source": "geometry",
+        "length_m": 3.5,
+        "length_source": "base_quantity",
+        "quantity_sets": [
+          "Qto_ColumnBaseQuantities"
+        ]
+      },
+      {
+        "global_id": "0oSdlcRuvFW9jUDNjqWoWp",
+        "ifc_type": "IfcBeam",
+        "name": "B-101",
+        "storey": "Level 1",
+        "volume_m3": 1.65,
+        "volume_source": "base_quantity",
+        "area_m2": 17.9,
+        "area_source": "geometry",
+        "length_m": 11.0,
+        "length_source": "base_quantity",
+        "quantity_sets": [
+          "Qto_BeamBaseQuantities"
+        ]
+      },
+      {
+        "global_id": "0thzlZJ996k8RKzWt6IJG0",
+        "ifc_type": "IfcWall",
+        "name": "WL-103",
+        "storey": "Level 1",
+        "volume_m3": 10.5,
+        "volume_source": "base_quantity",
+        "area_m2": 42.0,
+        "area_source": "base_quantity",
+        "length_m": 12.0,
+        "length_source": "base_quantity",
+        "quantity_sets": [
+          "Qto_WallBaseQuantities"
+        ]
+      },
+      {
+        "global_id": "1G20W5wmPEauz_nY7hwIyR",
+        "ifc_type": "IfcColumn",
+        "name": "C-103",
+        "storey": "Level 1",
+        "volume_m3": 0.56,
+        "volume_source": "base_quantity",
+        "area_m2": 5.920000000000003,
+        "area_source": "geometry",
+        "length_m": 3.5,
+        "length_source": "base_quantity",
+        "quantity_sets": [
+          "Qto_ColumnBaseQuantities"
+        ]
+      }
+    ]
+  },
+  "ids": {
+    "ids_file": "sample.ids",
+    "title": "VeriModel sample requirements",
+    "specifications_total": 3,
+    "specifications_passed": 3,
+    "specifications": [
+      {
+        "name": "Walls have a fire rating",
+        "description": "Each wall must carry a Pset_WallCommon.FireRating value.",
+        "instructions": "Add the FireRating property to Pset_WallCommon on every wall type or occurrence.",
+        "applicability": [
+          "All IFCWALL data"
+        ],
+        "cardinality": "optional",
+        "applicable_count": 9,
+        "passed": true,
+        "requirements": [
+          {
+            "description": "FireRating data shall be provided in the dataset Pset_WallCommon",
+            "facet": "property",
+            "passed": true,
+            "failed_entities": []
+          }
+        ]
+      },
+      {
+        "name": "Walls state IsExternal",
+        "description": "Each wall must carry a Pset_WallCommon.IsExternal flag.",
+        "instructions": "",
+        "applicability": [
+          "All IFCWALL data"
+        ],
+        "cardinality": "optional",
+        "applicable_count": 9,
+        "passed": true,
+        "requirements": [
+          {
+            "description": "IsExternal data shall be provided in the dataset Pset_WallCommon",
+            "facet": "property",
+            "passed": true,
+            "failed_entities": []
+          }
+        ]
+      },
+      {
+        "name": "Beams have a material",
+        "description": "Each beam must be associated with at least one material.",
+        "instructions": "",
+        "applicability": [
+          "All IFCBEAM data"
+        ],
+        "cardinality": "optional",
+        "applicable_count": 3,
+        "passed": true,
+        "requirements": [
+          {
+            "description": "Shall have a material",
+            "facet": "material",
+            "passed": true,
+            "failed_entities": []
+          }
+        ]
+      }
+    ]
+  },
+  "clash": {
+    "enabled": false,
+    "implemented": false,
+    "message": "Clash detection is disabled in project.yaml (clash.enabled: false).",
+    "clashes": []
+  }
+}

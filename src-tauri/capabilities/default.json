@@ -1,0 +1,14 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Permissions of the VeriModel main window: core APIs (including drag-and-drop and app events), native file dialogs and opening files/folders with the system default app.",
+  "windows": ["main"],
+  "permissions": [
+    "core:default",
+    "core:event:default",
+    "core:window:default",
+    "core:webview:default",
+    "dialog:default",
+    "opener:default"
+  ]
+}

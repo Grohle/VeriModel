@@ -1,0 +1,38 @@
+{
+  "file_name": "demo_building.ifc",
+  "path": "/home/anna/VeriModel/examples/demo/demo_building.ifc",
+  "size_bytes": 69674,
+  "sha256": "c64a0cb3e46fc24539d8e67df4a3243029bef6ce92b741006119cfe0f4a1c582",
+  "sha256_short": "c64a0cb3e46f",
+  "schema": "IFC4",
+  "element_count": 46,
+  "units": {
+    "system": "metric",
+    "length_unit": "MILLIMETRE"
+  },
+  "disciplines": [
+    "architecture",
+    "mep",
+    "structure"
+  ],
+  "storeys": [
+    "Level 1",
+    "Level 2",
+    "Roof"
+  ],
+  "type_counts": {
+    "IfcBeam": 3,
+    "IfcBuilding": 1,
+    "IfcBuildingStorey": 3,
+    "IfcColumn": 10,
+    "IfcDoor": 4,
+    "IfcDuctSegment": 2,
+    "IfcRoof": 1,
+    "IfcSite": 1,
+    "IfcSlab": 2,
+    "IfcSpace": 3,
+    "IfcWall": 9,
+    "IfcWindow": 7
+  },
+  "reader_warnings": []
+}

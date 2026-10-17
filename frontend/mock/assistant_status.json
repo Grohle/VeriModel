@@ -1,0 +1,13 @@
+{
+  "model_id": "qwen2.5-0.5b-instruct-q4_k_m",
+  "name": "Qwen2.5 0.5B Instruct (Q4_K_M)",
+  "installed": true,
+  "model_dir": "/home/anna/.local/share/io.verimodel.desktop/assistant/qwen2.5-0.5b-instruct-q4_k_m",
+  "gguf_path": "/home/anna/.local/share/io.verimodel.desktop/assistant/qwen2.5-0.5b-instruct-q4_k_m/model.gguf",
+  "tokenizer_path": "/home/anna/.local/share/io.verimodel.desktop/assistant/qwen2.5-0.5b-instruct-q4_k_m/tokenizer.json",
+  "gguf_size_bytes": 491400032,
+  "license": "Apache-2.0",
+  "approx_ram_mb": 700,
+  "backend": "candle",
+  "loaded": true
+}

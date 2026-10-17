@@ -1,0 +1,17 @@
+[package]
+name = "verimodel-tests"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish = false
+description = "End-to-end tests of VeriModel on real IFC fixtures (golden, genericity, determinism, IDS, schema, BCF)."
+
+[lib]
+path = "src/lib.rs"
+
+[dependencies]
+verimodel-core = { path = "../crates/core" }
+verimodel-ifc-reader = { path = "../crates/ifc_reader" }
+serde_json.workspace = true
+zip.workspace = true
+tempfile.workspace = true

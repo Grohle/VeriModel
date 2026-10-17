@@ -1,0 +1,106 @@
+# VeriModel example: bridge and road (infrastructure) project.
+#
+# This file is illustrative. Infrastructure models differ from buildings:
+# they use IFC4X3, they are very long, they have no storeys, and they use
+# facility parts (bridge parts, road parts) instead of building storeys.
+# Every key is checked: an unknown key is an error.
+#
+# Run it with (from the repository root):
+#   verimodel check --ifc tests/fixtures/bsi_ifc4x3_infra_bridge.ifc \
+#     --config examples/infrastructure/project.yaml --out ./out
+#
+# The custom rule pack used here is examples/infrastructure/infrastructure_rules.yaml.
+# Full reference of every key: docs/CONFIG.md
+
+# ---------------------------------------------------------------------------
+# project: the project itself.
+# ---------------------------------------------------------------------------
+project:
+  name: "Bridge and road - example"
+  language: en
+  # Metric. Infrastructure is almost always designed in metres.
+  units: metric
+  # The classification system used for infrastructure elements in this example.
+  classification_system: CCI
+  # Accept only IFC4X3. The file's IFC4X3_ADD2 schema is read as IFC4X3.
+  ifc_versions: [IFC4X3]
+
+# ---------------------------------------------------------------------------
+# requirements: which rule pack to use and which property sets are required.
+# ---------------------------------------------------------------------------
+requirements:
+  # A custom rule pack in this folder, instead of the built-in generic pack.
+  # The path is relative to this file. The pack holds identity, spatial,
+  # geometry, property and schema rules tuned for bridges and roads.
+  rule_pack: infrastructure_rules.yaml
+  # No property set is required for every element in this example. The
+  # custom pack asks for one optional concrete property set instead.
+  required_psets: []
+
+# ---------------------------------------------------------------------------
+# tolerances: long linear projects need much larger limits.
+# ---------------------------------------------------------------------------
+tolerances:
+  clash_hard_mm: 10.0
+  clash_clearance_mm: 50.0
+  # 100 km. A road or a bridge can be far from the model origin, because
+  # coordinates often come from a national grid. This allows that distance.
+  far_from_origin_m: 100000.0
+  geometry:
+    min_volume_m3: 0.000001
+    min_area_m2: 0.000001
+    # 20 km. An element longer than this (in any direction) is flagged by GEO-003.
+    max_extent_m: 20000.0
+
+# ---------------------------------------------------------------------------
+# qto: quantities for infrastructure.
+# ---------------------------------------------------------------------------
+qto:
+  # Group by IFC type, then by material, for example all concrete beams
+  # together and all steel members together.
+  group_by: [type, material]
+  # No unit rates file in this example. Quantities are reported without prices.
+  currency: EUR
+  sample_count: 5
+
+# ---------------------------------------------------------------------------
+# clash: not available yet.
+# ---------------------------------------------------------------------------
+clash:
+  enabled: false
+
+# ---------------------------------------------------------------------------
+# output: report and BCF settings.
+# ---------------------------------------------------------------------------
+output:
+  language: en
+  include_3d_snapshot: true
+  bcf_version: "2.1"
+  bcf_author: "infra-coordination@example.com"
+
+# ---------------------------------------------------------------------------
+# checks: rule switches.
+# ---------------------------------------------------------------------------
+checks:
+  rules: {}
+  # Naming conventions are not checked for infrastructure in this example.
+  # Setting the whole "naming" category to false switches off every rule in it.
+  categories:
+    naming: false
+  # Element names must be unique within the same type. Infrastructure models
+  # have no storeys, so "storey" is not used here.
+  unique_name_within: [type]
+
+# ---------------------------------------------------------------------------
+# naming: no patterns, because the naming category is off.
+# ---------------------------------------------------------------------------
+naming:
+  patterns: {}
+
+# ---------------------------------------------------------------------------
+# classification: not required for this example.
+# ---------------------------------------------------------------------------
+classification:
+  required: false
+  applies_to: []
+  allowed_codes: []

@@ -1,0 +1,29 @@
+[package]
+name = "verimodel-desktop"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "VeriModel desktop app (Tauri v2): IFC QA gate, quantity takeoff and BCF export."
+
+[lib]
+name = "verimodel_desktop_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+verimodel-core = { path = "../crates/core" }
+verimodel-ifc-reader = { path = "../crates/ifc_reader" }
+verimodel-assistant = { path = "../crates/assistant" }
+tauri = { version = "2", features = [] }
+tauri-plugin-dialog = "2"
+tauri-plugin-opener = "2"
+serde.workspace = true
+serde_json.workspace = true
+chrono.workspace = true
+log = { workspace = true, features = ["std"] }
+
+[dev-dependencies]
+tempfile.workspace = true

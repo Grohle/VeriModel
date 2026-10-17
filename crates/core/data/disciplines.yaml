@@ -1,0 +1,7 @@
+# Discipline inference by IFC entity type (data, not code). An element counts for a
+# discipline when its type or any supertype appears in the list. Several
+# disciplines may match the same model; the file card lists all of them.
+architecture: [IfcWall, IfcCurtainWall, IfcDoor, IfcWindow, IfcRoof, IfcStair, IfcStairFlight, IfcRamp, IfcRampFlight, IfcRailing, IfcCovering, IfcFurnishingElement, IfcSpace, IfcShadingDevice, IfcChimney, IfcBuildingElementProxy]
+structure: [IfcBeam, IfcColumn, IfcFooting, IfcPile, IfcMember, IfcPlate, IfcReinforcingElement, IfcSlab, IfcStructuralItem, IfcStructuralActivity, IfcTendon, IfcTendonAnchor]
+mep: [IfcDistributionElement, IfcDistributionFlowElement, IfcDistributionControlElement, IfcFlowSegment, IfcFlowFitting, IfcFlowTerminal, IfcFlowController, IfcFlowMovingDevice, IfcFlowStorageDevice, IfcFlowTreatmentDevice, IfcEnergyConversionDevice, IfcElectricalElement, IfcDistributionPort]
+civil: [IfcRoad, IfcBridge, IfcRailway, IfcMarineFacility, IfcAlignment, IfcEarthworksElement, IfcPavement, IfcKerb, IfcCourse, IfcGeotechnicalElement, IfcSign, IfcSignal, IfcTrackElement, IfcMooringDevice, IfcNavigationElement, IfcBridgePart, IfcRoadPart, IfcRailwayPart, IfcMarinePart, IfcFacility, IfcFacilityPart, IfcCivilElement, IfcGeographicElement]
