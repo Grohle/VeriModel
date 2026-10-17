@@ -205,3 +205,155 @@ export async function onDragDrop(handlers) {
     if (files.length) handlers.drop(files.map((f) => f.name));
   });
 }
+
+// --------------------------------------------------------------- assistant
+// Optional local copilot. It is read-only: it never produces a verdict, a
+// score or a quantity. In a plain browser the answers below are canned so the
+// panel can be demoed and screenshotted.
+
+export async function appInfo() {
+  if (isDesktop()) return invoke('app_info');
+  return fresh('app_info');
+}
+
+let mockInstalled = true;
+let mockLoaded = false;
+
+export async function assistantStatus() {
+  if (isDesktop()) return invoke('assistant_status');
+  const s = await fresh('assistant_status');
+  s.installed = mockInstalled;
+  s.loaded = mockInstalled && mockLoaded;
+  return s;
+}
+
+// onProgress({ done, total }) is called while the model downloads.
+export async function assistantDownloadModel(onProgress) {
+  if (isDesktop()) {
+    const ev = tauri().event;
+    const unlisten = ev && ev.listen ? await ev.listen('assistant://download-progress', (e) => onProgress(e.payload)) : null;
+    try { return await invoke('assistant_download_model'); } finally { if (unlisten) unlisten(); }
+  }
+  const total = 491400032;
+  for (let i = 1; i <= 20; i++) { await sleep(130); onProgress({ done: Math.round((total * i) / 20), total }); }
+  mockInstalled = true;
+  mockLoaded = false;
+  return assistantStatus();
+}
+
+export async function assistantRemoveModel() {
+  if (isDesktop()) return invoke('assistant_remove_model');
+  await sleep(200);
+  mockInstalled = false;
+  mockLoaded = false;
+  return assistantStatus();
+}
+
+// task: the JSON of the Rust `Task` enum, tagged by `kind`.
+export async function assistantAsk(task) {
+  if (isDesktop()) return invoke('assistant_ask', { task });
+  await sleep(1100);
+  mockLoaded = true;
+  return mockAnswer(task);
+}
+
+export async function assistantKnowledgeYaml() {
+  if (isDesktop()) return invoke('assistant_knowledge_yaml');
+  return mockKnowledgeYaml;
+}
+
+const DOC_EXTENSIONS = ['md', 'markdown', 'txt', 'yaml', 'yml', 'json', 'docx', 'pdf'];
+
+// Returns an array of paths (files, or one folder) or null when cancelled.
+export async function pickDocs({ directory = false } = {}) {
+  if (isDesktop() && tauri().dialog) {
+    const r = await tauri().dialog.open(directory
+      ? { multiple: true, directory: true }
+      : { multiple: true, filters: [{ name: 'Documents', extensions: DOC_EXTENSIONS }] });
+    if (!r) return null;
+    const list = (Array.isArray(r) ? r : [r]).map((x) => (typeof x === 'string' ? x : x.path)).filter(Boolean);
+    return list.length ? list : null;
+  }
+  return new Promise((resolve) => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.multiple = true;
+    if (directory) input.webkitdirectory = true; else input.accept = DOC_EXTENSIONS.map((e) => `.${e}`).join(',');
+    input.addEventListener('change', () => {
+      const files = Array.from(input.files || []);
+      resolve(files.length ? (directory ? [files[0].webkitRelativePath.split('/')[0] || 'folder'] : files.map((f) => f.name)) : null);
+    });
+    input.addEventListener('cancel', () => resolve(null));
+    input.click();
+  });
+}
+
+let mockKnowledgeYaml = 'chunks: []\n';
+
+export async function assistantImportDocs(paths) {
+  if (isDesktop()) return invoke('assistant_import_docs', { paths });
+  await sleep(700);
+  const ok = paths.filter((p) => DOC_EXTENSIONS.includes((/\.([A-Za-z0-9]+)$/.exec(p) || [])[1]?.toLowerCase()) || !/\.[A-Za-z0-9]+$/.test(p));
+  const skipped = paths.filter((p) => !ok.includes(p));
+  const chunks = ok.length * 14;
+  mockKnowledgeYaml = `chunks:\n${ok.map((p) => `  - source: ${p}\n    title: "${p} \u203a Overview"\n    text: "(imported text of ${p})"\n    keywords: []\n`).join('')}`;
+  return { files_read: ok, skipped, chunks_added: chunks, knowledge_yaml: mockKnowledgeYaml };
+}
+
+// Canned answers for the browser fallback, one per task kind. Type "[raw]" in a
+// question to see the "not structured" note.
+function mockAnswer(task) {
+  const q = String(task.question || '');
+  if (/\[raw\]/i.test(q)) {
+    return { kind: 'text', text: 'Probably the wall fire ratings; I could not produce a clean filter for that.', sources: [], structured: false };
+  }
+  switch (task.kind) {
+    case 'filter': {
+      const ctx = task.context || {};
+      const storeys = ctx.storeys || [];
+      const asked = /level\s*(\d+)/i.exec(q);
+      const named = storeys.find((s) => q.toLowerCase().includes(String(s).toLowerCase()));
+      const storey = named || (asked ? storeys.find((s) => s.toLowerCase() === `level ${asked[1]}`) : null) || null;
+      const dropped = asked && !storey ? [`Level ${asked[1]}`] : [];
+      const wantsWarnings = /warning/i.test(q);
+      const filter = {
+        severity: wantsWarnings ? ['WARNING'] : ['ERROR'],
+        rule_id: null,
+        storey: storey || (dropped.length ? null : storeys[0] || null),
+        ifc_type: null,
+        search: null,
+        explanation: `Shows ${wantsWarnings ? 'warnings' : 'errors'}${storey || !dropped.length ? ` on ${storey || storeys[0] || 'every storey'}` : ''}. Press Apply filter to see them in the Failures table.`,
+        dropped,
+      };
+      return { kind: 'filter', filter };
+    }
+    case 'explain': {
+      const f = task.finding || {};
+      const where = f.name ? `${f.name}${f.global_id ? ` (${f.global_id})` : ''}` : (f.global_id || 'the model');
+      return { kind: 'explanation', text: [`${where}${f.storey ? ` on ${f.storey}` : ''} failed rule ${f.rule_id}.`, f.message, f.fix_hint ? `To fix it: ${f.fix_hint}` : ''].filter(Boolean).map((x) => (/[.!?]$/.test(x) ? x : `${x}.`)).join(' ') };
+    }
+    case 'config_help': {
+      if (/\binvalid\b/i.test(q)) {
+        return { kind: 'config_snippet', yaml: 'naming:\n  patterns:\n    IfcWall: [unclosed\n', valid: false, validation_error: 'naming.patterns.IfcWall: expected a regular expression string', explanation: 'This is deliberately broken to show the validity badge.' };
+      }
+      return {
+        kind: 'config_snippet',
+        yaml: "naming:\n  patterns:\n    IfcWall: '^WL-[0-9]{3}$'\n    IfcDoor: '^D-[0-9]{3}$'\nrequirements:\n  required_psets:\n    - pset: Pset_WallCommon\n      applies_to: [IfcWall]\n      properties: [FireRating, IsExternal]\n",
+        valid: true,
+        validation_error: null,
+        explanation: 'Walls and doors must follow the naming pattern, and every wall needs FireRating and IsExternal. Paste it into your project settings.',
+      };
+    }
+    case 'draft_rules':
+      return { kind: 'config_snippet', yaml: 'requirements:\n  required_psets: []\n', valid: true, validation_error: null, explanation: 'No requirements found in the text.' };
+    default:
+      return {
+        kind: 'text',
+        text: /CL-001/i.test(q)
+          ? 'CL-001 checks that every element carries a classification reference from the configured system (Uniclass in this project). Elements without one are reported as errors.'
+          : 'VeriModel checks the model against rules and IDS requirements, then produces a score, a quantity takeoff and BCF issues. The assistant only helps you read them.',
+        sources: ['docs/RULES.md', 'docs/CONFIG.md'],
+        structured: true,
+      };
+  }
+}

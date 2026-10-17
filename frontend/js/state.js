@@ -44,6 +44,20 @@ export const state = {
     pageSize: 50,
   },
   detail: null,          // { finding, element, status }
+
+  appVersion: null,      // from app_info
+  assistant: {
+    open: false,
+    status: null,        // ModelStatus + { loaded }
+    statusError: null,
+    download: null,      // { done, total } while the model downloads
+    confirmRemove: false,
+    busy: false,         // a question is being answered
+    mode: 'ask',         // how the next question is sent: ask | filter | explain | config
+    messages: [],        // { role: 'user'|'assistant'|'error'|'note', ... }
+    importing: false,
+    importResult: null,  // { files_read, skipped, chunks_added }
+  },
 };
 
 export const actions = {};

@@ -55,7 +55,9 @@ pub fn build_file_card(path: &Path, info: &ModelInfo) -> FileCard {
         info.sha256.clone()
     };
     let file_name = if info.file_name.is_empty() {
-        path.file_name().map(|s| s.to_string_lossy().to_string()).unwrap_or_default()
+        path.file_name()
+            .map(|s| s.to_string_lossy().to_string())
+            .unwrap_or_default()
     } else {
         info.file_name.clone()
     };
@@ -107,8 +109,14 @@ pub fn default_config_yaml() -> String {
 
 pub fn validate_config_yaml(yaml: &str) -> ValidationResult {
     match Config::from_yaml(yaml) {
-        Ok(_) => ValidationResult { ok: true, error: None },
-        Err(e) => ValidationResult { ok: false, error: Some(e.to_string()) },
+        Ok(_) => ValidationResult {
+            ok: true,
+            error: None,
+        },
+        Err(e) => ValidationResult {
+            ok: false,
+            error: Some(e.to_string()),
+        },
     }
 }
 
@@ -126,8 +134,20 @@ pub fn parse_config(yaml: Option<&str>) -> Result<Config, AppError> {
 
 /// `<runs_root>/<ifc stem>-<yyyymmdd-hhmmss>`.
 pub fn default_out_dir(runs_root: &Path, ifc_path: &Path, stamp: &str) -> PathBuf {
-    let stem = ifc_path.file_stem().map(|s| s.to_string_lossy().to_string()).unwrap_or_else(|| "model".into());
-    let safe: String = stem.chars().map(|c| if c.is_alphanumeric() || c == '-' || c == '_' || c == '.' { c } else { '_' }).collect();
+    let stem = ifc_path
+        .file_stem()
+        .map(|s| s.to_string_lossy().to_string())
+        .unwrap_or_else(|| "model".into());
+    let safe: String = stem
+        .chars()
+        .map(|c| {
+            if c.is_alphanumeric() || c == '-' || c == '_' || c == '.' {
+                c
+            } else {
+                '_'
+            }
+        })
+        .collect();
     runs_root.join(format!("{safe}-{stamp}"))
 }
 
@@ -149,17 +169,30 @@ pub struct RunRequest {
 pub fn run_check_blocking(req: &RunRequest) -> Result<(RunOutcome, Model), AppError> {
     let started = Instant::now();
     if !req.ifc_path.is_file() {
-        return Err(AppError::file_missing("IFC file", &req.ifc_path.display().to_string()));
+        return Err(AppError::file_missing(
+            "IFC file",
+            &req.ifc_path.display().to_string(),
+        ));
     }
     let config = parse_config(req.config_yaml.as_deref())?;
     // An explicit IDS wins; otherwise use requirements.ids_file from the config.
-    let ids_path = req.ids_path.clone().or_else(|| config.ids_path(req.config_dir.as_deref()));
+    let ids_path = req
+        .ids_path
+        .clone()
+        .or_else(|| config.ids_path(req.config_dir.as_deref()));
     if let Some(ids) = &ids_path {
         if !ids.is_file() {
-            return Err(AppError::file_missing("IDS file", &ids.display().to_string()));
+            return Err(AppError::file_missing(
+                "IDS file",
+                &ids.display().to_string(),
+            ));
         }
     }
-    let opts = ReadOptions { ids_path: ids_path.clone(), geometry: true, ..Default::default() };
+    let opts = ReadOptions {
+        ids_path: ids_path.clone(),
+        geometry: true,
+        ..Default::default()
+    };
     log::info!("run_check: reading {}", req.ifc_path.display());
     let model = verimodel_ifc_reader::read_model(&req.ifc_path, &opts)?;
     let inputs = RunInputs {
@@ -213,7 +246,10 @@ pub fn resolve_roots(bundled: Option<ExampleRoots>, dev_root: &Path) -> ExampleR
             return b;
         }
     }
-    ExampleRoots { examples: dev_root.join("examples"), fixtures: dev_root.join("tests").join("fixtures") }
+    ExampleRoots {
+        examples: dev_root.join("examples"),
+        fixtures: dev_root.join("tests").join("fixtures"),
+    }
 }
 
 struct ExampleDef {
@@ -244,13 +280,33 @@ const EXAMPLE_DEFS: [ExampleDef; 3] = [
     },
 ];
 
-/// List the examples whose IFC file exists. Missing optional files become `null`.
+/// The demo pavilion: always the first example, because it is the fastest way to see VeriModel
+/// at work (its `project.yaml` references `../sample.ids` and `../rates.csv`).
+pub const DEMO_ID: &str = "demo";
+const DEMO_NAME: &str = "Demo pavilion (start here)";
+const DEMO_DESCRIPTION: &str = "Two-storey office pavilion with properties, quantities, classification and five deliberate defects \u{2014} the fastest way to see VeriModel at work.";
+
+/// List the examples whose IFC file exists, the demo first. Missing optional files become `null`.
 pub fn list_examples_in(roots: &ExampleRoots) -> Vec<Example> {
-    let existing = |p: PathBuf| if p.is_file() { Some(p.display().to_string()) } else { None };
+    let existing = |p: PathBuf| {
+        if p.is_file() {
+            Some(p.display().to_string())
+        } else {
+            None
+        }
+    };
     let ids = existing(roots.examples.join("sample.ids"));
-    EXAMPLE_DEFS
-        .iter()
-        .filter_map(|d| {
+    let demo_dir = roots.examples.join(DEMO_ID);
+    let demo = existing(demo_dir.join("demo_building.ifc")).map(|ifc| Example {
+        id: DEMO_ID.into(),
+        name: DEMO_NAME.into(),
+        description: DEMO_DESCRIPTION.into(),
+        ifc_path: ifc,
+        config_path: existing(demo_dir.join("project.yaml")),
+        ids_path: ids.clone(),
+    });
+    demo.into_iter()
+        .chain(EXAMPLE_DEFS.iter().filter_map(|d| {
             let ifc = existing(roots.fixtures.join(d.ifc))?;
             Some(Example {
                 id: d.id.into(),
@@ -260,7 +316,7 @@ pub fn list_examples_in(roots: &ExampleRoots) -> Vec<Example> {
                 config_path: existing(roots.examples.join(d.id).join("project.yaml")),
                 ids_path: ids.clone(),
             })
-        })
+        }))
         .collect()
 }
 
@@ -300,7 +356,10 @@ mod tests {
             file_size_bytes: 2048,
             sha256: "0123456789abcdef0123456789abcdef".into(),
             schema: "IFC4".into(),
-            units: ModelUnits { length_unit: Some("MILLIMETRE".into()), ..Default::default() },
+            units: ModelUnits {
+                length_unit: Some("MILLIMETRE".into()),
+                ..Default::default()
+            },
             element_count: 12,
             type_counts,
             storeys: vec!["Level 1".into()],
@@ -328,8 +387,18 @@ mod tests {
     fn file_card_json_shape_is_the_documented_contract() {
         let v = serde_json::to_value(build_file_card(Path::new("/x/a.ifc"), &info())).unwrap();
         for k in [
-            "file_name", "path", "size_bytes", "sha256", "sha256_short", "schema", "element_count", "units", "disciplines",
-            "storeys", "type_counts", "reader_warnings",
+            "file_name",
+            "path",
+            "size_bytes",
+            "sha256",
+            "sha256_short",
+            "schema",
+            "element_count",
+            "units",
+            "disciplines",
+            "storeys",
+            "type_counts",
+            "reader_warnings",
         ] {
             assert!(v.get(k).is_some(), "missing key {k}");
         }
@@ -358,7 +427,13 @@ mod tests {
     fn default_config_validates_and_roundtrips() {
         let y = default_config_yaml();
         assert!(y.starts_with('#'));
-        assert_eq!(validate_config_yaml(&y), ValidationResult { ok: true, error: None });
+        assert_eq!(
+            validate_config_yaml(&y),
+            ValidationResult {
+                ok: true,
+                error: None
+            }
+        );
         assert!(parse_config(Some(&y)).is_ok());
     }
 
@@ -376,12 +451,19 @@ mod tests {
     fn blank_or_missing_config_means_defaults() {
         assert_eq!(parse_config(None).unwrap(), Config::default());
         assert_eq!(parse_config(Some("  \n")).unwrap(), Config::default());
-        assert_eq!(parse_config(Some("nope: 1")).unwrap_err().code, "config_invalid");
+        assert_eq!(
+            parse_config(Some("nope: 1")).unwrap_err().code,
+            "config_invalid"
+        );
     }
 
     #[test]
     fn out_dir_uses_stem_and_stamp_and_sanitises() {
-        let d = default_out_dir(Path::new("/runs"), Path::new("/m/My Model (v2).ifc"), "20260101-120000");
+        let d = default_out_dir(
+            Path::new("/runs"),
+            Path::new("/m/My Model (v2).ifc"),
+            "20260101-120000",
+        );
         assert_eq!(d, PathBuf::from("/runs/My_Model__v2_-20260101-120000"));
         let t = timestamp_now();
         assert_eq!(t.len(), 15);
@@ -390,16 +472,40 @@ mod tests {
 
     #[test]
     fn run_check_rejects_missing_inputs_before_reading() {
-        let req = RunRequest { ifc_path: "/no/model.ifc".into(), ids_path: None, config_yaml: None, config_dir: None, out_dir: "/tmp/x".into() };
-        assert_eq!(run_check_blocking(&req).err().unwrap().code, "file_not_found");
+        let req = RunRequest {
+            ifc_path: "/no/model.ifc".into(),
+            ids_path: None,
+            config_yaml: None,
+            config_dir: None,
+            out_dir: "/tmp/x".into(),
+        };
+        assert_eq!(
+            run_check_blocking(&req).err().unwrap().code,
+            "file_not_found"
+        );
         let dir = tempfile::tempdir().unwrap();
         let ifc = dir.path().join("m.ifc");
         std::fs::write(&ifc, "x").unwrap();
-        let req = RunRequest { ifc_path: ifc.clone(), ids_path: Some("/no/x.ids".into()), config_yaml: None, config_dir: None, out_dir: dir.path().join("o") };
+        let req = RunRequest {
+            ifc_path: ifc.clone(),
+            ids_path: Some("/no/x.ids".into()),
+            config_yaml: None,
+            config_dir: None,
+            out_dir: dir.path().join("o"),
+        };
         let e = run_check_blocking(&req).err().unwrap();
         assert!(e.message.starts_with("IDS file not found"));
-        let req = RunRequest { ifc_path: ifc, ids_path: None, config_yaml: Some("bad_key: 1".into()), config_dir: None, out_dir: dir.path().join("o") };
-        assert_eq!(run_check_blocking(&req).err().unwrap().code, "config_invalid");
+        let req = RunRequest {
+            ifc_path: ifc,
+            ids_path: None,
+            config_yaml: Some("bad_key: 1".into()),
+            config_dir: None,
+            out_dir: dir.path().join("o"),
+        };
+        assert_eq!(
+            run_check_blocking(&req).err().unwrap().code,
+            "config_invalid"
+        );
     }
 
     #[test]
@@ -416,7 +522,11 @@ mod tests {
         };
         let e = run_check_blocking(&req).err().unwrap();
         assert_eq!(e.code, "file_not_found");
-        assert!(e.message.contains("missing.ids") && e.message.contains("cfg"), "{}", e.message);
+        assert!(
+            e.message.contains("missing.ids") && e.message.contains("cfg"),
+            "{}",
+            e.message
+        );
     }
 
     fn touch(p: &Path) {
@@ -430,14 +540,20 @@ mod tests {
         let r = resolve_roots(None, repo);
         assert_eq!(r.examples, PathBuf::from("/repo/examples"));
         assert_eq!(r.fixtures, PathBuf::from("/repo/tests/fixtures"));
-        let missing = ExampleRoots { examples: "/nope/a".into(), fixtures: "/nope/b".into() };
+        let missing = ExampleRoots {
+            examples: "/nope/a".into(),
+            fixtures: "/nope/b".into(),
+        };
         assert_eq!(resolve_roots(Some(missing), repo), r);
     }
 
     #[test]
     fn bundled_roots_win_when_present() {
         let dir = tempfile::tempdir().unwrap();
-        let b = ExampleRoots { examples: dir.path().join("examples"), fixtures: dir.path().join("fixtures") };
+        let b = ExampleRoots {
+            examples: dir.path().join("examples"),
+            fixtures: dir.path().join("fixtures"),
+        };
         std::fs::create_dir_all(&b.examples).unwrap();
         std::fs::create_dir_all(&b.fixtures).unwrap();
         assert_eq!(resolve_roots(Some(b.clone()), Path::new("/repo")), b);
@@ -446,18 +562,74 @@ mod tests {
     #[test]
     fn examples_resolve_paths_and_skip_missing_models() {
         let dir = tempfile::tempdir().unwrap();
-        let roots = ExampleRoots { examples: dir.path().join("examples"), fixtures: dir.path().join("fixtures") };
+        let roots = ExampleRoots {
+            examples: dir.path().join("examples"),
+            fixtures: dir.path().join("fixtures"),
+        };
         touch(&roots.fixtures.join("bsi_ifc2x3_building_architecture.ifc"));
         touch(&roots.fixtures.join("bsi_ifc4_building_structural.ifc"));
         touch(&roots.examples.join("residential").join("project.yaml"));
         touch(&roots.examples.join("sample.ids"));
-        let list = list_examples_in(&roots);
-        assert_eq!(list.iter().map(|e| e.id.as_str()).collect::<Vec<_>>(), vec!["residential", "office"]);
+        let without_demo = list_examples_in(&roots);
+        assert_eq!(
+            without_demo
+                .iter()
+                .map(|e| e.id.as_str())
+                .collect::<Vec<_>>(),
+            vec!["residential", "office"],
+            "no demo files, no demo entry"
+        );
+        touch(&roots.examples.join("demo").join("demo_building.ifc"));
+        touch(&roots.examples.join("demo").join("project.yaml"));
+        let all = list_examples_in(&roots);
+        assert_eq!(all[0].id, "demo");
+        let list = all[1..].to_vec();
+        assert_eq!(
+            list.iter().map(|e| e.id.as_str()).collect::<Vec<_>>(),
+            vec!["residential", "office"]
+        );
         let res = &list[0];
-        assert!(res.ifc_path.ends_with("bsi_ifc2x3_building_architecture.ifc"));
-        assert!(res.config_path.as_ref().unwrap().ends_with("residential/project.yaml"));
+        assert!(res
+            .ifc_path
+            .ends_with("bsi_ifc2x3_building_architecture.ifc"));
+        assert!(res
+            .config_path
+            .as_ref()
+            .unwrap()
+            .ends_with("residential/project.yaml"));
         assert!(res.ids_path.as_ref().unwrap().ends_with("sample.ids"));
-        assert!(list[1].config_path.is_none(), "office has no project.yaml in this fixture tree");
+        assert!(
+            list[1].config_path.is_none(),
+            "office has no project.yaml in this fixture tree"
+        );
+    }
+
+    #[test]
+    fn demo_is_the_first_example_with_config_and_ids() {
+        let root = Path::new(env!("CARGO_MANIFEST_DIR")).parent().unwrap();
+        let list = list_examples_in(&resolve_roots(None, root));
+        let demo = &list[0];
+        assert_eq!(demo.id, "demo");
+        assert_eq!(demo.name, "Demo pavilion (start here)");
+        assert!(demo.description.contains("five deliberate defects"));
+        assert!(
+            demo.ifc_path.ends_with("examples/demo/demo_building.ifc")
+                && Path::new(&demo.ifc_path).is_file()
+        );
+        assert!(demo
+            .config_path
+            .as_ref()
+            .unwrap()
+            .ends_with("examples/demo/project.yaml"));
+        assert!(demo
+            .ids_path
+            .as_ref()
+            .unwrap()
+            .ends_with("examples/sample.ids"));
+        assert!(
+            list.len() >= 2 && list[1..].iter().all(|e| e.id != "demo"),
+            "the buildingSMART samples follow the demo"
+        );
     }
 
     #[test]
@@ -478,6 +650,9 @@ mod tests {
         let p = dir.path().join("deep/er/x.yaml");
         save_text_file(&p.display().to_string(), "a: 1\n").unwrap();
         assert_eq!(read_text_file(&p.display().to_string()).unwrap(), "a: 1\n");
-        assert_eq!(read_text_file("/no/such").unwrap_err().code, "file_not_found");
+        assert_eq!(
+            read_text_file("/no/such").unwrap_err().code,
+            "file_not_found"
+        );
     }
 }

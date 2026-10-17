@@ -49,9 +49,20 @@ impl Log for FileLogger {
 pub fn init(dir: &Path) -> Option<PathBuf> {
     std::fs::create_dir_all(dir).ok()?;
     let path = dir.join("verimodel.log");
-    let file = OpenOptions::new().create(true).append(true).open(&path).ok()?;
-    let level = if cfg!(debug_assertions) { LevelFilter::Debug } else { LevelFilter::Info };
-    let logger = FileLogger { file: Mutex::new(file), level };
+    let file = OpenOptions::new()
+        .create(true)
+        .append(true)
+        .open(&path)
+        .ok()?;
+    let level = if cfg!(debug_assertions) {
+        LevelFilter::Debug
+    } else {
+        LevelFilter::Info
+    };
+    let logger = FileLogger {
+        file: Mutex::new(file),
+        level,
+    };
     log::set_boxed_logger(Box::new(logger)).ok()?;
     log::set_max_level(level);
     Some(path)

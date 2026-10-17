@@ -21,12 +21,22 @@ pub struct CliError {
 
 impl CliError {
     pub fn new(message: impl Into<String>) -> Self {
-        Self { message: message.into(), hint: None }
+        Self {
+            message: message.into(),
+            hint: None,
+        }
     }
 
     pub fn with_hint(message: impl Into<String>, hint: impl Into<String>) -> Self {
         let hint = hint.into();
-        Self { message: message.into(), hint: if hint.trim().is_empty() { None } else { Some(hint) } }
+        Self {
+            message: message.into(),
+            hint: if hint.trim().is_empty() {
+                None
+            } else {
+                Some(hint)
+            },
+        }
     }
 
     /// Text printed to stderr.
@@ -63,9 +73,19 @@ impl From<CoreError> for CliError {
     }
 }
 
+impl From<verimodel_assistant::AssistantError> for CliError {
+    fn from(e: verimodel_assistant::AssistantError) -> Self {
+        log::debug!("assistant error: {e:?}");
+        CliError::with_hint(e.to_string(), e.hint())
+    }
+}
+
 impl From<std::io::Error> for CliError {
     fn from(e: std::io::Error) -> Self {
-        CliError::with_hint(format!("File problem: {e}"), "Check the path and your permissions.")
+        CliError::with_hint(
+            format!("File problem: {e}"),
+            "Check the path and your permissions.",
+        )
     }
 }
 
@@ -79,6 +99,13 @@ mod tests {
         assert_eq!(e.render(), "Error: boom\nHint: try again");
         assert_eq!(CliError::new("boom").render(), "Error: boom");
         assert_eq!(CliError::with_hint("x", "  ").hint, None);
+    }
+
+    #[test]
+    fn assistant_error_keeps_its_plain_hint() {
+        let e: CliError = verimodel_assistant::AssistantError::ModelNotInstalled.into();
+        assert!(e.message.contains("not installed"));
+        assert!(e.hint.as_deref().unwrap_or("").contains("Download"));
     }
 
     #[test]

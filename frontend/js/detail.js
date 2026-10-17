@@ -18,6 +18,7 @@ export async function openDetail(finding, opts = {}) {
   $('#detail').hidden = false;
   renderDetail();
   updateSelectionHighlight();
+  if (actions.assistantChanged) actions.assistantChanged();
   $('#detail-close').focus();
   if (!globalId) return;
   const mine = state.detail;
@@ -39,6 +40,7 @@ export function closeDetail() {
   document.body.classList.remove('detail-open');
   $('#detail').hidden = true;
   updateSelectionHighlight();
+  if (actions.assistantChanged) actions.assistantChanged();
   if (d.opener && document.contains(d.opener) && typeof d.opener.focus === 'function') d.opener.focus();
   return true;
 }
@@ -69,7 +71,8 @@ function findingBlock(f) {
       rule ? h('span', { class: 'muted' }, rule.description) : null),
     h('p', { class: 'd-message' }, f.message),
     f.expected || f.actual ? kv([[t('failures.expected'), f.expected || dash], [t('failures.actual'), f.actual || dash]]) : null,
-    f.fix_hint ? h('p', { class: 'd-fix' }, h('strong', null, t('detail.fix')), ' ', f.fix_hint) : null);
+    f.fix_hint ? h('p', { class: 'd-fix' }, h('strong', null, t('detail.fix')), ' ', f.fix_hint) : null,
+    h('button', { type: 'button', class: 'btn btn-secondary btn-sm d-explain', onclick: () => actions.explainFinding(f) }, t('detail.explain')));
 }
 
 function geometryBlock(el) {

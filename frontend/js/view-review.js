@@ -207,6 +207,20 @@ export function setRuleFilter(ruleId) {
   setTab('failures');
 }
 
+// Apply a filter proposed by the assistant (after the user pressed "Apply filter").
+// `spec` is FilterSpec: severity[], rule_id, storey, ifc_type, search.
+export function applyFilterSpec(spec) {
+  const f = flt();
+  f.rule = spec.rule_id || '';
+  f.storey = spec.storey || '';
+  f.type = spec.ifc_type || '';
+  f.q = spec.search || '';
+  const sevs = (spec.severity || []).map((x) => String(x).toUpperCase()).filter((x) => SEVS.includes(x));
+  SEVS.forEach((s) => { f.sev[s] = sevs.length ? sevs.includes(s) : true; });
+  state.review.page = { checks: 1, failures: 1, quantities: 1 };
+  setTab('failures');
+}
+
 function renderFilterbar() {
   const bar = $('#filterbar');
   clear(bar);

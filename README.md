@@ -89,7 +89,7 @@ The UI is a stepper: **1 Load → 2 Review → 3 Export**. One primary action pe
 
 ### 1 · Load
 
-Drop an IFC (plus optional IDS and `project.yaml`), or try one of the three bundled samples. The file card shows the name, SHA-256, schema, size, element count, units, disciplines and storeys. "Project settings" (collapsed by default) edits the rule pack, tolerances, classification, QTO grouping and currency and writes a reusable `project.yaml`. Defaults work with zero configuration.
+Drop an IFC (plus optional IDS and `project.yaml`), click **Load the demo** (a two-storey pavilion with five deliberate defects, its settings and an IDS, the fastest way to see the tool work), or try one of the three bundled buildingSMART samples. The file card shows the name, SHA-256, schema, size, element count, units, disciplines and storeys. "Project settings" (collapsed by default) edits the rule pack, tolerances, classification, QTO grouping and currency and writes a reusable `project.yaml`. Defaults work with zero configuration.
 
 ![Step 1 — Load](docs/screenshots/step1-load.png)
 
@@ -111,6 +111,19 @@ Dark theme, Spanish UI, and imperial display units are toggles in the top bar; a
 
 ![Dark theme](docs/screenshots/step2-dark.png)
 
+### Assistant (optional)
+
+The **Assistant** button in the header opens a side panel (Escape closes it) with a small language model that runs on your computer. It is optional: the model is not bundled, you download it once from the panel (about 0.5 GB from Hugging Face), and nothing about your model leaves the machine. It helps you:
+
+- **find** things ("show the errors on Level 1" proposes a filter you apply with one button; values that are not in the report are dropped and listed),
+- **understand** a failure ("Explain with assistant" in the element detail),
+- **configure** (it drafts a `project.yaml` fragment, marked Valid or Invalid by the real config parser; "Use in settings" only works when it is valid),
+- and **look things up** in the built-in docs, the current report and your own documentation (**Import documentation…** accepts .md, .txt, .yaml, .json, .docx and .pdf; "Save knowledge.yaml" keeps the converted text).
+
+It is a read-only copilot: verdicts, scores and quantities are computed by the engine and never come from the assistant, and nothing changes until you press a button.
+
+![Assistant panel](docs/screenshots/assistant.png)
+
 ## CLI
 
 ```text
@@ -120,9 +133,24 @@ verimodel clash            --ifc-a a.ifc --ifc-b b.ifc [--config project.yaml] [
 verimodel validate-config  --config project.yaml [--schema]
 verimodel inspect          --ifc model.ifc
 verimodel doctor
+verimodel ask              --question "What does rule CL-001 check?" [--report out/report.json] [--app-data DIR]
+verimodel assistant status   [--app-data DIR]
+verimodel assistant download [--app-data DIR]
+verimodel docs-to-yaml     --in docs/ bep.docx naming.pdf --out knowledge.yaml
 ```
 
 The CLI and the desktop app call the same `verimodel-core` functions; there is one implementation of every check, quantity and writer.
+
+### Assistant commands
+
+The optional local assistant (see "Assistant" above) is also available headless. The model lives in `<app-data>/assistant/`; by default `<app-data>` is the desktop app's data folder (`~/.local/share/io.verimodel.desktop` on Linux, `~/Library/Application Support/io.verimodel.desktop` on macOS, `%APPDATA%\io.verimodel.desktop` on Windows), so the CLI and the app share one download. Set `VERIMODEL_APP_DATA` or pass `--app-data` to use another folder.
+
+- `verimodel assistant status` shows whether the model is installed, its size, license and memory need.
+- `verimodel assistant download` downloads it once (progress on stderr).
+- `verimodel ask --question "..."` answers from the built-in docs; add `--report out/report.json` to ask about a run. If the model is not installed it prints a plain-language hint and exits with code 2.
+- `verimodel docs-to-yaml --in <files or folders> --out knowledge.yaml` converts documentation to the assistant's knowledge format (no model needed) and prints the files read, the files skipped and the chunk count.
+
+The assistant only prints text. It never changes a verdict, a score or a quantity.
 
 ## Outputs of a run
 

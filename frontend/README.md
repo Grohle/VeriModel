@@ -24,8 +24,9 @@ Use "Try with a sample" for the quickest walk-through.
 calls `core.invoke`, `dialog.open/save` and `event.listen` (drag and drop).
 
 Commands used: `inspect_file`, `run_check`, `list_runs`, `default_config_yaml`, `validate_config_yaml`,
-`list_examples`, `open_path`, `save_text_file`, `get_element`.
-Proposed addition: `read_text_file({ path }) -> string`, needed to load a dropped or sample `project.yaml`.
+`list_examples`, `open_path`, `save_text_file`, `get_element`, `read_text_file`, `app_info`, and the assistant commands
+`assistant_status`, `assistant_download_model` (emits the `assistant://download-progress` event `{ done, total }`),
+`assistant_remove_model`, `assistant_ask({ task })`, `assistant_import_docs({ paths })`, `assistant_knowledge_yaml`.
 
 ## Layout
 
@@ -33,3 +34,11 @@ Proposed addition: `read_text_file({ path }) -> string`, needed to load a droppe
 - `js/` modules: `api`, `i18n`, `state`, `units`, `yaml`, `settings`, `view-load`, `view-review`, `view-export`, `detail`, `table`, `dom`, `format`
 - `i18n/en.json`, `i18n/es.json`: every user-facing string, same keys. Plurals use `key_one` / `key_other`.
 - Preferences persisted in `localStorage`: `vm.theme`, `vm.lang`, `vm.units`.
+
+## Assistant panel (`js/assistant.js`)
+
+A right-hand drawer (420 px, Escape closes) opened from the header. In a browser the answers are canned
+(`mock/assistant_status.json` plus per-kind answers in `js/api.js`): a question with "level 9" shows the
+dropped-value note, "[raw]" shows the unstructured-answer note, "invalid" in a settings question shows the
+Invalid badge. The panel never decides pass/fail; it only proposes filters, text and YAML that the user applies
+with a button. The demo example (`id: demo`) is always the first sample and has a "Load the demo" button next to the drop zone.

@@ -5512,7 +5512,7 @@ dependencies = [
 
 [[package]]
 name = "verimodel-assistant"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "candle-core",
  "candle-transformers",
@@ -5535,7 +5535,7 @@ dependencies = [
 
 [[package]]
 name = "verimodel-cli"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "anyhow",
  "clap",
@@ -5543,13 +5543,14 @@ dependencies = [
  "log",
  "serde_json",
  "tempfile",
+ "verimodel-assistant",
  "verimodel-core",
  "verimodel-ifc-reader",
 ]
 
 [[package]]
 name = "verimodel-core"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "chrono",
  "csv",
@@ -5573,7 +5574,7 @@ dependencies = [
 
 [[package]]
 name = "verimodel-desktop"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "chrono",
  "log",
@@ -5584,13 +5585,14 @@ dependencies = [
  "tauri-plugin-dialog",
  "tauri-plugin-opener",
  "tempfile",
+ "verimodel-assistant",
  "verimodel-core",
  "verimodel-ifc-reader",
 ]
 
 [[package]]
 name = "verimodel-ifc-reader"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "log",
  "serde",
@@ -5602,7 +5604,7 @@ dependencies = [
 
 [[package]]
 name = "verimodel-tests"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "serde_json",
  "tempfile",

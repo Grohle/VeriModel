@@ -92,17 +92,21 @@ export function updateSettingsBadge() {
   else badge.hidden = true;
 }
 
+const demoExample = () => state.examples.find((x) => x.id === 'demo') || null;
+
 export function renderSampleList() {
   const host = $('#sample-list');
   clear(host);
   state.examples.forEach((ex) => {
-    host.appendChild(h('article', { class: 'sample' },
-      h('h3', null, ex.name),
-      h('p', null, ex.description),
-      h('p', { class: 'sample-meta' },
-        h('span', { class: 'chip' }, ex.ids_path ? t('load.samples.with_ids') : t('load.samples.no_ids')),
-        h('span', { class: 'chip' }, ex.config_path ? t('load.samples.with_config') : t('load.samples.default_config'))),
-      h('button', { type: 'button', class: 'btn btn-secondary', disabled: state.inspecting || state.running, 'aria-label': t('load.samples.use_named', { name: ex.name }), onclick: () => useExample(ex) }, t('load.samples.use'))));
+    const isDemo = ex.id === 'demo';
+    const meta = h('p', { class: 'sample-meta' },
+      isDemo ? h('span', { class: 'chip chip-accent' }, t('load.samples.start_here')) : null,
+      h('span', { class: 'chip' }, ex.ids_path ? t('load.samples.with_ids') : t('load.samples.no_ids')),
+      h('span', { class: 'chip' }, ex.config_path ? t('load.samples.with_config') : t('load.samples.default_config')));
+    const btn = h('button', { type: 'button', class: 'btn btn-secondary', disabled: state.inspecting || state.running, 'aria-label': t('load.samples.use_named', { name: isDemo ? t('load.demo.card_name') : ex.name }), onclick: () => useExample(ex) }, t('load.samples.use'));
+    host.appendChild(isDemo
+      ? h('article', { class: 'sample is-demo' }, h('div', { class: 'sample-body' }, h('h3', null, t('load.demo.card_name')), h('p', null, t('load.demo.card_desc')), meta), btn)
+      : h('article', { class: 'sample' }, h('h3', null, ex.name), h('p', null, ex.description), meta, btn));
   });
 }
 
@@ -213,6 +217,8 @@ export function renderLoad() {
   $('#dz-sub').textContent = state.file ? t('load.drop.sub_loaded') : t('load.drop.sub');
   $('#btn-browse-ifc').textContent = state.file ? t('load.browse.ifc_replace') : t('load.browse.ifc');
   $('#btn-browse-ifc').disabled = state.inspecting || state.running;
+  $('#demo-cta').hidden = !demoExample();
+  $('#btn-demo').disabled = state.inspecting || state.running;
   renderAttachments();
   renderErrorCard();
   renderFileCard();
@@ -227,5 +233,6 @@ export function initLoad() {
   $('#btn-browse-yaml').addEventListener('click', async () => { const p = await api.pickFile('yaml'); if (p) attachConfig(p); });
   $('#btn-clear-ids').addEventListener('click', () => { state.idsPath = null; renderLoad(); });
   $('#btn-clear-yaml').addEventListener('click', clearConfigFile);
+  $('#btn-demo').addEventListener('click', () => { const ex = demoExample(); if (ex) useExample(ex); });
   $('#btn-run').addEventListener('click', () => actions.run());
 }

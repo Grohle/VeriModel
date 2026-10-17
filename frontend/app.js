@@ -20,6 +20,7 @@ import {
 } from './js/view-load.js';
 import { renderReview, refreshHead, setRuleFilter, closeVerdictPopover } from './js/view-review.js';
 import { renderExport } from './js/view-export.js';
+import { initAssistant, renderAssistant, refreshChips, isAssistantOpen, closeAssistant, explainFinding } from './js/assistant.js';
 import { initDetail, openDetail, closeDetail, isDetailOpen, renderDetail } from './js/detail.js';
 
 const VIEWS = { 1: '#view-load', 2: '#view-review', 3: '#view-export' };
@@ -45,6 +46,7 @@ async function setLang(lang) {
   applyToggleState();
   renderSettingsPanel();
   renderAll();
+  renderAssistant();
 }
 
 // ---------------------------------------------------------------- routing
@@ -141,6 +143,14 @@ async function boot() {
   Object.assign(actions, {
     goto, run, newCheck, toast, openDetail, clearConfigFile,
     filterByRule: setRuleFilter,
+    explainFinding,
+    assistantChanged: refreshChips,
+    // The assistant replaced the project settings with its YAML: show them on step 1.
+    settingsRefresh: () => {
+      renderSettingsPanel(); renderRunBar(); updateSettingsBadge();
+      const d = $('#settings'); if (d) d.open = true;
+      if (state.step !== 1) goto(1, { focus: false });
+    },
     settingsChanged: () => { renderRunBar(); updateSettingsBadge(); },
   });
 
@@ -160,11 +170,13 @@ async function boot() {
   initLoad();
   initDetail();
   renderSettingsPanel();
+  initAssistant();
 
   document.addEventListener('keydown', (e) => {
     if (e.key !== 'Escape') return;
     hideTip();
     if (closeVerdictPopover()) { const b = $('#btn-verdict-info'); if (b) b.focus(); return; }
+    if (isAssistantOpen()) { closeAssistant(); e.preventDefault(); return; }
     if (closeDetail()) e.preventDefault();
   });
 

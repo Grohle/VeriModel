@@ -18,7 +18,11 @@ pub struct AppError {
 
 impl AppError {
     pub fn new(code: &str, message: impl Into<String>, hint: impl Into<String>) -> Self {
-        Self { code: code.to_string(), message: message.into(), hint: hint.into() }
+        Self {
+            code: code.to_string(),
+            message: message.into(),
+            hint: hint.into(),
+        }
     }
 
     pub fn file_missing(what: &str, path: &str) -> Self {
@@ -47,8 +51,17 @@ impl std::fmt::Display for AppError {
 
 impl From<ReaderError> for AppError {
     fn from(e: ReaderError) -> Self {
-        log::error!("reader error [{}]: {} (hint: {})", e.code, e.message, e.hint);
-        AppError { code: e.code, message: e.message, hint: e.hint }
+        log::error!(
+            "reader error [{}]: {} (hint: {})",
+            e.code,
+            e.message,
+            e.hint
+        );
+        AppError {
+            code: e.code,
+            message: e.message,
+            hint: e.hint,
+        }
     }
 }
 
@@ -56,12 +69,30 @@ impl From<CoreError> for AppError {
     fn from(e: CoreError) -> Self {
         log::error!("core error: {e:?}");
         let (code, hint) = match &e {
-            CoreError::Config(_) => ("config_invalid", "Open the Project settings and fix the highlighted problem."),
-            CoreError::RulePack(_) => ("rule_pack_invalid", "Check the custom rule pack referenced in the project settings."),
-            CoreError::Io(_) => ("io_error", "Check that the file exists and that you can read and write that folder."),
-            CoreError::Report(_) => ("report_error", "Choose another output folder and run the check again."),
-            CoreError::Bcf(_) => ("bcf_error", "Choose another output folder and run the check again."),
-            CoreError::Qto(_) => ("qto_error", "Check the unit rates file and the quantity takeoff settings."),
+            CoreError::Config(_) => (
+                "config_invalid",
+                "Open the Project settings and fix the highlighted problem.",
+            ),
+            CoreError::RulePack(_) => (
+                "rule_pack_invalid",
+                "Check the custom rule pack referenced in the project settings.",
+            ),
+            CoreError::Io(_) => (
+                "io_error",
+                "Check that the file exists and that you can read and write that folder.",
+            ),
+            CoreError::Report(_) => (
+                "report_error",
+                "Choose another output folder and run the check again.",
+            ),
+            CoreError::Bcf(_) => (
+                "bcf_error",
+                "Choose another output folder and run the check again.",
+            ),
+            CoreError::Qto(_) => (
+                "qto_error",
+                "Check the unit rates file and the quantity takeoff settings.",
+            ),
             CoreError::Other(_) => ("error", ""),
         };
         AppError::new(code, e.to_string(), hint)
@@ -71,7 +102,11 @@ impl From<CoreError> for AppError {
 impl From<std::io::Error> for AppError {
     fn from(e: std::io::Error) -> Self {
         log::error!("io error: {e:?}");
-        AppError::new("io_error", format!("File problem: {e}"), "Check the path and your permissions.")
+        AppError::new(
+            "io_error",
+            format!("File problem: {e}"),
+            "Check the path and your permissions.",
+        )
     }
 }
 
@@ -84,19 +119,33 @@ mod tests {
         let e: AppError = CoreError::Config("bad yaml".into()).into();
         assert_eq!(e.code, "config_invalid");
         assert!(e.message.contains("bad yaml"));
-        assert!(!e.message.contains("Config("), "no Debug output in messages");
+        assert!(
+            !e.message.contains("Config("),
+            "no Debug output in messages"
+        );
         assert!(!e.hint.is_empty());
     }
 
     #[test]
     fn reader_error_keeps_code_message_hint() {
-        let e: AppError = ReaderError { code: "python_missing".into(), message: "No Python".into(), hint: "Install it".into() }.into();
-        assert_eq!((e.code.as_str(), e.message.as_str(), e.hint.as_str()), ("python_missing", "No Python", "Install it"));
+        let e: AppError = ReaderError {
+            code: "python_missing".into(),
+            message: "No Python".into(),
+            hint: "Install it".into(),
+        }
+        .into();
+        assert_eq!(
+            (e.code.as_str(), e.message.as_str(), e.hint.as_str()),
+            ("python_missing", "No Python", "Install it")
+        );
     }
 
     #[test]
     fn serialises_to_three_fields() {
         let v = serde_json::to_value(AppError::new("c", "m", "h")).unwrap();
-        assert_eq!(v, serde_json::json!({"code": "c", "message": "m", "hint": "h"}));
+        assert_eq!(
+            v,
+            serde_json::json!({"code": "c", "message": "m", "hint": "h"})
+        );
     }
 }

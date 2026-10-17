@@ -4,6 +4,7 @@
 //! 1 = verdict FAIL, 2 = error (bad input, missing file, missing IFC tooling),
 //! 3 = feature planned but not implemented yet (`clash`).
 
+mod assistant_cmds;
 mod error;
 mod render;
 
@@ -23,7 +24,9 @@ const ABOUT: &str = "VeriModel \u{2014} IFC QA Gate + Quantity Takeoff + BCF Exp
 
 #[derive(Parser, Debug)]
 #[command(name = "verimodel", version = verimodel_core::VERSION, about = ABOUT, long_about = ABOUT)]
-#[command(after_help = "Exit codes: 0 pass (or pass with warnings), 1 fail, 2 error, 3 not implemented yet.")]
+#[command(
+    after_help = "Exit codes: 0 pass (or pass with warnings), 1 fail, 2 error, 3 not implemented yet."
+)]
 struct Cli {
     /// Print detailed logs to stderr (repeat for more: -vv).
     #[arg(short, long, action = clap::ArgAction::Count, global = true)]
@@ -47,6 +50,13 @@ enum Command {
     Inspect(InspectArgs),
     /// Check that Python, IfcOpenShell and IfcTester are installed.
     Doctor,
+    /// Ask the optional local assistant a question (read-only copilot; never decides pass/fail).
+    Ask(assistant_cmds::AskArgs),
+    /// Manage the optional local assistant model: `status` or `download`.
+    #[command(subcommand)]
+    Assistant(assistant_cmds::AssistantCommand),
+    /// Convert project documentation (.md .txt .yaml .json .docx .pdf) into a knowledge.yaml for the assistant.
+    DocsToYaml(assistant_cmds::DocsToYamlArgs),
 }
 
 #[derive(Args, Debug)]
@@ -135,7 +145,8 @@ fn init_logging(verbose: u8) {
         1 => "info",
         _ => "debug",
     };
-    let _ = env_logger::Builder::from_env(env_logger::Env::default().default_filter_or(level)).try_init();
+    let _ = env_logger::Builder::from_env(env_logger::Env::default().default_filter_or(level))
+        .try_init();
 }
 
 fn dispatch(cmd: Command) -> Result<i32, CliError> {
@@ -146,6 +157,9 @@ fn dispatch(cmd: Command) -> Result<i32, CliError> {
         Command::ValidateConfig(a) => cmd_validate(a),
         Command::Inspect(a) => cmd_inspect(a),
         Command::Doctor => cmd_doctor(),
+        Command::Ask(a) => assistant_cmds::cmd_ask(a),
+        Command::Assistant(c) => assistant_cmds::cmd_assistant(c),
+        Command::DocsToYaml(a) => assistant_cmds::cmd_docs_to_yaml(a),
     }
 }
 
@@ -184,12 +198,18 @@ fn run_pipeline(common: &CommonRun, ids: Option<&PathBuf>) -> Result<RunOutcome,
     require_file(&common.ifc, "IFC file")?;
     let (config, config_dir) = load_config(common.config.as_deref())?;
     // --ids wins; otherwise use requirements.ids_file from project.yaml (relative to the config).
-    let ids: Option<PathBuf> = ids.cloned().or_else(|| config.ids_path(config_dir.as_deref()));
+    let ids: Option<PathBuf> = ids
+        .cloned()
+        .or_else(|| config.ids_path(config_dir.as_deref()));
     if let Some(ids) = &ids {
         require_file(ids, "IDS file")?;
         log::info!("using IDS file {}", ids.display());
     }
-    let opts = ReadOptions { ids_path: ids.clone(), geometry: !common.no_geometry, ..Default::default() };
+    let opts = ReadOptions {
+        ids_path: ids.clone(),
+        geometry: !common.no_geometry,
+        ..Default::default()
+    };
     log::info!("reading {}", common.ifc.display());
     let model = verimodel_ifc_reader::read_model(&common.ifc, &opts)?;
     log::info!("read {} elements", model.elements.len());
@@ -207,7 +227,8 @@ fn run_pipeline(common: &CommonRun, ids: Option<&PathBuf>) -> Result<RunOutcome,
 fn cmd_check(a: CheckArgs) -> Result<i32, CliError> {
     let outcome = run_pipeline(&a.common, a.ids.as_ref())?;
     if a.json {
-        let text = serde_json::to_string_pretty(&outcome).map_err(|e| CliError::new(format!("Cannot render JSON: {e}")))?;
+        let text = serde_json::to_string_pretty(&outcome)
+            .map_err(|e| CliError::new(format!("Cannot render JSON: {e}")))?;
         println!("{text}");
     } else {
         print!("{}", render::render_summary(&outcome));
@@ -235,7 +256,12 @@ fn cmd_clash(a: ClashArgs) -> Result<i32, CliError> {
     // The user asked for clashes explicitly, so report "not implemented", not "disabled".
     config.clash.enabled = true;
     let strings = Strings::for_language(config.output.language);
-    let report = verimodel_core::clash::run(&Model::default(), Some(&Model::default()), &config, &strings);
+    let report = verimodel_core::clash::run(
+        &Model::default(),
+        Some(&Model::default()),
+        &config,
+        &strings,
+    );
     println!("{}", report.message);
     if !report.implemented {
         eprintln!("No clash results were produced. Exit code {EXIT_NOT_IMPLEMENTED} means 'not implemented yet'.");
@@ -247,11 +273,17 @@ fn cmd_clash(a: ClashArgs) -> Result<i32, CliError> {
 fn cmd_validate(a: ValidateArgs) -> Result<i32, CliError> {
     if a.schema {
         let schema = Config::json_schema();
-        let text = serde_json::to_string_pretty(&schema).map_err(|e| CliError::new(format!("Cannot render schema: {e}")))?;
+        let text = serde_json::to_string_pretty(&schema)
+            .map_err(|e| CliError::new(format!("Cannot render schema: {e}")))?;
         println!("{text}");
         return Ok(0);
     }
-    let path = a.config.ok_or_else(|| CliError::with_hint("No config file given.", "Use --config <project.yaml>, or --schema to print the schema."))?;
+    let path = a.config.ok_or_else(|| {
+        CliError::with_hint(
+            "No config file given.",
+            "Use --config <project.yaml>, or --schema to print the schema.",
+        )
+    })?;
     require_file(&path, "Config file")?;
     Config::from_file(&path)?;
     println!("OK: {} is a valid VeriModel configuration.", path.display());
@@ -303,7 +335,17 @@ mod tests {
         Cli::command().debug_assert();
         let help = Cli::command().render_help().to_string();
         assert!(help.contains("VeriModel \u{2014} IFC QA Gate + Quantity Takeoff + BCF Export"));
-        for sub in ["check", "qto", "clash", "validate-config", "inspect", "doctor"] {
+        for sub in [
+            "check",
+            "qto",
+            "clash",
+            "validate-config",
+            "inspect",
+            "doctor",
+            "ask",
+            "assistant",
+            "docs-to-yaml",
+        ] {
             assert!(help.contains(sub), "missing subcommand {sub}");
         }
     }
@@ -311,7 +353,18 @@ mod tests {
     #[test]
     fn parses_check_flags() {
         let cli = Cli::try_parse_from([
-            "verimodel", "check", "--ifc", "a.ifc", "--ids", "b.ids", "--config", "p.yaml", "--out", "o", "--no-geometry", "--json",
+            "verimodel",
+            "check",
+            "--ifc",
+            "a.ifc",
+            "--ids",
+            "b.ids",
+            "--config",
+            "p.yaml",
+            "--out",
+            "o",
+            "--no-geometry",
+            "--json",
         ])
         .unwrap();
         match cli.command {
@@ -364,13 +417,30 @@ mod tests {
         let dir = tempfile::tempdir().unwrap();
         let a = dir.path().join("a.ifc");
         std::fs::write(&a, "x").unwrap();
-        let code = cmd_clash(ClashArgs { ifc_a: a.clone(), ifc_b: a, config: None, out: dir.path().join("o") }).unwrap();
+        let code = cmd_clash(ClashArgs {
+            ifc_a: a.clone(),
+            ifc_b: a,
+            config: None,
+            out: dir.path().join("o"),
+        })
+        .unwrap();
         assert_eq!(code, EXIT_NOT_IMPLEMENTED);
     }
 
     #[test]
     fn validate_schema_and_file() {
-        assert_eq!(cmd_validate(ValidateArgs { config: None, schema: true }).unwrap(), 0);
-        assert!(cmd_validate(ValidateArgs { config: None, schema: false }).is_err());
+        assert_eq!(
+            cmd_validate(ValidateArgs {
+                config: None,
+                schema: true
+            })
+            .unwrap(),
+            0
+        );
+        assert!(cmd_validate(ValidateArgs {
+            config: None,
+            schema: false
+        })
+        .is_err());
     }
 }

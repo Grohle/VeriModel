@@ -16,6 +16,7 @@ tauri-build = { version = "2", features = [] }
 [dependencies]
 verimodel-core = { path = "../crates/core" }
 verimodel-ifc-reader = { path = "../crates/ifc_reader" }
+verimodel-assistant = { path = "../crates/assistant" }
 tauri = { version = "2", features = [] }
 tauri-plugin-dialog = "2"
 tauri-plugin-opener = "2"
