@@ -1,0 +1,43 @@
+# Rust
+/target/
+**/target/
+Cargo.lock
+# Keep Cargo.lock for the Tauri binary / CLI — uncomment if this becomes a library-only crate
+# !Cargo.lock
+
+# Tauri
+src-tauri/target/
+src-tauri/WixTools/
+*.msi
+*.dmg
+*.AppImage
+*.deb
+*.rpm
+
+# Frontend / Node
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+node_modules/
+dist/
+build/
+
+# Generated outputs (per-run, never commit)
+out/
+*.bcfzip
+*.log
+
+# Large BIM test files — keep fixtures small; large samples live outside the repo
+*.ifc
+*.ifczip
+!tests/fixtures/*.ifc
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+.env
+.env.local
