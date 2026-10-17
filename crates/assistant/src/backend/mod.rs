@@ -23,7 +23,11 @@ pub struct GenOptions {
 
 impl Default for GenOptions {
     fn default() -> Self {
-        Self { max_tokens: 384, temperature: 0.0, stop: vec!["<|im_end|>".into(), "<|endoftext|>".into()] }
+        Self {
+            max_tokens: 384,
+            temperature: 0.0,
+            stop: vec!["<|im_end|>".into(), "<|endoftext|>".into()],
+        }
     }
 }
 

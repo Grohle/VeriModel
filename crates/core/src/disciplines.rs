@@ -29,7 +29,11 @@ mod tests {
     fn detects_by_ancestor() {
         let e = Element {
             ifc_type: "IfcDuctSegment".into(),
-            ancestors: vec!["IfcFlowSegment".into(), "IfcDistributionFlowElement".into(), "IfcDistributionElement".into()],
+            ancestors: vec![
+                "IfcFlowSegment".into(),
+                "IfcDistributionFlowElement".into(),
+                "IfcDistributionElement".into(),
+            ],
             ..Default::default()
         };
         assert_eq!(detect(&[e]), vec!["mep".to_string()]);

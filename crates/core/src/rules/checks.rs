@@ -50,17 +50,22 @@ impl Param {
 
     pub fn as_bool(&self, config: &Config) -> CoreResult<bool> {
         let v = self.resolve(config)?;
-        v.as_bool().ok_or_else(|| CoreError::RulePack(format!("parameter {:?} is not a boolean", self)))
+        v.as_bool()
+            .ok_or_else(|| CoreError::RulePack(format!("parameter {:?} is not a boolean", self)))
     }
 
     pub fn as_string_list(&self, config: &Config) -> CoreResult<Vec<String>> {
         let v = self.resolve(config)?;
         match v {
-            serde_json::Value::Array(a) => {
-                Ok(a.iter().filter_map(|x| x.as_str().map(|s| s.to_string())).collect())
-            }
+            serde_json::Value::Array(a) => Ok(a
+                .iter()
+                .filter_map(|x| x.as_str().map(|s| s.to_string()))
+                .collect()),
             serde_json::Value::String(s) => Ok(vec![s]),
-            _ => Err(CoreError::RulePack(format!("parameter {:?} is not a list", self))),
+            _ => Err(CoreError::RulePack(format!(
+                "parameter {:?} is not a list",
+                self
+            ))),
         }
     }
 }
@@ -171,7 +176,12 @@ pub struct CheckFailure {
 }
 
 impl CheckFailure {
-    fn element(idx: usize, message: impl Into<String>, expected: impl Into<String>, actual: impl Into<String>) -> Self {
+    fn element(
+        idx: usize,
+        message: impl Into<String>,
+        expected: impl Into<String>,
+        actual: impl Into<String>,
+    ) -> Self {
         Self {
             element: Some(idx),
             message: message.into(),
@@ -179,8 +189,17 @@ impl CheckFailure {
             actual: Some(actual.into()),
         }
     }
-    fn model(message: impl Into<String>, expected: impl Into<String>, actual: impl Into<String>) -> Self {
-        Self { element: None, message: message.into(), expected: Some(expected.into()), actual: Some(actual.into()) }
+    fn model(
+        message: impl Into<String>,
+        expected: impl Into<String>,
+        actual: impl Into<String>,
+    ) -> Self {
+        Self {
+            element: None,
+            message: message.into(),
+            expected: Some(expected.into()),
+            actual: Some(actual.into()),
+        }
     }
 }
 
@@ -209,7 +228,11 @@ const GLOBAL_ID_ALPHABET: &str = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghij
 pub fn is_valid_global_id(id: &str) -> bool {
     id.len() == 22
         && id.chars().all(|c| GLOBAL_ID_ALPHABET.contains(c))
-        && id.chars().next().map(|c| ('0'..='3').contains(&c)).unwrap_or(false)
+        && id
+            .chars()
+            .next()
+            .map(|c| ('0'..='3').contains(&c))
+            .unwrap_or(false)
 }
 
 fn name_of(e: &Element) -> String {
@@ -254,7 +277,9 @@ impl CheckKind {
     pub fn is_model_level(&self) -> bool {
         matches!(
             self,
-            CheckKind::SpatialHierarchy { .. } | CheckKind::TypesPresent { .. } | CheckKind::SchemaAllowed
+            CheckKind::SpatialHierarchy { .. }
+                | CheckKind::TypesPresent { .. }
+                | CheckKind::SchemaAllowed
         )
     }
 
@@ -271,11 +296,18 @@ impl CheckKind {
                 }
                 for (id, idxs) in by_id {
                     if idxs.len() > 1 {
-                        let others: Vec<String> = idxs.iter().map(|i| format!("#{}", els[*i].step_id)).collect();
+                        let others: Vec<String> = idxs
+                            .iter()
+                            .map(|i| format!("#{}", els[*i].step_id))
+                            .collect();
                         for &i in &idxs {
                             failures.push(CheckFailure::element(
                                 i,
-                                format!("GlobalId '{id}' is used by {} elements ({})", idxs.len(), others.join(", ")),
+                                format!(
+                                    "GlobalId '{id}' is used by {} elements ({})",
+                                    idxs.len(),
+                                    others.join(", ")
+                                ),
                                 "unique GlobalId",
                                 format!("{} occurrences", idxs.len()),
                             ));
@@ -291,7 +323,11 @@ impl CheckKind {
                             i,
                             format!("GlobalId '{id}' is not a valid 22-character IFC identifier"),
                             "22 characters from the IFC base64 alphabet",
-                            if id.is_empty() { "<empty>".to_string() } else { format!("'{id}' ({} chars)", id.len()) },
+                            if id.is_empty() {
+                                "<empty>".to_string()
+                            } else {
+                                format!("'{id}' ({} chars)", id.len())
+                            },
                         ));
                     }
                 }
@@ -329,7 +365,12 @@ impl CheckKind {
                         for &i in &idxs {
                             failures.push(CheckFailure::element(
                                 i,
-                                format!("Name '{}' is shared by {} elements of the same {}", key[0], idxs.len(), keys.join(" and ")),
+                                format!(
+                                    "Name '{}' is shared by {} elements of the same {}",
+                                    key[0],
+                                    idxs.len(),
+                                    keys.join(" and ")
+                                ),
                                 "unique name",
                                 format!("{} elements named '{}'", idxs.len(), key[0]),
                             ));
@@ -379,10 +420,15 @@ impl CheckKind {
                     .map(|n| n.ifc_type.to_ascii_lowercase())
                     .collect();
                 for group in require {
-                    let ok = group.iter().any(|t| present.contains(&t.to_ascii_lowercase()));
+                    let ok = group
+                        .iter()
+                        .any(|t| present.contains(&t.to_ascii_lowercase()));
                     if !ok {
                         failures.push(CheckFailure::model(
-                            format!("Spatial hierarchy is missing a {} element", group.join(" / ")),
+                            format!(
+                                "Spatial hierarchy is missing a {} element",
+                                group.join(" / ")
+                            ),
                             format!("at least one of {}", group.join(", ")),
                             "none found",
                         ));
@@ -391,7 +437,9 @@ impl CheckKind {
             }
             CheckKind::DistanceFromOrigin { max_m } => {
                 if !ctx.model.info.geometry_available {
-                    return Ok(CheckOutcome::Skipped { reason: "geometry kernel unavailable".into() });
+                    return Ok(CheckOutcome::Skipped {
+                        reason: "geometry kernel unavailable".into(),
+                    });
                 }
                 let max = max_m.as_f64(cfg)?;
                 for &i in ctx.scope {
@@ -400,7 +448,11 @@ impl CheckKind {
                         if d > max {
                             failures.push(CheckFailure::element(
                                 i,
-                                format!("{} is {:.1} m from the project origin", describe_elem(&els[i]), d),
+                                format!(
+                                    "{} is {:.1} m from the project origin",
+                                    describe_elem(&els[i]),
+                                    d
+                                ),
                                 format!("<= {} m", crate::model::format_number(max)),
                                 format!("{:.1} m", d),
                             ));
@@ -420,7 +472,12 @@ impl CheckKind {
                     }
                 }
             }
-            CheckKind::PropertyExists { pset, property, require_value, data_type } => {
+            CheckKind::PropertyExists {
+                pset,
+                property,
+                require_value,
+                data_type,
+            } => {
                 for &i in ctx.scope {
                     let e = &els[i];
                     let label = match pset {
@@ -434,18 +491,23 @@ impl CheckKind {
                             format!("property {label} present"),
                             "missing",
                         )),
-                        Some(v) if *require_value && v.is_empty() => failures.push(CheckFailure::element(
-                            i,
-                            format!("{} has property {label} but no value", describe_elem(e)),
-                            format!("non-empty value for {label}"),
-                            v.display(),
-                        )),
+                        Some(v) if *require_value && v.is_empty() => {
+                            failures.push(CheckFailure::element(
+                                i,
+                                format!("{} has property {label} but no value", describe_elem(e)),
+                                format!("non-empty value for {label}"),
+                                v.display(),
+                            ))
+                        }
                         Some(v) => {
                             if let Some(dt) = data_type {
                                 if !type_matches(v, dt) {
                                     failures.push(CheckFailure::element(
                                         i,
-                                        format!("{} property {label} has the wrong data type", describe_elem(e)),
+                                        format!(
+                                            "{} property {label} has the wrong data type",
+                                            describe_elem(e)
+                                        ),
                                         dt.clone(),
                                         format!("{} ({})", v.type_name(), v.display()),
                                     ));
@@ -455,11 +517,18 @@ impl CheckKind {
                     }
                 }
             }
-            CheckKind::PropertyMatches { pset, property, pattern, allowed_values } => {
+            CheckKind::PropertyMatches {
+                pset,
+                property,
+                pattern,
+                allowed_values,
+            } => {
                 let re = match pattern {
                     Some(p) => {
                         let s = p.resolve(cfg)?.as_str().unwrap_or_default().to_string();
-                        Some(Regex::new(&s).map_err(|e| CoreError::RulePack(format!("invalid pattern '{s}': {e}")))?)
+                        Some(Regex::new(&s).map_err(|e| {
+                            CoreError::RulePack(format!("invalid pattern '{s}': {e}"))
+                        })?)
                     }
                     None => None,
                 };
@@ -469,7 +538,9 @@ impl CheckKind {
                 };
                 for &i in ctx.scope {
                     let e = &els[i];
-                    let Some(v) = e.property(pset.as_deref(), property) else { continue };
+                    let Some(v) = e.property(pset.as_deref(), property) else {
+                        continue;
+                    };
                     let s = v.display();
                     if let Some(re) = &re {
                         if !re.is_match(&s) {
@@ -486,7 +557,10 @@ impl CheckKind {
                         if !a.iter().any(|x| x == &s) {
                             failures.push(CheckFailure::element(
                                 i,
-                                format!("{} property {property} = '{s}' is not an allowed value", describe_elem(e)),
+                                format!(
+                                    "{} property {property} = '{s}' is not an allowed value",
+                                    describe_elem(e)
+                                ),
                                 format!("one of {}", a.join(", ")),
                                 s.clone(),
                             ));
@@ -508,7 +582,13 @@ impl CheckKind {
                     if !empties.is_empty() {
                         failures.push(CheckFailure::element(
                             i,
-                            format!("{} has {} empty propert{}: {}", describe_elem(e), empties.len(), if empties.len() == 1 { "y" } else { "ies" }, empties.join(", ")),
+                            format!(
+                                "{} has {} empty propert{}: {}",
+                                describe_elem(e),
+                                empties.len(),
+                                if empties.len() == 1 { "y" } else { "ies" },
+                                empties.join(", ")
+                            ),
                             "every property carries a value",
                             format!("{} empty", empties.len()),
                         ));
@@ -527,9 +607,14 @@ impl CheckKind {
                     }
                 }
             }
-            CheckKind::NonDegenerateGeometry { min_volume_m3, min_area_m2 } => {
+            CheckKind::NonDegenerateGeometry {
+                min_volume_m3,
+                min_area_m2,
+            } => {
                 if !ctx.model.info.geometry_available {
-                    return Ok(CheckOutcome::Skipped { reason: "geometry kernel unavailable".into() });
+                    return Ok(CheckOutcome::Skipped {
+                        reason: "geometry kernel unavailable".into(),
+                    });
                 }
                 let min_v = match min_volume_m3 {
                     Some(p) => p.as_f64(cfg)?,
@@ -568,7 +653,9 @@ impl CheckKind {
             }
             CheckKind::BboxWithinBounds { max_extent_m } => {
                 if !ctx.model.info.geometry_available {
-                    return Ok(CheckOutcome::Skipped { reason: "geometry kernel unavailable".into() });
+                    return Ok(CheckOutcome::Skipped {
+                        reason: "geometry kernel unavailable".into(),
+                    });
                 }
                 let max = max_extent_m.as_f64(cfg)?;
                 for &i in ctx.scope {
@@ -578,7 +665,11 @@ impl CheckKind {
                         if largest > max {
                             failures.push(CheckFailure::element(
                                 i,
-                                format!("{} spans {:.1} m, larger than the configured project bounds", describe_elem(&els[i]), largest),
+                                format!(
+                                    "{} spans {:.1} m, larger than the configured project bounds",
+                                    describe_elem(&els[i]),
+                                    largest
+                                ),
                                 format!("extent <= {} m", crate::model::format_number(max)),
                                 format!("{:.1} m", largest),
                             ));
@@ -588,7 +679,11 @@ impl CheckKind {
             }
             CheckKind::ClassificationExists { system } => {
                 let sys = match system {
-                    Some(p) => p.resolve(cfg)?.as_str().map(|s| s.to_string()).filter(|s| !s.is_empty() && s != "none"),
+                    Some(p) => p
+                        .resolve(cfg)?
+                        .as_str()
+                        .map(|s| s.to_string())
+                        .filter(|s| !s.is_empty() && s != "none"),
                     None => None,
                 };
                 // `classification.applies_to` narrows the scope without a custom rule pack.
@@ -601,7 +696,11 @@ impl CheckKind {
                     let found = e.classifications.iter().any(|c| {
                         c.code.as_ref().map(|s| !s.is_empty()).unwrap_or(false)
                             && match &sys {
-                                Some(s) => c.system.as_ref().map(|x| x.to_lowercase().contains(&s.to_lowercase())).unwrap_or(false),
+                                Some(s) => c
+                                    .system
+                                    .as_ref()
+                                    .map(|x| x.to_lowercase().contains(&s.to_lowercase()))
+                                    .unwrap_or(false),
                                 None => true,
                             }
                     });
@@ -609,8 +708,12 @@ impl CheckKind {
                         failures.push(CheckFailure::element(
                             i,
                             match &sys {
-                                Some(s) => format!("{} has no {s} classification", describe_elem(e)),
-                                None => format!("{} has no classification reference", describe_elem(e)),
+                                Some(s) => {
+                                    format!("{} has no {s} classification", describe_elem(e))
+                                }
+                                None => {
+                                    format!("{} has no classification reference", describe_elem(e))
+                                }
                             },
                             match &sys {
                                 Some(s) => format!("classification from system '{s}'"),
@@ -621,7 +724,13 @@ impl CheckKind {
                             } else {
                                 e.classifications
                                     .iter()
-                                    .map(|c| format!("{}:{}", c.system.clone().unwrap_or_default(), c.code.clone().unwrap_or_default()))
+                                    .map(|c| {
+                                        format!(
+                                            "{}:{}",
+                                            c.system.clone().unwrap_or_default(),
+                                            c.code.clone().unwrap_or_default()
+                                        )
+                                    })
                                     .collect::<Vec<_>>()
                                     .join(", ")
                             },
@@ -631,7 +740,9 @@ impl CheckKind {
             }
             CheckKind::ClassificationCodeAllowed => {
                 let pattern = match &cfg.classification.code_pattern {
-                    Some(p) => Some(Regex::new(p).map_err(|e| CoreError::Config(format!("classification.code_pattern: {e}")))?),
+                    Some(p) => Some(Regex::new(p).map_err(|e| {
+                        CoreError::Config(format!("classification.code_pattern: {e}"))
+                    })?),
                     None => None,
                 };
                 if ctx.allowed_codes.is_empty() && pattern.is_none() {
@@ -642,8 +753,11 @@ impl CheckKind {
                 for &i in ctx.scope {
                     let e = &els[i];
                     for c in &e.classifications {
-                        let Some(code) = c.code.as_ref().filter(|s| !s.is_empty()) else { continue };
-                        let in_list = ctx.allowed_codes.is_empty() || ctx.allowed_codes.contains(code);
+                        let Some(code) = c.code.as_ref().filter(|s| !s.is_empty()) else {
+                            continue;
+                        };
+                        let in_list =
+                            ctx.allowed_codes.is_empty() || ctx.allowed_codes.contains(code);
                         let matches = pattern.as_ref().map(|re| re.is_match(code)).unwrap_or(true);
                         if !in_list || !matches {
                             failures.push(CheckFailure::element(
@@ -667,29 +781,47 @@ impl CheckKind {
                         if s.is_empty() {
                             None
                         } else {
-                            Some(Regex::new(&s).map_err(|e| CoreError::RulePack(format!("invalid pattern '{s}': {e}")))?)
+                            Some(Regex::new(&s).map_err(|e| {
+                                CoreError::RulePack(format!("invalid pattern '{s}': {e}"))
+                            })?)
                         }
                     }
                     None => None,
                 };
                 let mut per_type: Vec<(String, Regex)> = Vec::new();
                 for (t, p) in &cfg.naming.patterns {
-                    per_type.push((t.clone(), Regex::new(p).map_err(|e| CoreError::Config(format!("naming.patterns['{t}']: {e}")))?));
+                    per_type.push((
+                        t.clone(),
+                        Regex::new(p).map_err(|e| {
+                            CoreError::Config(format!("naming.patterns['{t}']: {e}"))
+                        })?,
+                    ));
                 }
                 if explicit.is_none() && per_type.is_empty() {
-                    return Ok(CheckOutcome::Skipped { reason: "no naming patterns configured (naming.patterns)".into() });
+                    return Ok(CheckOutcome::Skipped {
+                        reason: "no naming patterns configured (naming.patterns)".into(),
+                    });
                 }
                 for &i in ctx.scope {
                     let e = &els[i];
                     let name = name_of(e);
-                    let re = explicit.as_ref().or_else(|| per_type.iter().find(|(t, _)| e.is_a(t)).map(|(_, r)| r));
+                    let re = explicit
+                        .as_ref()
+                        .or_else(|| per_type.iter().find(|(t, _)| e.is_a(t)).map(|(_, r)| r));
                     let Some(re) = re else { continue };
                     if !re.is_match(&name) {
                         failures.push(CheckFailure::element(
                             i,
-                            format!("{} name '{}' does not follow the naming convention", e.ifc_type, name),
+                            format!(
+                                "{} name '{}' does not follow the naming convention",
+                                e.ifc_type, name
+                            ),
                             format!("name matching /{}/", re.as_str()),
-                            if name.is_empty() { "<empty>".into() } else { name.clone() },
+                            if name.is_empty() {
+                                "<empty>".into()
+                            } else {
+                                name.clone()
+                            },
                         ));
                     }
                 }
@@ -710,7 +842,12 @@ impl CheckKind {
                         if v <= min_v {
                             failures.push(CheckFailure::element(
                                 i,
-                                format!("{} has {label} {} {unit} (from {})", describe_elem(e), crate::model::format_number(v), src.label()),
+                                format!(
+                                    "{} has {label} {} {unit} (from {})",
+                                    describe_elem(e),
+                                    crate::model::format_number(v),
+                                    src.label()
+                                ),
                                 format!("{label} > {} {unit}", crate::model::format_number(min_v)),
                                 format!("{} {unit}", crate::model::format_number(v)),
                             ));
@@ -735,10 +872,15 @@ impl CheckKind {
                 let allowed = &cfg.project.ifc_versions;
                 if !allowed.is_empty() {
                     let schema = ctx.model.info.schema.to_ascii_uppercase();
-                    let ok = allowed.iter().any(|a| normalise_schema(a) == normalise_schema(&schema));
+                    let ok = allowed
+                        .iter()
+                        .any(|a| normalise_schema(a) == normalise_schema(&schema));
                     if !ok {
                         failures.push(CheckFailure::model(
-                            format!("File schema {} is not accepted by the project", ctx.model.info.schema),
+                            format!(
+                                "File schema {} is not accepted by the project",
+                                ctx.model.info.schema
+                            ),
                             format!("one of {}", allowed.join(", ")),
                             ctx.model.info.schema.clone(),
                         ));

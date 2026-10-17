@@ -96,7 +96,11 @@ pub struct RequirementsSection {
 
 impl Default for RequirementsSection {
     fn default() -> Self {
-        Self { ids_file: None, rule_pack: "generic".into(), required_psets: vec![] }
+        Self {
+            ids_file: None,
+            rule_pack: "generic".into(),
+            required_psets: vec![],
+        }
     }
 }
 
@@ -148,7 +152,11 @@ pub struct GeometryTolerances {
 
 impl Default for GeometryTolerances {
     fn default() -> Self {
-        Self { min_volume_m3: 0.000001, min_area_m2: 0.000001, max_extent_m: 5_000.0 }
+        Self {
+            min_volume_m3: 0.000001,
+            min_area_m2: 0.000001,
+            max_extent_m: 5_000.0,
+        }
     }
 }
 
@@ -265,7 +273,8 @@ impl ChecksSection {
 impl Config {
     /// Parse YAML text. Unknown fields are errors so typos never silently disable a rule.
     pub fn from_yaml(text: &str) -> CoreResult<Config> {
-        let cfg: Config = serde_yaml::from_str(text).map_err(|e| CoreError::Config(e.to_string()))?;
+        let cfg: Config =
+            serde_yaml::from_str(text).map_err(|e| CoreError::Config(e.to_string()))?;
         cfg.validate()?;
         Ok(cfg)
     }
@@ -290,7 +299,14 @@ impl Config {
     /// Semantic validation beyond the schema. Returns a list of plain-language problems.
     pub fn validate(&self) -> CoreResult<()> {
         let mut problems = Vec::new();
-        let allowed_groups = ["type", "storey", "classification", "material", "predefined_type", "type_name"];
+        let allowed_groups = [
+            "type",
+            "storey",
+            "classification",
+            "material",
+            "predefined_type",
+            "type_name",
+        ];
         for g in &self.qto.group_by {
             if !allowed_groups.contains(&g.as_str()) {
                 problems.push(format!(
@@ -309,7 +325,10 @@ impl Config {
             problems.push("tolerances.geometry.min_volume_m3 must be >= 0".into());
         }
         if !matches!(self.output.bcf_version.as_str(), "2.1" | "3.0") {
-            problems.push(format!("output.bcf_version must be '2.1' or '3.0', got '{}'", self.output.bcf_version));
+            problems.push(format!(
+                "output.bcf_version must be '2.1' or '3.0', got '{}'",
+                self.output.bcf_version
+            ));
         }
         for (t, p) in &self.naming.patterns {
             if let Err(e) = regex::Regex::new(p) {
@@ -318,7 +337,9 @@ impl Config {
         }
         if let Some(p) = &self.classification.code_pattern {
             if let Err(e) = regex::Regex::new(p) {
-                problems.push(format!("classification.code_pattern is not a valid regex: {e}"));
+                problems.push(format!(
+                    "classification.code_pattern is not a valid regex: {e}"
+                ));
             }
         }
         for rp in &self.requirements.required_psets {
@@ -327,13 +348,18 @@ impl Config {
             }
             if let Some(s) = &rp.severity {
                 if s.parse::<crate::model::Severity>().is_err() {
-                    problems.push(format!("requirements.required_psets['{}'].severity '{s}' is invalid", rp.pset));
+                    problems.push(format!(
+                        "requirements.required_psets['{}'].severity '{s}' is invalid",
+                        rp.pset
+                    ));
                 }
             }
         }
         for w in &self.checks.unique_name_within {
             if !matches!(w.as_str(), "type" | "storey") {
-                problems.push(format!("checks.unique_name_within contains '{w}', expected 'type' or 'storey'"));
+                problems.push(format!(
+                    "checks.unique_name_within contains '{w}', expected 'type' or 'storey'"
+                ));
             }
         }
         if problems.is_empty() {
@@ -362,7 +388,11 @@ impl Config {
 
     /// The IDS file declared in `requirements.ids_file`, resolved against the config directory.
     pub fn ids_path(&self, config_dir: Option<&Path>) -> Option<PathBuf> {
-        self.requirements.ids_file.as_deref().filter(|s| !s.trim().is_empty()).map(|f| Config::resolve_path(config_dir, f))
+        self.requirements
+            .ids_file
+            .as_deref()
+            .filter(|s| !s.trim().is_empty())
+            .map(|f| Config::resolve_path(config_dir, f))
     }
 
     /// Look up a dotted path ("tolerances.far_from_origin_m") in the config.
@@ -407,7 +437,10 @@ mod tests {
 
     #[test]
     fn checks_toggle_resolution() {
-        let c = Config::from_yaml("checks:\n  rules:\n    GEO-001: false\n  categories:\n    naming: false\n").unwrap();
+        let c = Config::from_yaml(
+            "checks:\n  rules:\n    GEO-001: false\n  categories:\n    naming: false\n",
+        )
+        .unwrap();
         assert!(!c.checks.is_enabled("GEO-001", "geometry"));
         assert!(c.checks.is_enabled("GEO-002", "geometry"));
         assert!(!c.checks.is_enabled("NAM-001", "naming"));
@@ -416,7 +449,10 @@ mod tests {
     #[test]
     fn lookup_dotted_path() {
         let c = Config::default();
-        assert_eq!(c.lookup("tolerances.far_from_origin_m"), Some(serde_json::json!(10000.0)));
+        assert_eq!(
+            c.lookup("tolerances.far_from_origin_m"),
+            Some(serde_json::json!(10000.0))
+        );
         assert_eq!(c.lookup("nope.x"), None);
     }
 

@@ -42,8 +42,14 @@ const BUILTIN_DOCS: &[(&str, &str)] = &[
     ("docs/CONFIG.md", include_str!("../../../docs/CONFIG.md")),
     ("docs/RULES.md", include_str!("../../../docs/RULES.md")),
     ("docs/IDS.md", include_str!("../../../docs/IDS.md")),
-    ("docs/ASSUMPTIONS.md", include_str!("../../../docs/ASSUMPTIONS.md")),
-    ("rule_packs/generic.yaml", verimodel_core::rules::pack::GENERIC_RULE_PACK_YAML),
+    (
+        "docs/ASSUMPTIONS.md",
+        include_str!("../../../docs/ASSUMPTIONS.md"),
+    ),
+    (
+        "rule_packs/generic.yaml",
+        verimodel_core::rules::pack::GENERIC_RULE_PACK_YAML,
+    ),
 ];
 
 pub fn tokenize(text: &str) -> Vec<String> {
@@ -63,9 +69,18 @@ pub fn chunk_markdown(source: &str, text: &str) -> Vec<Chunk> {
     let flush = |buf: &mut String, path: &Vec<(usize, String)>, out: &mut Vec<Chunk>| {
         let t = buf.trim();
         if !t.is_empty() {
-            let title = path.iter().map(|(_, h)| h.as_str()).collect::<Vec<_>>().join(" › ");
+            let title = path
+                .iter()
+                .map(|(_, h)| h.as_str())
+                .collect::<Vec<_>>()
+                .join(" › ");
             for piece in split_long(t, 1800) {
-                out.push(Chunk { source: source.to_string(), title: title.clone(), text: piece, keywords: vec![] });
+                out.push(Chunk {
+                    source: source.to_string(),
+                    title: title.clone(),
+                    text: piece,
+                    keywords: vec![],
+                });
             }
         }
         buf.clear();
@@ -174,7 +189,13 @@ impl Knowledge {
         for r in &report.rules {
             let mut text = format!(
                 "Rule {} [{}] — {}. Severity {}. Status {:?}. Elements checked {}, failures {}.",
-                r.rule_id, r.category, r.description, r.severity.as_str(), r.status, r.elements_checked, r.failures
+                r.rule_id,
+                r.category,
+                r.description,
+                r.severity.as_str(),
+                r.status,
+                r.elements_checked,
+                r.failures
             );
             if let Some(reason) = &r.skipped_reason {
                 text.push_str(&format!(" Skipped because: {reason}."));
@@ -184,13 +205,27 @@ impl Knowledge {
                 .iter()
                 .filter(|f| f.rule_id == r.rule_id)
                 .take(5)
-                .map(|f| format!("{} {} ({}) in {}: {}", f.ifc_type.clone().unwrap_or_default(), f.name.clone().unwrap_or_default(), f.global_id.clone().unwrap_or_default(), f.storey.clone().unwrap_or_else(|| "-".into()), f.message))
+                .map(|f| {
+                    format!(
+                        "{} {} ({}) in {}: {}",
+                        f.ifc_type.clone().unwrap_or_default(),
+                        f.name.clone().unwrap_or_default(),
+                        f.global_id.clone().unwrap_or_default(),
+                        f.storey.clone().unwrap_or_else(|| "-".into()),
+                        f.message
+                    )
+                })
                 .collect();
             if !examples.is_empty() {
                 text.push_str(" Examples: ");
                 text.push_str(&examples.join(" | "));
             }
-            self.chunks.push(Chunk { source: src.clone(), title: format!("Rule {}", r.rule_id), text, keywords: vec![r.rule_id.to_lowercase(), r.category.clone()] });
+            self.chunks.push(Chunk {
+                source: src.clone(),
+                title: format!("Rule {}", r.rule_id),
+                text,
+                keywords: vec![r.rule_id.to_lowercase(), r.category.clone()],
+            });
         }
         if !report.qto.rows.is_empty() {
             let rows: Vec<String> = report
@@ -198,7 +233,16 @@ impl Knowledge {
                 .rows
                 .iter()
                 .take(60)
-                .map(|r| format!("{}: count {}, volume {:.3} m3, area {:.3} m2, length {:.3} m", r.group.join(" / "), r.count, r.volume_m3, r.area_m2, r.length_m))
+                .map(|r| {
+                    format!(
+                        "{}: count {}, volume {:.3} m3, area {:.3} m2, length {:.3} m",
+                        r.group.join(" / "),
+                        r.count,
+                        r.volume_m3,
+                        r.area_m2,
+                        r.length_m
+                    )
+                })
                 .collect();
             self.chunks.push(Chunk {
                 source: src,
@@ -261,14 +305,24 @@ impl Knowledge {
             })
             .filter(|(_, s)| *s > 0.0)
             .collect();
-        scored.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap_or(std::cmp::Ordering::Equal).then(a.0.cmp(&b.0)));
-        scored.into_iter().take(k).map(|(i, s)| (&self.chunks[i], s)).collect()
+        scored.sort_by(|a, b| {
+            b.1.partial_cmp(&a.1)
+                .unwrap_or(std::cmp::Ordering::Equal)
+                .then(a.0.cmp(&b.0))
+        });
+        scored
+            .into_iter()
+            .take(k)
+            .map(|(i, s)| (&self.chunks[i], s))
+            .collect()
     }
 }
 
 /// One chunk per rule of a YAML rule pack.
 pub fn chunk_rule_pack(source: &str, text: &str) -> Vec<Chunk> {
-    let Ok(pack) = verimodel_core::rules::RulePack::from_yaml(text) else { return vec![] };
+    let Ok(pack) = verimodel_core::rules::RulePack::from_yaml(text) else {
+        return vec![];
+    };
     pack.rules
         .iter()
         .map(|r| Chunk {
@@ -280,10 +334,18 @@ pub fn chunk_rule_pack(source: &str, text: &str) -> Vec<Chunk> {
                 r.description,
                 r.severity,
                 r.check.kind_name(),
-                if r.scope.ifc_types.is_empty() { "all".to_string() } else { r.scope.ifc_types.join(", ") },
+                if r.scope.ifc_types.is_empty() {
+                    "all".to_string()
+                } else {
+                    r.scope.ifc_types.join(", ")
+                },
                 r.fix_hint.clone().unwrap_or_default()
             ),
-            keywords: vec![r.id.to_lowercase(), r.category.clone(), r.check.kind_name().to_string()],
+            keywords: vec![
+                r.id.to_lowercase(),
+                r.category.clone(),
+                r.check.kind_name().to_string(),
+            ],
         })
         .collect()
 }
@@ -298,21 +360,37 @@ mod tests {
         assert!(k.chunks.len() > 40, "{}", k.chunks.len());
         let hits = k.search("duplicate GlobalId", 3);
         assert!(!hits.is_empty());
-        assert!(hits[0].0.text.to_lowercase().contains("globalid"), "{}", hits[0].0.text);
+        assert!(
+            hits[0].0.text.to_lowercase().contains("globalid"),
+            "{}",
+            hits[0].0.text
+        );
         let hits = k.search("far from origin tolerance", 3);
-        assert!(hits.iter().any(|(c, _)| c.text.contains("far_from_origin_m")));
+        assert!(hits
+            .iter()
+            .any(|(c, _)| c.text.contains("far_from_origin_m")));
     }
 
     #[test]
     fn yaml_roundtrip() {
-        let k = Knowledge { chunks: vec![Chunk { source: "a".into(), title: "t".into(), text: "hello world".into(), keywords: vec!["x".into()] }] };
+        let k = Knowledge {
+            chunks: vec![Chunk {
+                source: "a".into(),
+                title: "t".into(),
+                text: "hello world".into(),
+                keywords: vec!["x".into()],
+            }],
+        };
         let y = k.to_yaml();
         assert_eq!(Knowledge::from_yaml(&y).unwrap(), k);
     }
 
     #[test]
     fn markdown_chunking_keeps_heading_path() {
-        let c = chunk_markdown("f.md", "# A\nintro\n## B\ntext b\n### C\ntext c\n## D\ntext d\n");
+        let c = chunk_markdown(
+            "f.md",
+            "# A\nintro\n## B\ntext b\n### C\ntext c\n## D\ntext d\n",
+        );
         let titles: Vec<_> = c.iter().map(|c| c.title.as_str()).collect();
         assert_eq!(titles, vec!["A", "A › B", "A › B › C", "A › D"]);
     }

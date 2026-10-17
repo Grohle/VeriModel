@@ -15,10 +15,23 @@ pub const WARNING_WEIGHT: f64 = 0.25;
 pub const VERDICT_RULE: &str = "FAIL = at least one ERROR. PASS WITH WARNINGS = no errors, at least one WARNING. PASS = no errors and no warnings. Score = 100 × (1 − (errors + 0.25 × warnings) / element checks). Skipped rules are never counted as passed.";
 
 pub fn summarise(rules: &[RuleResult], findings: &[Finding]) -> Summary {
-    let errors = findings.iter().filter(|f| f.severity == Severity::Error).count();
-    let warnings = findings.iter().filter(|f| f.severity == Severity::Warning).count();
-    let infos = findings.iter().filter(|f| f.severity == Severity::Info).count();
-    let element_checks: usize = rules.iter().filter(|r| r.status != RuleStatus::Skipped).map(|r| r.elements_checked).sum();
+    let errors = findings
+        .iter()
+        .filter(|f| f.severity == Severity::Error)
+        .count();
+    let warnings = findings
+        .iter()
+        .filter(|f| f.severity == Severity::Warning)
+        .count();
+    let infos = findings
+        .iter()
+        .filter(|f| f.severity == Severity::Info)
+        .count();
+    let element_checks: usize = rules
+        .iter()
+        .filter(|r| r.status != RuleStatus::Skipped)
+        .map(|r| r.elements_checked)
+        .sum();
     let mut distinct = std::collections::BTreeSet::new();
     for f in findings {
         if let Some(g) = &f.global_id {
@@ -54,10 +67,22 @@ pub fn summarise(rules: &[RuleResult], findings: &[Finding]) -> Summary {
         warnings,
         infos,
         rules_total: rules.len(),
-        rules_passed: rules.iter().filter(|r| r.status == RuleStatus::Pass).count(),
-        rules_failed: rules.iter().filter(|r| r.status == RuleStatus::Fail).count(),
-        rules_skipped: rules.iter().filter(|r| r.status == RuleStatus::Skipped).count(),
-        rules_not_applicable: rules.iter().filter(|r| r.status == RuleStatus::NotApplicable).count(),
+        rules_passed: rules
+            .iter()
+            .filter(|r| r.status == RuleStatus::Pass)
+            .count(),
+        rules_failed: rules
+            .iter()
+            .filter(|r| r.status == RuleStatus::Fail)
+            .count(),
+        rules_skipped: rules
+            .iter()
+            .filter(|r| r.status == RuleStatus::Skipped)
+            .count(),
+        rules_not_applicable: rules
+            .iter()
+            .filter(|r| r.status == RuleStatus::NotApplicable)
+            .count(),
         verdict_rule: VERDICT_RULE.to_string(),
     }
 }
@@ -99,7 +124,10 @@ mod tests {
 
     #[test]
     fn score_formula() {
-        let rules = vec![rule("a", RuleStatus::Fail, 100, 10), rule("b", RuleStatus::Pass, 100, 0)];
+        let rules = vec![
+            rule("a", RuleStatus::Fail, 100, 10),
+            rule("b", RuleStatus::Pass, 100, 0),
+        ];
         let findings: Vec<Finding> = (0..10).map(|_| finding(Severity::Error)).collect();
         let s = summarise(&rules, &findings);
         assert_eq!(s.score, 95);

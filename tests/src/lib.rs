@@ -9,12 +9,16 @@ use verimodel_ifc_reader::{read_model, ReadOptions};
 
 /// Absolute path of a file under `tests/fixtures/`.
 pub fn fixture(name: &str) -> PathBuf {
-    PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("fixtures").join(name)
+    PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("fixtures")
+        .join(name)
 }
 
 /// Absolute path of a file under `examples/`.
 pub fn example(name: &str) -> PathBuf {
-    PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../examples").join(name)
+    PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("../examples")
+        .join(name)
 }
 
 /// Whether the IFC-dependent tests are explicitly skipped (never silently).
@@ -28,12 +32,21 @@ pub fn skip_ifc() -> bool {
 
 /// Read a fixture with geometry and an optional IDS.
 pub fn read(name: &str, ids: Option<&Path>) -> Model {
-    let opts = ReadOptions { ids_path: ids.map(|p| p.to_path_buf()), ..Default::default() };
+    let opts = ReadOptions {
+        ids_path: ids.map(|p| p.to_path_buf()),
+        ..Default::default()
+    };
     read_model(&fixture(name), &opts).unwrap_or_else(|e| panic!("reading {name}: {e}"))
 }
 
 /// Run the whole pipeline into `out_dir`.
-pub fn run(model: &Model, config: &Config, config_dir: Option<&Path>, ids: Option<&Path>, out_dir: &Path) -> RunOutcome {
+pub fn run(
+    model: &Model,
+    config: &Config,
+    config_dir: Option<&Path>,
+    ids: Option<&Path>,
+    out_dir: &Path,
+) -> RunOutcome {
     let inputs = RunInputs {
         ifc_path: fixture(&model.info.file_name),
         ids_path: ids.map(|p| p.to_path_buf()),

@@ -10,12 +10,27 @@ use crate::i18n::Strings;
 use crate::model::{ClashReport, Model};
 
 /// Run clash detection between the configured sets.
-pub fn run(model_a: &Model, model_b: Option<&Model>, config: &Config, strings: &Strings) -> ClashReport {
+pub fn run(
+    model_a: &Model,
+    model_b: Option<&Model>,
+    config: &Config,
+    strings: &Strings,
+) -> ClashReport {
     let _ = (model_a, model_b);
     if !config.clash.enabled {
-        return ClashReport { enabled: false, implemented: false, message: strings.get("clash.disabled"), clashes: vec![] };
+        return ClashReport {
+            enabled: false,
+            implemented: false,
+            message: strings.get("clash.disabled"),
+            clashes: vec![],
+        };
     }
-    ClashReport { enabled: true, implemented: false, message: strings.get("clash.not_implemented"), clashes: vec![] }
+    ClashReport {
+        enabled: true,
+        implemented: false,
+        message: strings.get("clash.not_implemented"),
+        clashes: vec![],
+    }
 }
 
 #[cfg(test)]

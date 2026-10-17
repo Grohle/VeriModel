@@ -194,7 +194,10 @@ impl Element {
     /// Whether the element is of the given type or inherits from it.
     pub fn is_a(&self, ifc_type: &str) -> bool {
         self.ifc_type.eq_ignore_ascii_case(ifc_type)
-            || self.ancestors.iter().any(|a| a.eq_ignore_ascii_case(ifc_type))
+            || self
+                .ancestors
+                .iter()
+                .any(|a| a.eq_ignore_ascii_case(ifc_type))
     }
 
     /// True for spatial structure elements (site, building, storey, space, facility parts...).
@@ -275,7 +278,9 @@ impl Element {
 }
 
 /// Where a quantity came from, so every QTO row is auditable.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize, Deserialize, Default)]
+#[derive(
+    Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize, Deserialize, Default,
+)]
 #[serde(rename_all = "snake_case")]
 pub enum QuantitySource {
     /// IfcElementQuantity / BaseQuantities present in the file.
@@ -356,7 +361,6 @@ impl SpatialNode {
     }
 }
 
-
 /// File-level facts from the STEP header and the IFC project.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default)]
 pub struct ModelInfo {
@@ -409,8 +413,11 @@ pub struct Model {
 impl Model {
     /// Elements sorted by GlobalId then step id, so every consumer iterates deterministically.
     pub fn sort_elements(&mut self) {
-        self.elements
-            .sort_by(|a, b| a.global_id.cmp(&b.global_id).then(a.step_id.cmp(&b.step_id)));
+        self.elements.sort_by(|a, b| {
+            a.global_id
+                .cmp(&b.global_id)
+                .then(a.step_id.cmp(&b.step_id))
+        });
     }
 
     pub fn element_by_id(&self, global_id: &str) -> Option<&Element> {
@@ -519,7 +526,9 @@ impl std::str::FromStr for Severity {
             "error" => Ok(Severity::Error),
             "warning" | "warn" => Ok(Severity::Warning),
             "info" => Ok(Severity::Info),
-            other => Err(format!("unknown severity '{other}' (expected error|warning|info)")),
+            other => Err(format!(
+                "unknown severity '{other}' (expected error|warning|info)"
+            )),
         }
     }
 }
@@ -545,7 +554,10 @@ pub enum RuleSource {
     /// Generated from `requirements.required_psets` in project.yaml.
     ProjectConfig,
     /// buildingSMART IDS specification.
-    Ids { specification: String, requirement: String },
+    Ids {
+        specification: String,
+        requirement: String,
+    },
 }
 
 /// One failure: one element (or the model as a whole) failing one rule.
@@ -752,7 +764,10 @@ pub struct ToolInfo {
 
 impl Default for ToolInfo {
     fn default() -> Self {
-        Self { name: crate::TOOL_NAME.to_string(), version: crate::VERSION.to_string() }
+        Self {
+            name: crate::TOOL_NAME.to_string(),
+            version: crate::VERSION.to_string(),
+        }
     }
 }
 
@@ -839,7 +854,11 @@ mod tests {
     fn element_is_a_uses_ancestors() {
         let e = Element {
             ifc_type: "IfcWallStandardCase".into(),
-            ancestors: vec!["IfcWall".into(), "IfcBuildingElement".into(), "IfcElement".into()],
+            ancestors: vec![
+                "IfcWall".into(),
+                "IfcBuildingElement".into(),
+                "IfcElement".into(),
+            ],
             ..Default::default()
         };
         assert!(e.is_a("IfcElement"));
@@ -849,9 +868,18 @@ mod tests {
 
     #[test]
     fn volume_prefers_base_quantity_over_geometry() {
-        let mut e = Element { geometry: Some(Geometry { volume_m3: Some(5.0), ..Default::default() }), ..Default::default() };
+        let mut e = Element {
+            geometry: Some(Geometry {
+                volume_m3: Some(5.0),
+                ..Default::default()
+            }),
+            ..Default::default()
+        };
         assert_eq!(e.volume_m3(), Some((5.0, QuantitySource::Geometry)));
-        e.quantities.entry("Qto_WallBaseQuantities".into()).or_default().insert("NetVolume".into(), 2.0);
+        e.quantities
+            .entry("Qto_WallBaseQuantities".into())
+            .or_default()
+            .insert("NetVolume".into(), 2.0);
         assert_eq!(e.volume_m3(), Some((2.0, QuantitySource::BaseQuantity)));
     }
 

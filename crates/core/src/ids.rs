@@ -517,7 +517,11 @@ mod tests {
         );
         assert_eq!(ev.rules[1].status, RuleStatus::Pass);
         assert_eq!(ev.rules[2].status, RuleStatus::NotApplicable);
-        assert_eq!(ev.rules[2].severity, Severity::Error, "optional specs still fail as errors");
+        assert_eq!(
+            ev.rules[2].severity,
+            Severity::Error,
+            "optional specs still fail as errors"
+        );
         assert_eq!(
             ev.rules[3].severity,
             Severity::Error,

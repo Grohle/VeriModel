@@ -25,8 +25,8 @@ use std::process::{Command, Stdio};
 
 use serde::Deserialize;
 use verimodel_core::model::{
-    Classification, Element, Geometry, IdsResults, Model, ModelInfo, ModelUnits, PropValue, SpatialNode, SpatialRef,
-    UnitSystem,
+    Classification, Element, Geometry, IdsResults, Model, ModelInfo, ModelUnits, PropValue,
+    SpatialNode, SpatialRef, UnitSystem,
 };
 
 /// The bundled extractor script.
@@ -50,7 +50,12 @@ pub struct ReadOptions {
 
 impl Default for ReadOptions {
     fn default() -> Self {
-        Self { ids_path: None, geometry: true, python: None, threads: 0 }
+        Self {
+            ids_path: None,
+            geometry: true,
+            python: None,
+            threads: 0,
+        }
     }
 }
 
@@ -64,7 +69,11 @@ pub struct ReaderError {
 
 impl ReaderError {
     fn new(code: &str, message: impl Into<String>, hint: impl Into<String>) -> Self {
-        Self { code: code.into(), message: message.into(), hint: hint.into() }
+        Self {
+            code: code.into(),
+            message: message.into(),
+            hint: hint.into(),
+        }
     }
 }
 
@@ -118,14 +127,22 @@ fn python_candidates(explicit: Option<&Path>) -> Vec<(String, Vec<String>)> {
 /// Write the embedded script to a temp file (cached per process).
 fn script_path() -> Result<PathBuf, ReaderError> {
     let dir = std::env::temp_dir().join(format!("verimodel-reader-{}", verimodel_core::VERSION));
-    std::fs::create_dir_all(&dir).map_err(|e| ReaderError::new("io", format!("cannot create temp dir {}: {e}", dir.display()), ""))?;
+    std::fs::create_dir_all(&dir).map_err(|e| {
+        ReaderError::new(
+            "io",
+            format!("cannot create temp dir {}: {e}", dir.display()),
+            "",
+        )
+    })?;
     let path = dir.join("verimodel_extract.py");
     let needs_write = match std::fs::read_to_string(&path) {
         Ok(existing) => existing != EXTRACT_SCRIPT,
         Err(_) => true,
     };
     if needs_write {
-        std::fs::write(&path, EXTRACT_SCRIPT).map_err(|e| ReaderError::new("io", format!("cannot write {}: {e}", path.display()), ""))?;
+        std::fs::write(&path, EXTRACT_SCRIPT).map_err(|e| {
+            ReaderError::new("io", format!("cannot write {}: {e}", path.display()), "")
+        })?;
     }
     Ok(path)
 }
@@ -149,7 +166,13 @@ pub fn check_environment_with(explicit: Option<&Path>) -> Result<EnvironmentInfo
     let script = script_path()?;
     let mut last_err = String::new();
     for (exe, pre) in python_candidates(explicit) {
-        let out = Command::new(&exe).args(&pre).arg("-I").arg(&script).arg("--check-env").stdin(Stdio::null()).output();
+        let out = Command::new(&exe)
+            .args(&pre)
+            .arg("-I")
+            .arg(&script)
+            .arg("--check-env")
+            .stdin(Stdio::null())
+            .output();
         let out = match out {
             Ok(o) => o,
             Err(e) => {
@@ -159,7 +182,10 @@ pub fn check_environment_with(explicit: Option<&Path>) -> Result<EnvironmentInfo
         };
         let text = String::from_utf8_lossy(&out.stdout);
         let Some(line) = text.lines().find(|l| l.contains("\"kind\":\"env\"")) else {
-            last_err = format!("{exe}: unexpected output: {}", String::from_utf8_lossy(&out.stderr).trim());
+            last_err = format!(
+                "{exe}: unexpected output: {}",
+                String::from_utf8_lossy(&out.stderr).trim()
+            );
             continue;
         };
         let env: EnvLine = match serde_json::from_str(line) {
@@ -170,7 +196,10 @@ pub fn check_environment_with(explicit: Option<&Path>) -> Result<EnvironmentInfo
             }
         };
         if env.protocol != PROTOCOL_VERSION {
-            last_err = format!("{exe}: extractor protocol {} != {}", env.protocol, PROTOCOL_VERSION);
+            last_err = format!(
+                "{exe}: extractor protocol {} != {}",
+                env.protocol, PROTOCOL_VERSION
+            );
             continue;
         }
         match (env.ifcopenshell_version, env.error) {
@@ -353,7 +382,15 @@ impl From<ElementLine> for Element {
             psets: l
                 .psets
                 .into_iter()
-                .map(|(k, props)| (k, props.into_iter().map(|(pk, pv)| (pk, json_to_prop(pv))).collect()))
+                .map(|(k, props)| {
+                    (
+                        k,
+                        props
+                            .into_iter()
+                            .map(|(pk, pv)| (pk, json_to_prop(pv)))
+                            .collect(),
+                    )
+                })
                 .collect(),
             quantities: l.quantities,
             classifications: l.classifications,
@@ -368,7 +405,11 @@ impl From<ElementLine> for Element {
 // Reading
 // ---------------------------------------------------------------------------
 
-fn spawn_extractor(ifc_path: &Path, opts: &ReadOptions, mode: &str) -> Result<(std::process::Child, String), ReaderError> {
+fn spawn_extractor(
+    ifc_path: &Path,
+    opts: &ReadOptions,
+    mode: &str,
+) -> Result<(std::process::Child, String), ReaderError> {
     if !ifc_path.is_file() {
         return Err(ReaderError::new(
             "not_found",
@@ -382,7 +423,12 @@ fn spawn_extractor(ifc_path: &Path, opts: &ReadOptions, mode: &str) -> Result<(s
     if env.python == "py" {
         cmd.arg("-3");
     }
-    cmd.arg("-I").arg(&script).arg("--ifc").arg(ifc_path).arg("--mode").arg(mode);
+    cmd.arg("-I")
+        .arg(&script)
+        .arg("--ifc")
+        .arg(ifc_path)
+        .arg("--mode")
+        .arg(mode);
     if let Some(ids) = &opts.ids_path {
         cmd.arg("--ids").arg(ids);
     }
@@ -392,8 +438,16 @@ fn spawn_extractor(ifc_path: &Path, opts: &ReadOptions, mode: &str) -> Result<(s
     if opts.threads > 0 {
         cmd.arg("--threads").arg(opts.threads.to_string());
     }
-    cmd.stdin(Stdio::null()).stdout(Stdio::piped()).stderr(Stdio::piped());
-    let child = cmd.spawn().map_err(|e| ReaderError::new("spawn_failed", format!("Cannot start the IFC reader ({}): {e}", env.python), INSTALL_HINT))?;
+    cmd.stdin(Stdio::null())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped());
+    let child = cmd.spawn().map_err(|e| {
+        ReaderError::new(
+            "spawn_failed",
+            format!("Cannot start the IFC reader ({}): {e}", env.python),
+            INSTALL_HINT,
+        )
+    })?;
     Ok((child, env.python))
 }
 
@@ -404,7 +458,10 @@ pub fn read_model(ifc_path: &Path, opts: &ReadOptions) -> Result<Model, ReaderEr
 
 /// Quick inspection for the file card: no geometry, no IDS.
 pub fn inspect(ifc_path: &Path) -> Result<ModelInfo, ReaderError> {
-    let opts = ReadOptions { geometry: false, ..Default::default() };
+    let opts = ReadOptions {
+        geometry: false,
+        ..Default::default()
+    };
     Ok(read_with_mode(ifc_path, &opts, "inspect")?.info)
 }
 
@@ -416,8 +473,13 @@ fn read_with_mode(ifc_path: &Path, opts: &ReadOptions, mode: &str) -> Result<Mod
             "Check the path and that the file was not moved.",
         ));
     }
-    let sha = verimodel_core::hash::sha256_file(ifc_path)
-        .map_err(|e| ReaderError::new("io", format!("Cannot read '{}': {e}", ifc_path.display()), ""))?;
+    let sha = verimodel_core::hash::sha256_file(ifc_path).map_err(|e| {
+        ReaderError::new(
+            "io",
+            format!("Cannot read '{}': {e}", ifc_path.display()),
+            "",
+        )
+    })?;
     let (mut child, _python) = spawn_extractor(ifc_path, opts, mode)?;
     let stdout = child.stdout.take().expect("piped stdout");
     let stderr = child.stderr.take().expect("piped stderr");
@@ -428,7 +490,10 @@ fn read_with_mode(ifc_path: &Path, opts: &ReadOptions, mode: &str) -> Result<Mod
     });
 
     let mut model = Model::default();
-    model.info.file_name = ifc_path.file_name().map(|s| s.to_string_lossy().to_string()).unwrap_or_default();
+    model.info.file_name = ifc_path
+        .file_name()
+        .map(|s| s.to_string_lossy().to_string())
+        .unwrap_or_default();
     model.info.sha256 = sha;
     let mut geometry: BTreeMap<i64, Geometry> = BTreeMap::new();
     let mut got_header = false;
@@ -436,14 +501,19 @@ fn read_with_mode(ifc_path: &Path, opts: &ReadOptions, mode: &str) -> Result<Mod
     let mut geometry_lines = 0usize;
 
     for line in BufReader::new(stdout).lines() {
-        let line = line.map_err(|e| ReaderError::new("io", format!("Reader output could not be read: {e}"), ""))?;
+        let line = line.map_err(|e| {
+            ReaderError::new("io", format!("Reader output could not be read: {e}"), "")
+        })?;
         if line.trim().is_empty() {
             continue;
         }
         let kind: KindOnly = match serde_json::from_str(&line) {
             Ok(k) => k,
             Err(_) => {
-                model.info.reader_warnings.push(format!("Unreadable line from the IFC reader: {}", truncate(&line, 120)));
+                model.info.reader_warnings.push(format!(
+                    "Unreadable line from the IFC reader: {}",
+                    truncate(&line, 120)
+                ));
                 continue;
             }
         };
@@ -451,7 +521,14 @@ fn read_with_mode(ifc_path: &Path, opts: &ReadOptions, mode: &str) -> Result<Mod
             "header" => {
                 let h: HeaderLine = parse(&line)?;
                 if h.protocol != PROTOCOL_VERSION {
-                    return Err(ReaderError::new("protocol", format!("IFC reader protocol {} is not supported (expected {}).", h.protocol, PROTOCOL_VERSION), "Reinstall VeriModel."));
+                    return Err(ReaderError::new(
+                        "protocol",
+                        format!(
+                            "IFC reader protocol {} is not supported (expected {}).",
+                            h.protocol, PROTOCOL_VERSION
+                        ),
+                        "Reinstall VeriModel.",
+                    ));
                 }
                 model.info.schema = h.schema;
                 model.info.mvd = h.mvd;
@@ -466,7 +543,11 @@ fn read_with_mode(ifc_path: &Path, opts: &ReadOptions, mode: &str) -> Result<Mod
                     area_to_m2: h.units.area_to_m2,
                     volume_unit: h.units.volume_unit,
                     volume_to_m3: h.units.volume_to_m3,
-                    system: if h.units.system.as_deref() == Some("imperial") { UnitSystem::Imperial } else { UnitSystem::Metric },
+                    system: if h.units.system.as_deref() == Some("imperial") {
+                        UnitSystem::Imperial
+                    } else {
+                        UnitSystem::Metric
+                    },
                 };
                 if let Some(raw) = h.schema_raw {
                     if raw != model.info.schema {
@@ -489,7 +570,13 @@ fn read_with_mode(ifc_path: &Path, opts: &ReadOptions, mode: &str) -> Result<Mod
                 let _ = &g.global_id;
                 geometry.insert(
                     g.step_id,
-                    Geometry { bbox_min: g.bbox_min, bbox_max: g.bbox_max, volume_m3: g.volume_m3, area_m2: g.area_m2, triangle_count: g.triangle_count },
+                    Geometry {
+                        bbox_min: g.bbox_min,
+                        bbox_max: g.bbox_max,
+                        volume_m3: g.volume_m3,
+                        area_m2: g.area_m2,
+                        triangle_count: g.triangle_count,
+                    },
                 );
             }
             "geometry_unavailable" => model.info.geometry_available = false,
@@ -505,25 +592,41 @@ fn read_with_mode(ifc_path: &Path, opts: &ReadOptions, mode: &str) -> Result<Mod
             "error" => {
                 let e: ErrorLine = parse(&line)?;
                 let _ = child.wait();
-                return Err(ReaderError { code: e.code, message: e.message, hint: e.hint });
+                return Err(ReaderError {
+                    code: e.code,
+                    message: e.message,
+                    hint: e.hint,
+                });
             }
-            other => model.info.reader_warnings.push(format!("Unknown reader message '{other}' ignored")),
+            other => model
+                .info
+                .reader_warnings
+                .push(format!("Unknown reader message '{other}' ignored")),
         }
     }
-    let status = child.wait().map_err(|e| ReaderError::new("io", format!("IFC reader process failed: {e}"), ""))?;
+    let status = child
+        .wait()
+        .map_err(|e| ReaderError::new("io", format!("IFC reader process failed: {e}"), ""))?;
     let stderr_text = stderr_thread.join().unwrap_or_default();
     if !got_header {
         return Err(ReaderError::new(
             "no_output",
             "The IFC reader produced no output.".to_string(),
-            format!("{} Details: {}", INSTALL_HINT, truncate(stderr_text.trim(), 400)),
+            format!(
+                "{} Details: {}",
+                INSTALL_HINT,
+                truncate(stderr_text.trim(), 400)
+            ),
         ));
     }
     if !got_end || !status.success() {
         return Err(ReaderError::new(
             "reader_crashed",
             "The IFC reader stopped before finishing the file.".to_string(),
-            format!("The file may be corrupt or too large for the available memory. Details: {}", truncate(stderr_text.trim(), 400)),
+            format!(
+                "The file may be corrupt or too large for the available memory. Details: {}",
+                truncate(stderr_text.trim(), 400)
+            ),
         ));
     }
     if !stderr_text.trim().is_empty() {
@@ -536,8 +639,15 @@ fn read_with_mode(ifc_path: &Path, opts: &ReadOptions, mode: &str) -> Result<Mod
             e.geometry = Some(g);
         }
     }
-    if model.info.geometry_available && geometry_lines == 0 && model.elements.iter().any(|e| e.has_representation) && mode == "full" {
-        model.info.reader_warnings.push("The geometry kernel produced no shapes; geometry checks were skipped.".into());
+    if model.info.geometry_available
+        && geometry_lines == 0
+        && model.elements.iter().any(|e| e.has_representation)
+        && mode == "full"
+    {
+        model
+            .info
+            .reader_warnings
+            .push("The geometry kernel produced no shapes; geometry checks were skipped.".into());
         model.info.geometry_available = false;
     }
     model.sort_elements();
@@ -553,7 +663,13 @@ fn read_with_mode(ifc_path: &Path, opts: &ReadOptions, mode: &str) -> Result<Mod
 }
 
 fn parse<'a, T: Deserialize<'a>>(line: &'a str) -> Result<T, ReaderError> {
-    serde_json::from_str(line).map_err(|e| ReaderError::new("protocol", format!("Unexpected data from the IFC reader: {e}"), "Reinstall VeriModel or report this as a bug."))
+    serde_json::from_str(line).map_err(|e| {
+        ReaderError::new(
+            "protocol",
+            format!("Unexpected data from the IFC reader: {e}"),
+            "Reinstall VeriModel or report this as a bug.",
+        )
+    })
 }
 
 fn truncate(s: &str, n: usize) -> String {
@@ -589,8 +705,14 @@ mod tests {
         let line = r#"{"kind":"element","global_id":"0fqX614OH1YO1Njdxms2$Q","step_id":5,"ifc_type":"IfcWall","ancestors":["IfcWall","IfcElement"],"name":"W","psets":{"Pset_WallCommon":{"FireRating":"REI60","IsExternal":true,"X":null,"N":2.5}},"quantities":{"Qto_WallBaseQuantities":{"NetVolume":1.5}},"has_representation":true}"#;
         let e: Element = serde_json::from_str::<ElementLine>(line).unwrap().into();
         assert_eq!(e.ifc_type, "IfcWall");
-        assert_eq!(e.psets["Pset_WallCommon"]["FireRating"], PropValue::Text("REI60".into()));
-        assert_eq!(e.psets["Pset_WallCommon"]["IsExternal"], PropValue::Bool(true));
+        assert_eq!(
+            e.psets["Pset_WallCommon"]["FireRating"],
+            PropValue::Text("REI60".into())
+        );
+        assert_eq!(
+            e.psets["Pset_WallCommon"]["IsExternal"],
+            PropValue::Bool(true)
+        );
         assert_eq!(e.psets["Pset_WallCommon"]["X"], PropValue::Null);
         assert_eq!(e.quantity("NetVolume"), Some(1.5));
         assert!(e.is_a("IfcElement"));
@@ -605,7 +727,11 @@ mod tests {
 
     #[test]
     fn missing_file_is_a_plain_error() {
-        let err = read_model(Path::new("/definitely/not/here.ifc"), &ReadOptions::default()).unwrap_err();
+        let err = read_model(
+            Path::new("/definitely/not/here.ifc"),
+            &ReadOptions::default(),
+        )
+        .unwrap_err();
         assert_eq!(err.code, "not_found");
         assert!(err.message.contains("does not exist"));
     }

@@ -89,24 +89,41 @@ pub fn rules_from_config(config: &Config) -> Vec<Rule> {
 }
 
 fn rules_for_required_pset(n: usize, rp: &RequiredPset) -> Vec<Rule> {
-    let scope = RuleScope { ifc_types: rp.applies_to.clone(), ..Default::default() };
+    let scope = RuleScope {
+        ifc_types: rp.applies_to.clone(),
+        ..Default::default()
+    };
     let severity = rp.severity.clone().unwrap_or_else(|| "error".into());
     let mut rules = vec![Rule {
         id: format!("CFG-PSET-{:03}", n + 1),
         category: "properties".into(),
-        description: format!("Property set {} must exist on {}", rp.pset, applies_label(&rp.applies_to)),
+        description: format!(
+            "Property set {} must exist on {}",
+            rp.pset,
+            applies_label(&rp.applies_to)
+        ),
         severity: severity.clone(),
         enabled: true,
         enabled_if: None,
         scope: scope.clone(),
-        check: CheckKind::PsetExists { pset: rp.pset.clone() },
-        fix_hint: Some(format!("Add the property set {} to the element in the authoring tool.", rp.pset)),
+        check: CheckKind::PsetExists {
+            pset: rp.pset.clone(),
+        },
+        fix_hint: Some(format!(
+            "Add the property set {} to the element in the authoring tool.",
+            rp.pset
+        )),
     }];
     for (m, prop) in rp.properties.iter().enumerate() {
         rules.push(Rule {
             id: format!("CFG-PSET-{:03}-{:02}", n + 1, m + 1),
             category: "properties".into(),
-            description: format!("Property {}.{} must exist and have a value on {}", rp.pset, prop, applies_label(&rp.applies_to)),
+            description: format!(
+                "Property {}.{} must exist and have a value on {}",
+                rp.pset,
+                prop,
+                applies_label(&rp.applies_to)
+            ),
             severity: severity.clone(),
             enabled: true,
             enabled_if: None,
@@ -132,15 +149,34 @@ fn applies_label(types: &[String]) -> String {
 }
 
 /// Allowed classification codes from config (inline list + optional file).
-pub fn load_allowed_codes(config: &Config, config_dir: Option<&Path>) -> CoreResult<BTreeSet<String>> {
-    let mut set: BTreeSet<String> = config.classification.allowed_codes.iter().map(|s| s.trim().to_string()).collect();
+pub fn load_allowed_codes(
+    config: &Config,
+    config_dir: Option<&Path>,
+) -> CoreResult<BTreeSet<String>> {
+    let mut set: BTreeSet<String> = config
+        .classification
+        .allowed_codes
+        .iter()
+        .map(|s| s.trim().to_string())
+        .collect();
     if let Some(f) = &config.classification.allowed_codes_file {
         let path = Config::resolve_path(config_dir, f);
-        let text = std::fs::read_to_string(&path)
-            .map_err(|e| CoreError::Config(format!("cannot read classification.allowed_codes_file {}: {e}", path.display())))?;
-        let mut lines = text.lines().map(|l| l.trim()).filter(|l| !l.is_empty() && !l.starts_with('#'));
+        let text = std::fs::read_to_string(&path).map_err(|e| {
+            CoreError::Config(format!(
+                "cannot read classification.allowed_codes_file {}: {e}",
+                path.display()
+            ))
+        })?;
+        let mut lines = text
+            .lines()
+            .map(|l| l.trim())
+            .filter(|l| !l.is_empty() && !l.starts_with('#'));
         if let Some(first) = lines.next() {
-            let header: Vec<&str> = first.split(',').map(|s| s.trim().to_ascii_lowercase()).map(|s| Box::leak(s.into_boxed_str()) as &str).collect();
+            let header: Vec<&str> = first
+                .split(',')
+                .map(|s| s.trim().to_ascii_lowercase())
+                .map(|s| Box::leak(s.into_boxed_str()) as &str)
+                .collect();
             let code_col = header.iter().position(|h| *h == "code");
             match code_col {
                 Some(col) => {
@@ -166,8 +202,17 @@ pub fn load_allowed_codes(config: &Config, config_dir: Option<&Path>) -> CoreRes
 /// The category vocabulary used by the built-in pack and the documentation. A custom
 /// pack may add its own; a config may toggle any of these even when the active pack
 /// has no rule in that category (e.g. one project.yaml shared by several packs).
-pub const STANDARD_CATEGORIES: &[&str] =
-    &["identity", "spatial", "properties", "geometry", "classification", "naming", "sanity", "schema", "ids"];
+pub const STANDARD_CATEGORIES: &[&str] = &[
+    "identity",
+    "spatial",
+    "properties",
+    "geometry",
+    "classification",
+    "naming",
+    "sanity",
+    "schema",
+    "ids",
+];
 
 /// Reject `checks.rules` / `checks.categories` keys that match no rule, so a typo
 /// can never silently disable a check.
@@ -178,12 +223,18 @@ fn validate_toggles(config: &Config, rules: &[(Rule, RuleSource)]) -> CoreResult
     let mut problems = Vec::new();
     for k in config.checks.rules.keys() {
         if !ids.contains(k.as_str()) && !k.starts_with("IDS-") {
-            problems.push(format!("checks.rules refers to unknown rule id '{k}' (known: {})", ids.iter().copied().collect::<Vec<_>>().join(", ")));
+            problems.push(format!(
+                "checks.rules refers to unknown rule id '{k}' (known: {})",
+                ids.iter().copied().collect::<Vec<_>>().join(", ")
+            ));
         }
     }
     for k in config.checks.categories.keys() {
         if !cats.contains(k.as_str()) {
-            problems.push(format!("checks.categories refers to unknown category '{k}' (known: {})", cats.iter().copied().collect::<Vec<_>>().join(", ")));
+            problems.push(format!(
+                "checks.categories refers to unknown category '{k}' (known: {})",
+                cats.iter().copied().collect::<Vec<_>>().join(", ")
+            ));
         }
     }
     if problems.is_empty() {
@@ -194,15 +245,31 @@ fn validate_toggles(config: &Config, rules: &[(Rule, RuleSource)]) -> CoreResult
 }
 
 /// Evaluate all rules (pack + config generated) against the model.
-pub fn evaluate(model: &Model, config: &Config, pack: &RulePack, config_dir: Option<&Path>) -> CoreResult<Evaluation> {
+pub fn evaluate(
+    model: &Model,
+    config: &Config,
+    pack: &RulePack,
+    config_dir: Option<&Path>,
+) -> CoreResult<Evaluation> {
     let allowed_codes = load_allowed_codes(config, config_dir)?;
     let mut rules: Vec<(Rule, RuleSource)> = pack
         .rules
         .iter()
         .cloned()
-        .map(|r| (r, RuleSource::RulePack { pack: pack.name.clone() }))
+        .map(|r| {
+            (
+                r,
+                RuleSource::RulePack {
+                    pack: pack.name.clone(),
+                },
+            )
+        })
         .collect();
-    rules.extend(rules_from_config(config).into_iter().map(|r| (r, RuleSource::ProjectConfig)));
+    rules.extend(
+        rules_from_config(config)
+            .into_iter()
+            .map(|r| (r, RuleSource::ProjectConfig)),
+    );
     validate_toggles(config, &rules)?;
 
     let mut results = Vec::new();
@@ -213,15 +280,26 @@ pub fn evaluate(model: &Model, config: &Config, pack: &RulePack, config_dir: Opt
             continue;
         }
         if let Some(cond) = &rule.enabled_if {
-            let v = config.lookup(cond.trim_start_matches("$config.")).unwrap_or(serde_json::Value::Bool(false));
+            let v = config
+                .lookup(cond.trim_start_matches("$config."))
+                .unwrap_or(serde_json::Value::Bool(false));
             if !v.as_bool().unwrap_or(false) {
                 continue;
             }
         }
         let scope = resolve_scope(model, &rule.scope);
         let severity = rule.severity();
-        let ctx = CheckContext { model, config, scope: &scope, allowed_codes: &allowed_codes };
-        let checked = if rule.check.is_model_level() { scope.len().max(1) } else { scope.len() };
+        let ctx = CheckContext {
+            model,
+            config,
+            scope: &scope,
+            allowed_codes: &allowed_codes,
+        };
+        let checked = if rule.check.is_model_level() {
+            scope.len().max(1)
+        } else {
+            scope.len()
+        };
         let outcome = rule.check.run(&ctx)?;
         match outcome {
             CheckOutcome::Skipped { reason } => results.push(RuleResult {
@@ -279,7 +357,11 @@ pub fn evaluate(model: &Model, config: &Config, pack: &RulePack, config_dir: Opt
 
     results.sort_by(|a, b| a.rule_id.cmp(&b.rule_id));
     let summary = score::summarise(&results, &findings);
-    Ok(Evaluation { rules: results, findings, summary })
+    Ok(Evaluation {
+        rules: results,
+        findings,
+        summary,
+    })
 }
 
 /// Merge extra rule results / findings (e.g. from IDS) and recompute the summary.
@@ -300,12 +382,27 @@ mod tests {
             global_id: id.into(),
             step_id: 1,
             ifc_type: t.into(),
-            ancestors: vec![t.into(), "IfcBuildingElement".into(), "IfcElement".into(), "IfcProduct".into()],
+            ancestors: vec![
+                t.into(),
+                "IfcBuildingElement".into(),
+                "IfcElement".into(),
+                "IfcProduct".into(),
+            ],
             name: Some(name.into()),
             storey: storey.map(|s| s.to_string()),
-            container: storey.map(|s| SpatialRef { global_id: "S1".into(), ifc_type: "IfcBuildingStorey".into(), name: Some(s.into()) }),
+            container: storey.map(|s| SpatialRef {
+                global_id: "S1".into(),
+                ifc_type: "IfcBuildingStorey".into(),
+                name: Some(s.into()),
+            }),
             has_representation: true,
-            geometry: Some(Geometry { bbox_min: [0.0; 3], bbox_max: [1.0; 3], volume_m3: Some(1.0), area_m2: Some(6.0), triangle_count: 12 }),
+            geometry: Some(Geometry {
+                bbox_min: [0.0; 3],
+                bbox_max: [1.0; 3],
+                volume_m3: Some(1.0),
+                area_m2: Some(6.0),
+                triangle_count: 12,
+            }),
             ..Default::default()
         }
     }
@@ -321,7 +418,11 @@ mod tests {
                     children: vec![SpatialNode {
                         global_id: "B".into(),
                         ifc_type: "IfcBuilding".into(),
-                        children: vec![SpatialNode { global_id: "S1".into(), ifc_type: "IfcBuildingStorey".into(), ..Default::default() }],
+                        children: vec![SpatialNode {
+                            global_id: "S1".into(),
+                            ifc_type: "IfcBuildingStorey".into(),
+                            ..Default::default()
+                        }],
                         ..Default::default()
                     }],
                     ..Default::default()
@@ -344,7 +445,11 @@ mod tests {
         ]);
         let cfg = Config::default();
         let ev = evaluate(&m, &cfg, &RulePack::generic(), None).unwrap();
-        let dup: Vec<_> = ev.findings.iter().filter(|f| f.rule_id == "ID-001").collect();
+        let dup: Vec<_> = ev
+            .findings
+            .iter()
+            .filter(|f| f.rule_id == "ID-001")
+            .collect();
         assert_eq!(dup.len(), 2, "{:?}", ev.findings);
         assert_eq!(dup[0].severity, Severity::Error);
         assert_eq!(ev.summary.verdict, Some(crate::model::Verdict::Fail));
@@ -358,7 +463,11 @@ mod tests {
         ]);
         let cfg = Config::default();
         let ev = evaluate(&m, &cfg, &RulePack::generic(), None).unwrap();
-        let errors: Vec<_> = ev.findings.iter().filter(|f| f.severity == Severity::Error).collect();
+        let errors: Vec<_> = ev
+            .findings
+            .iter()
+            .filter(|f| f.severity == Severity::Error)
+            .collect();
         assert!(errors.is_empty(), "{:#?}", errors);
         assert_eq!(ev.summary.verdict, Some(crate::model::Verdict::Pass));
         assert_eq!(ev.summary.score, 100);
@@ -368,12 +477,21 @@ mod tests {
     fn element_without_storey_fails_spatial_rule() {
         let m = model(vec![elem("0fqX614OH1YO1Njdxms2$Q", "IfcWall", "W1", None)]);
         let ev = evaluate(&m, &Config::default(), &RulePack::generic(), None).unwrap();
-        assert!(ev.findings.iter().any(|f| f.rule_id == "SP-001"), "{:?}", ev.findings);
+        assert!(
+            ev.findings.iter().any(|f| f.rule_id == "SP-001"),
+            "{:?}",
+            ev.findings
+        );
     }
 
     #[test]
     fn config_required_pset_generates_rule_and_toggles_work() {
-        let m = model(vec![elem("0fqX614OH1YO1Njdxms2$Q", "IfcWall", "W1", Some("L1"))]);
+        let m = model(vec![elem(
+            "0fqX614OH1YO1Njdxms2$Q",
+            "IfcWall",
+            "W1",
+            Some("L1"),
+        )]);
         let cfg = Config::from_yaml(
             "requirements:\n  required_psets:\n    - pset: Pset_WallCommon\n      applies_to: [IfcWall]\n      properties: [FireRating]\n",
         )
@@ -388,7 +506,12 @@ mod tests {
 
     #[test]
     fn geometry_rules_are_skipped_without_kernel() {
-        let mut m = model(vec![elem("0fqX614OH1YO1Njdxms2$Q", "IfcWall", "W1", Some("L1"))]);
+        let mut m = model(vec![elem(
+            "0fqX614OH1YO1Njdxms2$Q",
+            "IfcWall",
+            "W1",
+            Some("L1"),
+        )]);
         m.info.geometry_available = false;
         let ev = evaluate(&m, &Config::default(), &RulePack::generic(), None).unwrap();
         let geo = ev.rules.iter().find(|r| r.rule_id == "GEO-002").unwrap();
@@ -399,7 +522,12 @@ mod tests {
 
     #[test]
     fn unknown_toggle_keys_are_rejected() {
-        let m = model(vec![elem("0fqX614OH1YO1Njdxms2$Q", "IfcWall", "W1", Some("L1"))]);
+        let m = model(vec![elem(
+            "0fqX614OH1YO1Njdxms2$Q",
+            "IfcWall",
+            "W1",
+            Some("L1"),
+        )]);
         let cfg = Config::from_yaml("checks:\n  rules:\n    ID-999: false\n").unwrap();
         let err = evaluate(&m, &cfg, &RulePack::generic(), None).unwrap_err();
         assert!(err.to_string().contains("ID-999"), "{err}");
@@ -413,18 +541,32 @@ mod tests {
             elem("0fqX614OH1YO1Njdxms2$Q", "IfcWall", "W1", Some("L1")),
             elem("1fqX614OH1YO1Njdxms2$Q", "IfcSlab", "S1", Some("L1")),
         ]);
-        let cfg = Config::from_yaml("classification:\n  required: true\n  applies_to: [IfcWall]\n").unwrap();
+        let cfg = Config::from_yaml("classification:\n  required: true\n  applies_to: [IfcWall]\n")
+            .unwrap();
         let ev = evaluate(&m, &cfg, &RulePack::generic(), None).unwrap();
-        let cl: Vec<_> = ev.findings.iter().filter(|f| f.rule_id == "CL-001").collect();
+        let cl: Vec<_> = ev
+            .findings
+            .iter()
+            .filter(|f| f.rule_id == "CL-001")
+            .collect();
         assert_eq!(cl.len(), 1);
         assert_eq!(cl[0].ifc_type.as_deref(), Some("IfcWall"));
     }
 
     #[test]
     fn naming_pattern_from_config() {
-        let m = model(vec![elem("0fqX614OH1YO1Njdxms2$Q", "IfcWall", "Wall-A", Some("L1"))]);
+        let m = model(vec![elem(
+            "0fqX614OH1YO1Njdxms2$Q",
+            "IfcWall",
+            "Wall-A",
+            Some("L1"),
+        )]);
         let cfg = Config::from_yaml("naming:\n  patterns:\n    IfcWall: '^W-[0-9]{3}$'\n").unwrap();
         let ev = evaluate(&m, &cfg, &RulePack::generic(), None).unwrap();
-        assert!(ev.findings.iter().any(|f| f.rule_id == "NAM-001"), "{:?}", ev.findings);
+        assert!(
+            ev.findings.iter().any(|f| f.rule_id == "NAM-001"),
+            "{:?}",
+            ev.findings
+        );
     }
 }

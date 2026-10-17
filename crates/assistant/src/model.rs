@@ -28,7 +28,8 @@ pub struct ModelSpec {
 }
 
 /// Default model: Qwen2.5-0.5B-Instruct, Q4_K_M (~470 MB, Apache-2.0).
-pub static DEFAULT_MODEL: std::sync::LazyLock<ModelSpec> = std::sync::LazyLock::new(|| ModelSpec {
+pub static DEFAULT_MODEL: std::sync::LazyLock<ModelSpec> = std::sync::LazyLock::new(|| {
+    ModelSpec {
     id: "qwen2.5-0.5b-instruct-q4_k_m".into(),
     name: "Qwen2.5 0.5B Instruct (Q4_K_M)".into(),
     family: "qwen2".into(),
@@ -39,6 +40,7 @@ pub static DEFAULT_MODEL: std::sync::LazyLock<ModelSpec> = std::sync::LazyLock::
     tokenizer_sha256: String::new(),
     license: "Apache-2.0".into(),
     approx_ram_mb: 700,
+}
 });
 
 /// All models the UI may offer.
@@ -86,7 +88,11 @@ pub fn status_of(app_data: &Path, spec: &ModelSpec) -> ModelStatus {
         gguf_size_bytes: spec.gguf_size_bytes,
         license: spec.license.clone(),
         approx_ram_mb: spec.approx_ram_mb,
-        backend: if cfg!(feature = "candle") { "candle".into() } else { "none".into() },
+        backend: if cfg!(feature = "candle") {
+            "candle".into()
+        } else {
+            "none".into()
+        },
     }
 }
 
@@ -96,9 +102,15 @@ pub type Progress<'a> = &'a mut dyn FnMut(u64, Option<u64>);
 /// Download `spec` into `app_data`, verify SHA-256 (when the spec declares one),
 /// and return the status. STUB: to be implemented with `ureq` streaming to a
 /// `.part` file renamed on success; never leaves a half file as installed.
-pub fn download(app_data: &Path, spec: &ModelSpec, progress: Progress<'_>) -> AssistantResult<ModelStatus> {
+pub fn download(
+    app_data: &Path,
+    spec: &ModelSpec,
+    progress: Progress<'_>,
+) -> AssistantResult<ModelStatus> {
     let _ = (app_data, spec, progress);
-    Err(crate::error::AssistantError::Download("not implemented yet".into()))
+    Err(crate::error::AssistantError::Download(
+        "not implemented yet".into(),
+    ))
 }
 
 /// Remove an installed model.

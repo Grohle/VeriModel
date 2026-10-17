@@ -31,12 +31,16 @@ pub struct ConvertReport {
     pub skipped: Vec<String>,
 }
 
-pub const SUPPORTED_EXTENSIONS: &[&str] = &["md", "markdown", "txt", "yaml", "yml", "json", "docx", "pdf"];
+pub const SUPPORTED_EXTENSIONS: &[&str] = &[
+    "md", "markdown", "txt", "yaml", "yml", "json", "docx", "pdf",
+];
 
 /// Convert files/directories into knowledge.
 pub fn convert_paths(paths: &[PathBuf]) -> AssistantResult<ConvertReport> {
     let _ = paths;
-    Err(crate::error::AssistantError::Convert("not implemented yet".into()))
+    Err(crate::error::AssistantError::Convert(
+        "not implemented yet".into(),
+    ))
 }
 
 /// Convert and write `knowledge.yaml` next to the outputs.

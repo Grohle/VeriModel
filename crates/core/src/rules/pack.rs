@@ -80,14 +80,16 @@ impl Rule {
 impl RulePack {
     /// Parse a rule pack from YAML text and validate it.
     pub fn from_yaml(text: &str) -> CoreResult<RulePack> {
-        let pack: RulePack = serde_yaml::from_str(text).map_err(|e| CoreError::RulePack(e.to_string()))?;
+        let pack: RulePack =
+            serde_yaml::from_str(text).map_err(|e| CoreError::RulePack(e.to_string()))?;
         pack.validate()?;
         Ok(pack)
     }
 
     /// The built-in generic pack.
     pub fn generic() -> RulePack {
-        RulePack::from_yaml(GENERIC_RULE_PACK_YAML).expect("built-in generic rule pack must be valid")
+        RulePack::from_yaml(GENERIC_RULE_PACK_YAML)
+            .expect("built-in generic rule pack must be valid")
     }
 
     pub fn validate(&self) -> CoreResult<()> {
@@ -101,18 +103,27 @@ impl RulePack {
                 problems.push(format!("duplicate rule id '{}'", r.id));
             }
             if r.severity.parse::<Severity>().is_err() {
-                problems.push(format!("rule '{}': invalid severity '{}'", r.id, r.severity));
+                problems.push(format!(
+                    "rule '{}': invalid severity '{}'",
+                    r.id, r.severity
+                ));
             }
             if let Some(f) = &r.scope.filter {
                 if let Some(p) = &f.name_pattern {
                     if let Err(e) = regex::Regex::new(p) {
-                        problems.push(format!("rule '{}': scope.filter.name_pattern invalid regex: {e}", r.id));
+                        problems.push(format!(
+                            "rule '{}': scope.filter.name_pattern invalid regex: {e}",
+                            r.id
+                        ));
                     }
                 }
             }
             if let Some(e) = &r.enabled_if {
                 if !e.starts_with("$config.") {
-                    problems.push(format!("rule '{}': enabled_if must be a '$config.<path>' reference", r.id));
+                    problems.push(format!(
+                        "rule '{}': enabled_if must be a '$config.<path>' reference",
+                        r.id
+                    ));
                 }
             }
         }
@@ -132,8 +143,9 @@ pub fn load_rule_pack(config: &Config, config_dir: Option<&Path>) -> CoreResult<
         return Ok(RulePack::generic());
     }
     let path = Config::resolve_path(config_dir, name);
-    let text = std::fs::read_to_string(&path)
-        .map_err(|e| CoreError::RulePack(format!("cannot read rule pack {}: {e}", path.display())))?;
+    let text = std::fs::read_to_string(&path).map_err(|e| {
+        CoreError::RulePack(format!("cannot read rule pack {}: {e}", path.display()))
+    })?;
     RulePack::from_yaml(&text)
 }
 
@@ -144,7 +156,11 @@ mod tests {
     #[test]
     fn generic_pack_loads_and_has_unique_ids() {
         let p = RulePack::generic();
-        assert!(p.rules.len() >= 15, "generic pack should be comprehensive, got {}", p.rules.len());
+        assert!(
+            p.rules.len() >= 15,
+            "generic pack should be comprehensive, got {}",
+            p.rules.len()
+        );
         let mut ids: Vec<_> = p.rules.iter().map(|r| r.id.clone()).collect();
         ids.sort();
         ids.dedup();
@@ -165,7 +181,10 @@ rules:
     description: b
     check: { kind: valid_global_id }
 "#;
-        assert!(RulePack::from_yaml(y).unwrap_err().to_string().contains("duplicate"));
+        assert!(RulePack::from_yaml(y)
+            .unwrap_err()
+            .to_string()
+            .contains("duplicate"));
     }
 
     #[test]

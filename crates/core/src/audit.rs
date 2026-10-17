@@ -13,7 +13,9 @@ pub struct AuditLog {
 impl AuditLog {
     pub fn open(dir: &Path) -> CoreResult<AuditLog> {
         std::fs::create_dir_all(dir)?;
-        Ok(AuditLog { path: dir.join("audit.log") })
+        Ok(AuditLog {
+            path: dir.join("audit.log"),
+        })
     }
 
     pub fn path(&self) -> &Path {
@@ -22,7 +24,10 @@ impl AuditLog {
 
     /// Append one event. Errors are returned, never swallowed, so a run cannot silently lose its trail.
     pub fn record(&self, event: &str, details: &str) -> CoreResult<()> {
-        let mut f = std::fs::OpenOptions::new().create(true).append(true).open(&self.path)?;
+        let mut f = std::fs::OpenOptions::new()
+            .create(true)
+            .append(true)
+            .open(&self.path)?;
         let ts = chrono::Utc::now().to_rfc3339_opts(chrono::SecondsFormat::Millis, true);
         writeln!(f, "{ts}\t{event}\t{}", details.replace('\n', " "))?;
         Ok(())

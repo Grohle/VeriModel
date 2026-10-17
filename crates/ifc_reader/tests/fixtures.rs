@@ -7,7 +7,9 @@ use std::path::PathBuf;
 use verimodel_ifc_reader::{inspect, read_model, ReadOptions};
 
 fn fixture(name: &str) -> PathBuf {
-    PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures").join(name)
+    PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("../../tests/fixtures")
+        .join(name)
 }
 
 fn skip() -> bool {
@@ -23,7 +25,11 @@ fn reads_ifc2x3_with_units_converted_to_metres() {
     if skip() {
         return;
     }
-    let m = read_model(&fixture("bsi_ifc2x3_building_architecture.ifc"), &ReadOptions::default()).unwrap();
+    let m = read_model(
+        &fixture("bsi_ifc2x3_building_architecture.ifc"),
+        &ReadOptions::default(),
+    )
+    .unwrap();
     assert_eq!(m.info.schema, "IFC2X3");
     assert_eq!(m.info.units.length_unit.as_deref(), Some("MILLIMETRE"));
     assert!((m.info.units.length_to_m - 0.001).abs() < 1e-12);
@@ -32,9 +38,16 @@ fn reads_ifc2x3_with_units_converted_to_metres() {
     assert!(m.info.disciplines.contains(&"architecture".to_string()));
     let wall = m.elements.iter().find(|e| e.ifc_type == "IfcWall").unwrap();
     // 200 mm in the file -> 0.2 m
-    assert!((wall.quantity("Width").unwrap() - 0.2).abs() < 1e-9, "{:?}", wall.quantities);
+    assert!(
+        (wall.quantity("Width").unwrap() - 0.2).abs() < 1e-9,
+        "{:?}",
+        wall.quantities
+    );
     assert_eq!(wall.storey.as_deref(), Some("00 groundfloor"));
-    assert!(wall.geometry.is_some(), "geometry kernel should produce a shape for the wall");
+    assert!(
+        wall.geometry.is_some(),
+        "geometry kernel should produce a shape for the wall"
+    );
     assert!(m.info.geometry_available);
     assert!(wall.is_a("IfcElement"));
 }
@@ -44,16 +57,29 @@ fn reads_ifc4_and_ifc4x3() {
     if skip() {
         return;
     }
-    let s = read_model(&fixture("bsi_ifc4_building_structural.ifc"), &ReadOptions::default()).unwrap();
+    let s = read_model(
+        &fixture("bsi_ifc4_building_structural.ifc"),
+        &ReadOptions::default(),
+    )
+    .unwrap();
     assert_eq!(s.info.schema, "IFC4");
     assert_eq!(s.elements.len(), 21);
     assert!(s.info.disciplines.contains(&"structure".to_string()));
-    let b = read_model(&fixture("bsi_ifc4x3_infra_bridge.ifc"), &ReadOptions::default()).unwrap();
+    let b = read_model(
+        &fixture("bsi_ifc4x3_infra_bridge.ifc"),
+        &ReadOptions::default(),
+    )
+    .unwrap();
     assert_eq!(b.info.schema, "IFC4X3");
     assert_eq!(b.elements.len(), 77);
     assert!(b.info.storeys.is_empty(), "bridge has no building storeys");
     assert!(b.info.disciplines.contains(&"civil".to_string()));
-    assert!(b.info.spatial_tree.iter().flat_map(|r| r.walk()).any(|n| n.ifc_type == "IfcBridge"));
+    assert!(b
+        .info
+        .spatial_tree
+        .iter()
+        .flat_map(|r| r.walk())
+        .any(|n| n.ifc_type == "IfcBridge"));
 }
 
 #[test]
@@ -86,7 +112,11 @@ fn ids_results_are_returned_as_facts() {
     </ids:specification>
   </ids:specifications>
 </ids:ids>"#).unwrap();
-    let opts = ReadOptions { ids_path: Some(ids), geometry: false, ..Default::default() };
+    let opts = ReadOptions {
+        ids_path: Some(ids),
+        geometry: false,
+        ..Default::default()
+    };
     let m = read_model(&fixture("bsi_ifc2x3_building_architecture.ifc"), &opts).unwrap();
     let r = m.ids_results.expect("ids results");
     assert_eq!(r.title.as_deref(), Some("Reader test"));

@@ -23,7 +23,10 @@ impl Strings {
             Language::En => en.clone(),
             Language::Es => serde_json::from_str(ES).expect("es.json must be valid"),
         };
-        Strings { table, fallback: en }
+        Strings {
+            table,
+            fallback: en,
+        }
     }
 
     /// Look up a key; falls back to English, then to the key itself (never panics, never empty).

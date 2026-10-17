@@ -64,27 +64,59 @@ pub struct FilterSpec {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "snake_case")]
 pub enum Task {
-    Filter { question: String, context: ReportContext },
-    Explain { finding: Finding, rule: Option<RuleResult> },
-    ConfigHelp { question: String, current_yaml: Option<String> },
-    DraftRules { requirements_text: String },
-    Ask { question: String },
+    Filter {
+        question: String,
+        context: ReportContext,
+    },
+    Explain {
+        finding: Finding,
+        rule: Option<RuleResult>,
+    },
+    ConfigHelp {
+        question: String,
+        current_yaml: Option<String>,
+    },
+    DraftRules {
+        requirements_text: String,
+    },
+    Ask {
+        question: String,
+    },
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "snake_case")]
 pub enum Answer {
-    Filter { filter: FilterSpec },
-    Explanation { text: String },
-    ConfigSnippet { yaml: String, valid: bool, validation_error: Option<String>, explanation: String },
-    Text { text: String, sources: Vec<String>, structured: bool },
+    Filter {
+        filter: FilterSpec,
+    },
+    Explanation {
+        text: String,
+    },
+    ConfigSnippet {
+        yaml: String,
+        valid: bool,
+        validation_error: Option<String>,
+        explanation: String,
+    },
+    Text {
+        text: String,
+        sources: Vec<String>,
+        structured: bool,
+    },
 }
 
 /// Number of retrieved chunks put in the prompt.
 pub const RETRIEVE_K: usize = 4;
 
 /// Run a task against a backend with the given knowledge.
-pub fn run(backend: &mut dyn Backend, knowledge: &Knowledge, task: &Task) -> AssistantResult<Answer> {
+pub fn run(
+    backend: &mut dyn Backend,
+    knowledge: &Knowledge,
+    task: &Task,
+) -> AssistantResult<Answer> {
     let _ = (backend, knowledge, task);
-    Err(crate::error::AssistantError::Generation("tasks not implemented yet".into()))
+    Err(crate::error::AssistantError::Generation(
+        "tasks not implemented yet".into(),
+    ))
 }

@@ -22,7 +22,9 @@ pub struct CandleBackend {
 impl CandleBackend {
     pub fn load(gguf: &Path, tokenizer: &Path) -> AssistantResult<CandleBackend> {
         let _ = (gguf, tokenizer);
-        Err(AssistantError::Load("candle backend not implemented yet".into()))
+        Err(AssistantError::Load(
+            "candle backend not implemented yet".into(),
+        ))
     }
 }
 
@@ -31,6 +33,8 @@ impl Backend for CandleBackend {
         &self.name
     }
     fn generate(&mut self, _prompt: &str, _opts: &GenOptions) -> AssistantResult<String> {
-        Err(AssistantError::Generation("candle backend not implemented yet".into()))
+        Err(AssistantError::Generation(
+            "candle backend not implemented yet".into(),
+        ))
     }
 }

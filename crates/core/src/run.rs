@@ -46,7 +46,11 @@ pub struct RunOutcome {
 }
 
 /// Build the report without writing anything (used by tests and the UI preview).
-pub fn build_report(model: &Model, config: &Config, config_dir: Option<&Path>) -> CoreResult<RunReport> {
+pub fn build_report(
+    model: &Model,
+    config: &Config,
+    config_dir: Option<&Path>,
+) -> CoreResult<RunReport> {
     let pack = rules::load_rule_pack(config, config_dir)?;
     let mut eval = engine::evaluate(model, config, &pack, config_dir)?;
 
@@ -55,8 +59,11 @@ pub fn build_report(model: &Model, config: &Config, config_dir: Option<&Path>) -
             let mut ev = ids::evaluate(results);
             // The IDS engine reports GlobalIds only; add storey and step id from the model
             // so IDS findings carry the same evidence as rule-pack findings.
-            let index: std::collections::BTreeMap<&str, &crate::model::Element> =
-                model.elements.iter().map(|e| (e.global_id.as_str(), e)).collect();
+            let index: std::collections::BTreeMap<&str, &crate::model::Element> = model
+                .elements
+                .iter()
+                .map(|e| (e.global_id.as_str(), e))
+                .collect();
             for f in &mut ev.findings {
                 if let Some(e) = f.global_id.as_deref().and_then(|g| index.get(g)) {
                     if f.storey.is_none() {
@@ -77,7 +84,9 @@ pub fn build_report(model: &Model, config: &Config, config_dir: Option<&Path>) -
     };
 
     let rates = match &config.qto.unit_rates_file {
-        Some(f) => Some(qto::RateTable::from_csv(&Config::resolve_path(config_dir, f))?),
+        Some(f) => Some(qto::RateTable::from_csv(&Config::resolve_path(
+            config_dir, f,
+        ))?),
         None => None,
     };
     let qto_report = qto::compute(model, config, rates.as_ref())?;
@@ -104,28 +113,61 @@ pub fn execute(model: &Model, config: &Config, inputs: &RunInputs) -> CoreResult
     let started = inputs.started.unwrap_or_else(Instant::now);
     std::fs::create_dir_all(&inputs.out_dir)?;
     let audit = AuditLog::open(&inputs.out_dir)?;
-    audit.record("run.start", &format!("ifc={} schema={} elements={}", inputs.ifc_path.display(), model.info.schema, model.elements.len()))?;
+    audit.record(
+        "run.start",
+        &format!(
+            "ifc={} schema={} elements={}",
+            inputs.ifc_path.display(),
+            model.info.schema,
+            model.elements.len()
+        ),
+    )?;
 
     let report = build_report(model, config, inputs.config_dir.as_deref())?;
     audit.record(
         "rules.done",
-        &format!("rules={} errors={} warnings={} score={}", report.rules.len(), report.summary.errors, report.summary.warnings, report.summary.score),
+        &format!(
+            "rules={} errors={} warnings={} score={}",
+            report.rules.len(),
+            report.summary.errors,
+            report.summary.warnings,
+            report.summary.score
+        ),
     )?;
 
     let mut files = report::write_all(&report, config, &inputs.out_dir)?;
-    audit.record("report.written", &files.iter().map(|f| f.name.clone()).collect::<Vec<_>>().join(","))?;
+    audit.record(
+        "report.written",
+        &files
+            .iter()
+            .map(|f| f.name.clone())
+            .collect::<Vec<_>>()
+            .join(","),
+    )?;
 
     let bcf_path = inputs.out_dir.join("issues.bcfzip");
     let bcf_stats = bcf::write_bcfzip(&report, model, config, &bcf_path)?;
-    files.push(OutputFile { name: "issues.bcfzip".into(), kind: "bcf".into(), bytes: file_len(&bcf_path) });
+    files.push(OutputFile {
+        name: "issues.bcfzip".into(),
+        kind: "bcf".into(),
+        bytes: file_len(&bcf_path),
+    });
     let issues_csv = inputs.out_dir.join("issues.csv");
     bcf::write_issues_csv(&report, &issues_csv)?;
-    files.push(OutputFile { name: "issues.csv".into(), kind: "issues_csv".into(), bytes: file_len(&issues_csv) });
+    files.push(OutputFile {
+        name: "issues.csv".into(),
+        kind: "issues_csv".into(),
+        bytes: file_len(&issues_csv),
+    });
     audit.record("bcf.written", &format!("topics={}", bcf_stats.topics))?;
 
     let cfg_yaml = config.to_yaml()?;
     std::fs::write(inputs.out_dir.join("project.yaml"), &cfg_yaml)?;
-    files.push(OutputFile { name: "project.yaml".into(), kind: "config".into(), bytes: cfg_yaml.len() as u64 });
+    files.push(OutputFile {
+        name: "project.yaml".into(),
+        kind: "config".into(),
+        bytes: cfg_yaml.len() as u64,
+    });
 
     let report_sha = hash::sha256_file(&inputs.out_dir.join("report.json"))?;
     let ledger = RunLedger {
@@ -143,7 +185,10 @@ pub fn execute(model: &Model, config: &Config, inputs: &RunInputs) -> CoreResult
         config_sha256: hash::sha256_bytes(cfg_yaml.as_bytes()),
         rates_file: config.qto.unit_rates_file.clone(),
         rates_sha256: match &config.qto.unit_rates_file {
-            Some(f) => Some(hash::sha256_file(&Config::resolve_path(inputs.config_dir.as_deref(), f))?),
+            Some(f) => Some(hash::sha256_file(&Config::resolve_path(
+                inputs.config_dir.as_deref(),
+                f,
+            ))?),
             None => None,
         },
         schema: model.info.schema.clone(),
@@ -161,16 +206,37 @@ pub fn execute(model: &Model, config: &Config, inputs: &RunInputs) -> CoreResult
     };
     let ledger_text = serde_json::to_string_pretty(&ledger)?;
     std::fs::write(inputs.out_dir.join("run.json"), &ledger_text)?;
-    files.push(OutputFile { name: "run.json".into(), kind: "run_json".into(), bytes: ledger_text.len() as u64 });
-    files.push(OutputFile { name: "audit.log".into(), kind: "audit_log".into(), bytes: file_len(audit.path()) });
-    audit.record("run.end", &format!("duration_ms={} verdict={:?}", ledger.duration_ms, ledger.verdict))?;
+    files.push(OutputFile {
+        name: "run.json".into(),
+        kind: "run_json".into(),
+        bytes: ledger_text.len() as u64,
+    });
+    files.push(OutputFile {
+        name: "audit.log".into(),
+        kind: "audit_log".into(),
+        bytes: file_len(audit.path()),
+    });
+    audit.record(
+        "run.end",
+        &format!(
+            "duration_ms={} verdict={:?}",
+            ledger.duration_ms, ledger.verdict
+        ),
+    )?;
 
-    Ok(RunOutcome { report, ledger, files, bcf: bcf_stats, out_dir: inputs.out_dir.clone() })
+    Ok(RunOutcome {
+        report,
+        ledger,
+        files,
+        bcf: bcf_stats,
+        out_dir: inputs.out_dir.clone(),
+    })
 }
 
 /// Read a `run.json` ledger (for run history).
 pub fn read_ledger(path: &Path) -> CoreResult<RunLedger> {
-    let text = std::fs::read_to_string(path).map_err(|e| CoreError::Io(format!("cannot read {}: {e}", path.display())))?;
+    let text = std::fs::read_to_string(path)
+        .map_err(|e| CoreError::Io(format!("cannot read {}: {e}", path.display())))?;
     Ok(serde_json::from_str(&text)?)
 }
 
@@ -192,7 +258,9 @@ pub fn list_runs(root: &Path) -> CoreResult<Vec<RunLedger>> {
 }
 
 fn file_name(p: &Path) -> String {
-    p.file_name().map(|s| s.to_string_lossy().to_string()).unwrap_or_else(|| p.display().to_string())
+    p.file_name()
+        .map(|s| s.to_string_lossy().to_string())
+        .unwrap_or_else(|| p.display().to_string())
 }
 
 fn file_len(p: &Path) -> u64 {
@@ -214,8 +282,16 @@ mod tests {
             ..Default::default()
         };
         let mut m = Model {
-            info: ModelInfo { schema: "IFC4".into(), file_name: "t.ifc".into(), sha256: "00".into(), ..Default::default() },
-            elements: vec![mk("0fqX614OH1YO1Njdxms2$Q", "A"), mk("0fqX614OH1YO1Njdxms2$Q", "B")],
+            info: ModelInfo {
+                schema: "IFC4".into(),
+                file_name: "t.ifc".into(),
+                sha256: "00".into(),
+                ..Default::default()
+            },
+            elements: vec![
+                mk("0fqX614OH1YO1Njdxms2$Q", "A"),
+                mk("0fqX614OH1YO1Njdxms2$Q", "B"),
+            ],
             ids_results: None,
         };
         m.sort_elements();
@@ -229,7 +305,11 @@ mod tests {
         let dir = tempfile::tempdir().unwrap();
         let run_once = |name: &str| {
             let out = dir.path().join(name);
-            let inputs = RunInputs { ifc_path: "t.ifc".into(), out_dir: out.clone(), ..Default::default() };
+            let inputs = RunInputs {
+                ifc_path: "t.ifc".into(),
+                out_dir: out.clone(),
+                ..Default::default()
+            };
             let o = execute(&model, &cfg, &inputs).unwrap();
             assert!(o.files.iter().any(|f| f.name == "report.json"));
             assert!(out.join("run.json").is_file());
