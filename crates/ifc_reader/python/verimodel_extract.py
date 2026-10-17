@@ -476,6 +476,7 @@ def stream_geometry(f, threads: int):
             emit({
                 "kind": "geometry",
                 "global_id": shape.guid,
+                "step_id": int(shape.id),
                 "bbox_min": bmin,
                 "bbox_max": bmax,
                 "volume_m3": vol,

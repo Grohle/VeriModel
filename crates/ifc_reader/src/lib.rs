@@ -290,7 +290,12 @@ struct ElementLine {
 
 #[derive(Deserialize)]
 struct GeometryLine {
+    #[serde(default)]
     global_id: String,
+    /// STEP id: geometry is merged by step id, never by GlobalId, because
+    /// duplicated GlobalIds are exactly one of the defects we must detect.
+    #[serde(default)]
+    step_id: i64,
     bbox_min: [f64; 3],
     bbox_max: [f64; 3],
     #[serde(default)]
@@ -425,7 +430,7 @@ fn read_with_mode(ifc_path: &Path, opts: &ReadOptions, mode: &str) -> Result<Mod
     let mut model = Model::default();
     model.info.file_name = ifc_path.file_name().map(|s| s.to_string_lossy().to_string()).unwrap_or_default();
     model.info.sha256 = sha;
-    let mut geometry: BTreeMap<String, Geometry> = BTreeMap::new();
+    let mut geometry: BTreeMap<i64, Geometry> = BTreeMap::new();
     let mut got_header = false;
     let mut got_end = false;
     let mut geometry_lines = 0usize;
@@ -481,8 +486,9 @@ fn read_with_mode(ifc_path: &Path, opts: &ReadOptions, mode: &str) -> Result<Mod
             "geometry" => {
                 let g: GeometryLine = parse(&line)?;
                 geometry_lines += 1;
+                let _ = &g.global_id;
                 geometry.insert(
-                    g.global_id,
+                    g.step_id,
                     Geometry { bbox_min: g.bbox_min, bbox_max: g.bbox_max, volume_m3: g.volume_m3, area_m2: g.area_m2, triangle_count: g.triangle_count },
                 );
             }
@@ -526,7 +532,7 @@ fn read_with_mode(ifc_path: &Path, opts: &ReadOptions, mode: &str) -> Result<Mod
 
     // Attach geometry, derive counts, disciplines, storeys.
     for e in &mut model.elements {
-        if let Some(g) = geometry.remove(&e.global_id) {
+        if let Some(g) = geometry.remove(&e.step_id) {
             e.geometry = Some(g);
         }
     }
