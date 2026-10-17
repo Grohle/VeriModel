@@ -52,7 +52,24 @@ pub fn build_report(model: &Model, config: &Config, config_dir: Option<&Path>) -
 
     let ids_report = match &model.ids_results {
         Some(results) => {
-            let ev = ids::evaluate(results);
+            let mut ev = ids::evaluate(results);
+            // The IDS engine reports GlobalIds only; add storey and step id from the model
+            // so IDS findings carry the same evidence as rule-pack findings.
+            let index: std::collections::BTreeMap<&str, &crate::model::Element> =
+                model.elements.iter().map(|e| (e.global_id.as_str(), e)).collect();
+            for f in &mut ev.findings {
+                if let Some(e) = f.global_id.as_deref().and_then(|g| index.get(g)) {
+                    if f.storey.is_none() {
+                        f.storey = e.storey.clone();
+                    }
+                    if f.step_id.is_none() {
+                        f.step_id = Some(e.step_id);
+                    }
+                    if f.ifc_type.is_none() {
+                        f.ifc_type = Some(e.ifc_type.clone());
+                    }
+                }
+            }
             engine::merge(&mut eval, ev.rules, ev.findings);
             Some(ev.report)
         }

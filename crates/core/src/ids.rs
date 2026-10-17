@@ -8,8 +8,10 @@
 //! * [`evaluate`] produces one [`RuleResult`] per (specification, requirement)
 //!   pair with rule id `IDS-<spec#>-<req#>` (1-based, two digits), and one
 //!   [`Finding`] per failed entity whose `expected` field quotes the
-//!   requirement text. Severity: ERROR for `required` (or unspecified) and
-//!   `prohibited` specifications, WARNING for `optional` ones.
+//!   requirement text. Severity: ERROR for every specification. In IDS 1.0 the
+//!   cardinality (`required` / `optional` / `prohibited`) only governs whether
+//!   applicable entities must, may or must not exist; a requirement that fails
+//!   on an applicable entity is always a failure.
 //!   A specification without requirements becomes a single rule
 //!   `IDS-<spec#>-00` so its verdict is never lost.
 //! * [`read_metadata`] reads the `.ids` XML header (title, author, version,
@@ -48,13 +50,13 @@ pub struct IdsMetadata {
 /// Rule category of every IDS-derived rule.
 pub const IDS_CATEGORY: &str = "ids";
 
-/// Severity of the rules derived from a specification, from its IDS cardinality.
+/// Severity of the rules derived from a specification. IDS 1.0 cardinality
+/// ("required" / "optional" / "prohibited") says whether applicable entities
+/// must, may or must not exist; it never downgrades a failed requirement, so
+/// every IDS rule is an ERROR.
 fn severity_for(cardinality: Option<&str>) -> Severity {
-    match cardinality.map(|c| c.trim().to_ascii_lowercase()) {
-        Some(c) if c == "optional" => Severity::Warning,
-        // "required", "prohibited" (applicable entities that exist are failures), unspecified or unknown.
-        _ => Severity::Error,
-    }
+    let _ = cardinality;
+    Severity::Error
 }
 
 fn status_for(passed: bool, applicable_count: usize) -> RuleStatus {
@@ -515,7 +517,7 @@ mod tests {
         );
         assert_eq!(ev.rules[1].status, RuleStatus::Pass);
         assert_eq!(ev.rules[2].status, RuleStatus::NotApplicable);
-        assert_eq!(ev.rules[2].severity, Severity::Warning);
+        assert_eq!(ev.rules[2].severity, Severity::Error, "optional specs still fail as errors");
         assert_eq!(
             ev.rules[3].severity,
             Severity::Error,

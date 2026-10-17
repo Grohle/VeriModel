@@ -849,8 +849,7 @@ mod tests {
 
     #[test]
     fn volume_prefers_base_quantity_over_geometry() {
-        let mut e = Element::default();
-        e.geometry = Some(Geometry { volume_m3: Some(5.0), ..Default::default() });
+        let mut e = Element { geometry: Some(Geometry { volume_m3: Some(5.0), ..Default::default() }), ..Default::default() };
         assert_eq!(e.volume_m3(), Some((5.0, QuantitySource::Geometry)));
         e.quantities.entry("Qto_WallBaseQuantities".into()).or_default().insert("NetVolume".into(), 2.0);
         assert_eq!(e.volume_m3(), Some((2.0, QuantitySource::BaseQuantity)));
