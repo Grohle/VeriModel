@@ -163,6 +163,29 @@ pub fn load_allowed_codes(config: &Config, config_dir: Option<&Path>) -> CoreRes
     Ok(set)
 }
 
+/// Reject `checks.rules` / `checks.categories` keys that match no rule, so a typo
+/// can never silently disable a check.
+fn validate_toggles(config: &Config, rules: &[(Rule, RuleSource)]) -> CoreResult<()> {
+    let ids: BTreeSet<&str> = rules.iter().map(|(r, _)| r.id.as_str()).collect();
+    let cats: BTreeSet<&str> = rules.iter().map(|(r, _)| r.category.as_str()).collect();
+    let mut problems = Vec::new();
+    for k in config.checks.rules.keys() {
+        if !ids.contains(k.as_str()) && !k.starts_with("IDS-") {
+            problems.push(format!("checks.rules refers to unknown rule id '{k}' (known: {})", ids.iter().copied().collect::<Vec<_>>().join(", ")));
+        }
+    }
+    for k in config.checks.categories.keys() {
+        if !cats.contains(k.as_str()) && k != "ids" {
+            problems.push(format!("checks.categories refers to unknown category '{k}' (known: {})", cats.iter().copied().collect::<Vec<_>>().join(", ")));
+        }
+    }
+    if problems.is_empty() {
+        Ok(())
+    } else {
+        Err(CoreError::Config(problems.join("; ")))
+    }
+}
+
 /// Evaluate all rules (pack + config generated) against the model.
 pub fn evaluate(model: &Model, config: &Config, pack: &RulePack, config_dir: Option<&Path>) -> CoreResult<Evaluation> {
     let allowed_codes = load_allowed_codes(config, config_dir)?;
@@ -173,6 +196,7 @@ pub fn evaluate(model: &Model, config: &Config, pack: &RulePack, config_dir: Opt
         .map(|r| (r, RuleSource::RulePack { pack: pack.name.clone() }))
         .collect();
     rules.extend(rules_from_config(config).into_iter().map(|r| (r, RuleSource::ProjectConfig)));
+    validate_toggles(config, &rules)?;
 
     let mut results = Vec::new();
     let mut findings = Vec::new();
@@ -364,6 +388,29 @@ mod tests {
         assert_eq!(geo.status, RuleStatus::Skipped);
         assert!(geo.skipped_reason.is_some());
         assert!(ev.summary.rules_skipped >= 1);
+    }
+
+    #[test]
+    fn unknown_toggle_keys_are_rejected() {
+        let m = model(vec![elem("0fqX614OH1YO1Njdxms2$Q", "IfcWall", "W1", Some("L1"))]);
+        let cfg = Config::from_yaml("checks:\n  rules:\n    ID-999: false\n").unwrap();
+        let err = evaluate(&m, &cfg, &RulePack::generic(), None).unwrap_err();
+        assert!(err.to_string().contains("ID-999"), "{err}");
+        let cfg2 = Config::from_yaml("checks:\n  categories:\n    geometrie: false\n").unwrap();
+        assert!(evaluate(&m, &cfg2, &RulePack::generic(), None).is_err());
+    }
+
+    #[test]
+    fn classification_applies_to_narrows_scope() {
+        let m = model(vec![
+            elem("0fqX614OH1YO1Njdxms2$Q", "IfcWall", "W1", Some("L1")),
+            elem("1fqX614OH1YO1Njdxms2$Q", "IfcSlab", "S1", Some("L1")),
+        ]);
+        let cfg = Config::from_yaml("classification:\n  required: true\n  applies_to: [IfcWall]\n").unwrap();
+        let ev = evaluate(&m, &cfg, &RulePack::generic(), None).unwrap();
+        let cl: Vec<_> = ev.findings.iter().filter(|f| f.rule_id == "CL-001").collect();
+        assert_eq!(cl.len(), 1);
+        assert_eq!(cl[0].ifc_type.as_deref(), Some("IfcWall"));
     }
 
     #[test]

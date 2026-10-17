@@ -1,0 +1,153 @@
+# VeriModel example: residential project.
+#
+# This file is illustrative. It works with any IFC model (IFC2X3, IFC4 or
+# IFC4X3) and shows the most common settings. Copy it, then change the values
+# to match your own project. Every key is checked: an unknown key is an error,
+# so a typo cannot silently switch a rule off.
+#
+# Run it with (from the repository root):
+#   verimodel check --ifc tests/fixtures/bsi_ifc4_building_structural.ifc \
+#     --config examples/residential/project.yaml --ids examples/sample.ids --out ./out
+#
+# Full reference of every key: docs/CONFIG.md
+
+# ---------------------------------------------------------------------------
+# project: who the project is and which rules about the file itself apply.
+# ---------------------------------------------------------------------------
+project:
+  # A name shown in reports. Free text.
+  name: "Residential example"
+  # Language of the user interface and reports: en (English) or es (Spanish).
+  language: en
+  # Units shown in reports: auto follows the units declared in the IFC file.
+  # Other choices: metric, imperial. Calculations are always stored in SI units.
+  units: auto
+  # The classification system the project expects. Used by the classification
+  # rule. Any text is accepted; a match is made against the system name in the
+  # file, ignoring case (so "Uniclass" matches "Uniclass 2015").
+  classification_system: Uniclass
+  # IFC schemas the project accepts. A file written in another schema fails
+  # rule SCH-001. IFC4X1 and IFC4X2 are treated as IFC4 (see docs/ASSUMPTIONS.md).
+  ifc_versions: [IFC2X3, IFC4, IFC4X3]
+
+# ---------------------------------------------------------------------------
+# requirements: what every element must contain.
+# ---------------------------------------------------------------------------
+requirements:
+  # An IDS file (buildingSMART Information Delivery Specification) with
+  # requirements written in the standard format. The path is relative to this
+  # file. The current command line reads the IDS from --ids, so this entry is
+  # recorded for the project but is not yet applied on its own.
+  ids_file: ../sample.ids
+  # "generic" uses the built-in rule pack. A path to a YAML rule pack replaces it.
+  rule_pack: generic
+  # Property sets that must exist on given element types. Each entry creates
+  # one rule per entry in the list, plus one rule per required property.
+  required_psets:
+    # Every wall must have the Pset_WallCommon set, with a FireRating and an
+    # IsExternal value. Missing ones are errors.
+    - pset: Pset_WallCommon
+      applies_to: [IfcWall]
+      properties: [FireRating, IsExternal]
+      severity: error
+    # Every door must have Pset_DoorCommon with a FireRating. A missing one is
+    # only a warning, so the verdict is "pass with warnings".
+    - pset: Pset_DoorCommon
+      applies_to: [IfcDoor]
+      properties: [FireRating]
+      severity: warning
+
+# ---------------------------------------------------------------------------
+# tolerances: the numbers that decide when a geometry or position check fails.
+# ---------------------------------------------------------------------------
+tolerances:
+  # Clash distances (used only when clash checks are enabled later).
+  clash_hard_mm: 10.0
+  clash_clearance_mm: 50.0
+  # An element whose centre is farther than this from the model origin (in
+  # metres) is flagged by rule SP-004.
+  far_from_origin_m: 10000.0
+  geometry:
+    # A solid with less volume than this (cubic metres) counts as degenerate.
+    min_volume_m3: 0.000001
+    # A surface with less area than this (square metres) counts as degenerate.
+    min_area_m2: 0.000001
+    # An element wider than this in any direction (metres) is flagged by GEO-003.
+    max_extent_m: 5000.0
+
+# ---------------------------------------------------------------------------
+# qto: quantity takeoff (how quantities are summed and priced).
+# ---------------------------------------------------------------------------
+qto:
+  # How the quantities are grouped in the tables. Any combination of: type,
+  # storey, classification, material, predefined_type, type_name.
+  group_by: [type, storey]
+  # Unit rates for pricing. The path is relative to this file. Each row of the
+  # CSV gives one price. See examples/README.md for the columns.
+  unit_rates_file: ../rates.csv
+  # Currency code printed with each cost (for example EUR, USD, GBP).
+  currency: EUR
+  # How many elements are listed as hand-check samples in the report.
+  sample_count: 5
+
+# ---------------------------------------------------------------------------
+# clash: clash detection between two models. Not available yet.
+# ---------------------------------------------------------------------------
+clash:
+  # Keep this off. Clash detection is planned for a later version.
+  enabled: false
+
+# ---------------------------------------------------------------------------
+# output: what the generated report and the BCF issue file contain.
+# ---------------------------------------------------------------------------
+output:
+  # Language of the generated report and of BCF topic titles: en or es.
+  language: en
+  # Whether a 3D snapshot (viewpoint) is attached to BCF issues.
+  include_3d_snapshot: true
+  # BCF version of issues.bcfzip: "2.1" (default) or "3.0". Quotes keep it as text.
+  bcf_version: "2.1"
+  # The name written as the author of every BCF topic.
+  bcf_author: "bim-coordination@example.com"
+
+# ---------------------------------------------------------------------------
+# checks: switch individual rules or whole groups on or off.
+# ---------------------------------------------------------------------------
+checks:
+  # Turn single rules off by id. Example: ID-003: false
+  # A rule set here overrides its category.
+  rules: {}
+  # Turn whole groups off by category. Categories are: identity, spatial,
+  # properties, geometry, classification, naming, sanity, schema.
+  categories: {}
+  # Element names must be unique within the same type and storey (the
+  # default). Use only "type" to require uniqueness across the whole model.
+  unique_name_within: [type, storey]
+
+# ---------------------------------------------------------------------------
+# naming: the naming convention per element type.
+# ---------------------------------------------------------------------------
+naming:
+  # Each entry maps an IFC type (or a parent type) to a regular expression that
+  # every name of that type must match. This example is deliberately permissive
+  # (any name passes). Replace it with your own convention, for example
+  # "^W-[0-9]{3}$" for wall names such as W-001.
+  patterns:
+    IfcWall: "^.*$"
+
+# ---------------------------------------------------------------------------
+# classification: the classification codes elements must carry.
+# ---------------------------------------------------------------------------
+classification:
+  # false: classification is recommended but not required. Set to true to make
+  # rule CL-001 (classification must exist) apply.
+  required: false
+  # Which element types must be classified. Empty means all elements.
+  applies_to: []
+  # Codes accepted in this project, written out inline. Empty means no list.
+  allowed_codes: []
+  # A regular expression that every classification code must match. This one
+  # accepts Uniclass 2015 style codes such as Ss_25_10_30 or EF_25_10 (two
+  # letters, then groups of two digits). It checks the shape of the code, not
+  # that the code exists in the Uniclass table.
+  code_pattern: "^[A-Za-z]{2}_[0-9]{2}(_[0-9]{2}){0,3}$"

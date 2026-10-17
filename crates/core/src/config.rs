@@ -360,6 +360,11 @@ impl Config {
         }
     }
 
+    /// The IDS file declared in `requirements.ids_file`, resolved against the config directory.
+    pub fn ids_path(&self, config_dir: Option<&Path>) -> Option<PathBuf> {
+        self.requirements.ids_file.as_deref().filter(|s| !s.trim().is_empty()).map(|f| Config::resolve_path(config_dir, f))
+    }
+
     /// Look up a dotted path ("tolerances.far_from_origin_m") in the config.
     pub fn lookup(&self, dotted: &str) -> Option<serde_json::Value> {
         let mut cur = self.to_json_value();

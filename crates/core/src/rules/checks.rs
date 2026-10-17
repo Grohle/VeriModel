@@ -591,8 +591,13 @@ impl CheckKind {
                     Some(p) => p.resolve(cfg)?.as_str().map(|s| s.to_string()).filter(|s| !s.is_empty() && s != "none"),
                     None => None,
                 };
+                // `classification.applies_to` narrows the scope without a custom rule pack.
+                let applies = &cfg.classification.applies_to;
                 for &i in ctx.scope {
                     let e = &els[i];
+                    if !applies.is_empty() && !applies.iter().any(|t| e.is_a(t)) {
+                        continue;
+                    }
                     let found = e.classifications.iter().any(|c| {
                         c.code.as_ref().map(|s| !s.is_empty()).unwrap_or(false)
                             && match &sys {

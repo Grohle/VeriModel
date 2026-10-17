@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  VeriModel sample IDS (buildingSMART Information Delivery Specification 1.0).
+
+  Illustrative only. Three specifications, each with one applicability
+  (which elements are checked) and one or more requirements (what they must
+  carry). Entity names are written in UPPERCASE, as the IDS standard expects.
+  See docs/IDS.md for a walk-through of this file.
+-->
+<ids:ids xmlns="http://standards.buildingsmart.org/IDS"
+         xmlns:ids="http://standards.buildingsmart.org/IDS"
+         xmlns:xs="http://www.w3.org/2001/XMLSchema"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://standards.buildingsmart.org/IDS http://standards.buildingsmart.org/IDS/1.0/ids.xsd">
+  <ids:info>
+    <ids:title>VeriModel sample requirements</ids:title>
+    <ids:copyright>Example file, MIT licence (see repository LICENSE)</ids:copyright>
+    <ids:version>1.0</ids:version>
+    <ids:description>Minimal example of a buildingSMART IDS 1.0 file used by the VeriModel examples. It asks that walls carry fire rating and external-wall information, and that beams carry a material.</ids:description>
+    <ids:author>examples@example.com</ids:author>
+    <ids:date>2026-10-17</ids:date>
+    <ids:purpose>Demonstrate how a project requirement is written as an IDS specification.</ids:purpose>
+  </ids:info>
+  <ids:specifications>
+    <!-- Specification 1: every wall must state its fire rating. -->
+    <ids:specification name="Walls have a fire rating" ifcVersion="IFC2X3 IFC4 IFC4X3_ADD2"
+                       description="Each wall must carry a Pset_WallCommon.FireRating value."
+                       instructions="Add the FireRating property to Pset_WallCommon on every wall type or occurrence.">
+      <ids:applicability minOccurs="0" maxOccurs="unbounded">
+        <ids:entity>
+          <ids:name>
+            <ids:simpleValue>IFCWALL</ids:simpleValue>
+          </ids:name>
+        </ids:entity>
+      </ids:applicability>
+      <ids:requirements>
+        <ids:property dataType="IFCLABEL" cardinality="required" instructions="FireRating must be a non-empty label, for example REI 60.">
+          <ids:propertySet>
+            <ids:simpleValue>Pset_WallCommon</ids:simpleValue>
+          </ids:propertySet>
+          <ids:baseName>
+            <ids:simpleValue>FireRating</ids:simpleValue>
+          </ids:baseName>
+        </ids:property>
+      </ids:requirements>
+    </ids:specification>
+
+    <!-- Specification 2: every wall must say whether it is external. -->
+    <ids:specification name="Walls state IsExternal" ifcVersion="IFC2X3 IFC4 IFC4X3_ADD2"
+                       description="Each wall must carry a Pset_WallCommon.IsExternal flag.">
+      <ids:applicability minOccurs="0" maxOccurs="unbounded">
+        <ids:entity>
+          <ids:name>
+            <ids:simpleValue>IFCWALL</ids:simpleValue>
+          </ids:name>
+        </ids:entity>
+      </ids:applicability>
+      <ids:requirements>
+        <ids:property dataType="IFCBOOLEAN" cardinality="required">
+          <ids:propertySet>
+            <ids:simpleValue>Pset_WallCommon</ids:simpleValue>
+          </ids:propertySet>
+          <ids:baseName>
+            <ids:simpleValue>IsExternal</ids:simpleValue>
+          </ids:baseName>
+        </ids:property>
+      </ids:requirements>
+    </ids:specification>
+
+    <!-- Specification 3: every beam must have a material assigned. -->
+    <ids:specification name="Beams have a material" ifcVersion="IFC2X3 IFC4 IFC4X3_ADD2"
+                       description="Each beam must be associated with at least one material.">
+      <ids:applicability minOccurs="0" maxOccurs="unbounded">
+        <ids:entity>
+          <ids:name>
+            <ids:simpleValue>IFCBEAM</ids:simpleValue>
+          </ids:name>
+        </ids:entity>
+      </ids:applicability>
+      <ids:requirements>
+        <ids:material cardinality="required" instructions="Assign a material (for example concrete or steel) to the beam."/>
+      </ids:requirements>
+    </ids:specification>
+  </ids:specifications>
+</ids:ids>

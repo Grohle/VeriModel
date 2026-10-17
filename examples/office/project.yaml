@@ -1,0 +1,124 @@
+# VeriModel example: office building, Spanish-language reports, imperial units.
+#
+# This file is illustrative. It shows a stricter setup than the residential
+# example: tighter tolerances, a single IFC schema, classification by OmniClass,
+# quantities grouped by classification, and USD pricing. Every key is checked:
+# an unknown key is an error.
+#
+# Run it with (from the repository root):
+#   verimodel check --ifc tests/fixtures/bsi_ifc4_building_structural.ifc \
+#     --config examples/office/project.yaml --out ./out
+#
+# Full reference of every key: docs/CONFIG.md
+
+# ---------------------------------------------------------------------------
+# project: the project itself.
+# ---------------------------------------------------------------------------
+project:
+  # Name shown in reports.
+  name: "Office building - example"
+  # Language of the user interface: es (Spanish). Use en for English.
+  language: es
+  # Show quantities in imperial units (feet, square feet, cubic feet) in the
+  # reports. Data stays in SI units internally; only the display changes.
+  units: imperial
+  # The classification system this project uses. The name is matched against
+  # the classification references in the file, ignoring case.
+  classification_system: OmniClass
+  # This office project is delivered in IFC4 only. Any other schema fails SCH-001.
+  ifc_versions: [IFC4]
+
+# ---------------------------------------------------------------------------
+# requirements: what each element must contain.
+# ---------------------------------------------------------------------------
+requirements:
+  # Optional IDS file, path relative to this file. Not read by the current
+  # command line (use --ids). Left out here on purpose.
+  rule_pack: generic
+  # Every slab must carry Pset_SlabCommon with a LoadBearing value (true or
+  # false), so structural and non-structural slabs are told apart.
+  # Every column must carry Pset_ColumnCommon with a LoadBearing value.
+  # Missing ones are errors (the default severity).
+  required_psets:
+    - pset: Pset_SlabCommon
+      applies_to: [IfcSlab]
+      properties: [LoadBearing]
+    - pset: Pset_ColumnCommon
+      applies_to: [IfcColumn]
+      properties: [LoadBearing]
+
+# ---------------------------------------------------------------------------
+# tolerances: stricter than the defaults.
+# ---------------------------------------------------------------------------
+tolerances:
+  clash_hard_mm: 10.0
+  clash_clearance_mm: 50.0
+  # Stricter than the default (10 000 m). An element whose centre is more than
+  # 2 000 m from the origin is flagged. This is about a building, not a region.
+  far_from_origin_m: 2000.0
+  geometry:
+    # Stricter than the default (0.000001 m3): any solid below 0.0001 m3
+    # (0.1 litre) counts as degenerate. No real building part is that small.
+    min_volume_m3: 0.0001
+    min_area_m2: 0.000001
+    max_extent_m: 5000.0
+
+# ---------------------------------------------------------------------------
+# qto: quantities and pricing.
+# ---------------------------------------------------------------------------
+qto:
+  # Group quantities by IFC type, then by classification code, so the
+  # takeoff reads like a bill of quantities organised by classification.
+  group_by: [type, classification]
+  # No price list for this example, so no unit rates file is given.
+  # Quantities are still computed and reported.
+  currency: USD
+  sample_count: 5
+
+# ---------------------------------------------------------------------------
+# clash: not available yet.
+# ---------------------------------------------------------------------------
+clash:
+  enabled: false
+
+# ---------------------------------------------------------------------------
+# output: report and BCF settings.
+# ---------------------------------------------------------------------------
+output:
+  # Reports and BCF titles are written in Spanish.
+  language: es
+  include_3d_snapshot: true
+  # BCF 2.1 is what most viewers read. Quotes keep it as text.
+  bcf_version: "2.1"
+  bcf_author: "coordinacion-bim@example.com"
+
+# ---------------------------------------------------------------------------
+# checks: rule switches.
+# ---------------------------------------------------------------------------
+checks:
+  rules:
+    # Allow the same element name to repeat within a type and storey.
+    # Many office models reuse names such as "Puerta" for every door, so this
+    # rule (ID-003) is off for this project.
+    ID-003: false
+  categories: {}
+  unique_name_within: [type, storey]
+
+# ---------------------------------------------------------------------------
+# naming: no naming convention is enforced in this example.
+# ---------------------------------------------------------------------------
+naming:
+  patterns: {}
+
+# ---------------------------------------------------------------------------
+# classification: OmniClass codes.
+# ---------------------------------------------------------------------------
+classification:
+  # Classification is recommended for this project, not mandatory.
+  required: false
+  applies_to: []
+  allowed_codes: []
+  # OmniClass codes look like "23-13 11 11": two digits, a hyphen, two digits,
+  # then one to three groups of two digits separated by spaces. This checks the
+  # shape of each code. It does not check that the code exists in OmniClass.
+  code_pattern: "^[0-9]{2}-[0-9]{2}( [0-9]{2})+$"
