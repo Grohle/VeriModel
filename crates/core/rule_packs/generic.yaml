@@ -1,0 +1,170 @@
+# VeriModel built-in generic rule pack.
+#
+# This file is DATA, not code: it is the default set of checks applied to any
+# IFC model when project.yaml does not name a custom pack. Every rule can be
+# disabled from project.yaml (checks.rules / checks.categories) and every
+# threshold is read from project.yaml through "$config.<path>" references.
+#
+# Rule anatomy:
+#   id          stable identifier shown in reports and BCF titles
+#   category    identity | spatial | properties | geometry | classification | naming | sanity | schema
+#   severity    error | warning | info
+#   scope       which elements the rule looks at (IFC type or supertype, exclusions, filters)
+#   check       one of the engine's check kinds plus its parameters
+#   fix_hint    plain-language advice for the modeller
+#   enabled_if  optional "$config.<bool path>" gate
+name: generic
+version: 1
+description: Generic quality gate for any IFC model (IFC2x3 / IFC4 / IFC4.3), any discipline.
+rules:
+  # --- A. Identity & uniqueness ---------------------------------------------
+  - id: ID-001
+    category: identity
+    description: Every element must have a unique GlobalId
+    severity: error
+    scope: { ifc_types: [IfcProduct], include_spatial: true }
+    check: { kind: unique_global_id }
+    fix_hint: Regenerate the GlobalId of the duplicated element in the authoring tool, or remove the duplicate copy.
+
+  - id: ID-002
+    category: identity
+    description: Every GlobalId must be a valid 22-character IFC identifier
+    severity: error
+    scope: { ifc_types: [IfcProduct], include_spatial: true }
+    check: { kind: valid_global_id }
+    fix_hint: Re-export the model; a malformed GlobalId usually comes from a hand-edited or truncated file.
+
+  - id: ID-003
+    category: identity
+    description: Element names must be unique within the same type and storey
+    severity: warning
+    scope: { ifc_types: [IfcElement] }
+    check: { kind: unique_name }
+    fix_hint: Give each element a distinct name (type + number), or disable this rule in project.yaml if names are intentionally shared.
+
+  # --- B. Spatial hierarchy ------------------------------------------------
+  - id: SP-001
+    category: spatial
+    description: Every element must be contained in a spatial structure element (storey, space, site, facility part)
+    severity: error
+    scope: { ifc_types: [IfcElement], exclude_types: [IfcFeatureElement, IfcVirtualElement] }
+    check: { kind: contained_in_spatial_structure }
+    fix_hint: Assign the element to a level / storey in the authoring tool before exporting.
+
+  - id: SP-002
+    category: spatial
+    description: The container of every element must exist in the spatial hierarchy
+    severity: error
+    scope: { ifc_types: [IfcElement] }
+    check: { kind: container_exists }
+    fix_hint: The element points to a storey that is not aggregated into a building or site; fix the level hierarchy.
+
+  - id: SP-003
+    category: spatial
+    description: The model must declare a site, a building or facility, and at least one storey or facility part
+    severity: warning
+    scope: { include_spatial: true }
+    check:
+      kind: spatial_hierarchy
+      require:
+        - [IfcSite]
+        - [IfcBuilding, IfcFacility, IfcBridge, IfcRoad, IfcRailway, IfcMarineFacility]
+        - [IfcBuildingStorey, IfcFacilityPart, IfcBridgePart, IfcRoadPart, IfcRailwayPart, IfcMarinePart]
+    fix_hint: Export with the full Site > Building > Storey (or Facility > Facility Part) structure enabled.
+
+  - id: SP-004
+    category: spatial
+    description: Elements must not be far from the project origin
+    severity: warning
+    scope: { ifc_types: [IfcElement] }
+    check: { kind: distance_from_origin, max_m: "$config.tolerances.far_from_origin_m" }
+    fix_hint: Move the model close to the origin or set the shared coordinates correctly; far geometry causes precision problems in viewers.
+
+  # --- D. Properties & data completeness --------------------------------------
+  - id: PR-001
+    category: properties
+    description: Properties that exist must carry a value (no empty or null values)
+    severity: warning
+    scope: { ifc_types: [IfcElement] }
+    check: { kind: no_empty_properties }
+    fix_hint: Fill in the empty property or remove it from the export mapping.
+
+  # --- E. Geometry health -----------------------------------------------------
+  - id: GEO-001
+    category: geometry
+    description: Physical elements must have a geometric representation
+    severity: warning
+    scope: { ifc_types: [IfcElement], exclude_types: [IfcFeatureElement, IfcVirtualElement, IfcAnnotation] }
+    check: { kind: has_geometry }
+    fix_hint: The element has no 3D body; check that its geometry is not hidden or filtered out of the export.
+
+  - id: GEO-002
+    category: geometry
+    description: Elements with a representation must produce a non-degenerate shape (volume or area above tolerance)
+    severity: error
+    scope: { ifc_types: [IfcElement], exclude_types: [IfcFeatureElement, IfcVirtualElement, IfcAnnotation] }
+    check:
+      kind: non_degenerate_geometry
+      min_volume_m3: "$config.tolerances.geometry.min_volume_m3"
+      min_area_m2: "$config.tolerances.geometry.min_area_m2"
+    fix_hint: The element's solid collapsed to zero volume (for example a wall with zero thickness or height). Fix the geometry in the authoring tool.
+
+  - id: GEO-003
+    category: geometry
+    description: Element bounding boxes must stay within the configured project bounds
+    severity: warning
+    scope: { ifc_types: [IfcElement] }
+    check: { kind: bbox_within_bounds, max_extent_m: "$config.tolerances.geometry.max_extent_m" }
+    fix_hint: An element larger than the whole project usually means a unit mismatch or a stray stretched solid.
+
+  # --- F. Classification & naming -------------------------------------------
+  - id: CL-001
+    category: classification
+    description: Elements must carry a classification reference from the configured system
+    severity: error
+    enabled_if: "$config.classification.required"
+    scope: { ifc_types: [IfcElement] }
+    check: { kind: classification_exists, system: "$config.project.classification_system" }
+    fix_hint: Assign a classification code (Uniclass, OmniClass, CCI, DIN 276...) to the element or its type.
+
+  - id: CL-002
+    category: classification
+    description: Classification codes must belong to the configured classification list or pattern
+    severity: warning
+    scope: { ifc_types: [IfcElement] }
+    check: { kind: classification_code_allowed }
+    fix_hint: Use a code from the project's classification table (classification.allowed_codes / allowed_codes_file / code_pattern in project.yaml).
+
+  - id: NAM-001
+    category: naming
+    description: Element names must follow the project naming convention
+    severity: warning
+    scope: { ifc_types: [IfcElement] }
+    check: { kind: name_matches }
+    fix_hint: Rename the element according to the pattern defined in naming.patterns of project.yaml.
+
+  # --- G. Type-specific sanity (quantity driven) -----------------------------
+  - id: QT-001
+    category: sanity
+    description: Elements that report a volume must report a positive volume
+    severity: warning
+    scope: { ifc_types: [IfcElement], exclude_types: [IfcFeatureElement, IfcVirtualElement, IfcAnnotation] }
+    check: { kind: quantity_positive, quantity: volume, min: "$config.tolerances.geometry.min_volume_m3" }
+    fix_hint: A zero volume means the base quantity or the solid is wrong; re-export quantities or fix the geometry.
+
+  - id: QT-002
+    category: sanity
+    description: Elements that report an area must report a positive area
+    severity: warning
+    scope: { ifc_types: [IfcElement], exclude_types: [IfcFeatureElement, IfcVirtualElement, IfcAnnotation] }
+    check: { kind: quantity_positive, quantity: area, min: "$config.tolerances.geometry.min_area_m2" }
+    fix_hint: A zero area usually means a collapsed surface or a wrong quantity export.
+
+  # --- Schema -------------------------------------------------------------------
+  - id: SCH-001
+    category: schema
+    description: The IFC schema of the file must be one the project accepts
+    severity: error
+    scope: { include_spatial: true }
+    check: { kind: schema_allowed }
+    fix_hint: Export in one of the schemas listed in project.ifc_versions, or add this schema to the list.

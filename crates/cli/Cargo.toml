@@ -1,0 +1,19 @@
+[package]
+name = "verimodel-cli"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "VeriModel command line: IFC QA gate, QTO and BCF export, headless."
+
+[[bin]]
+name = "verimodel"
+path = "src/main.rs"
+
+[dependencies]
+verimodel-core = { path = "../core" }
+verimodel-ifc-reader = { path = "../ifc_reader" }
+clap.workspace = true
+anyhow.workspace = true
+serde_json.workspace = true
+env_logger.workspace = true
+log.workspace = true

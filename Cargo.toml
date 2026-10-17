@@ -1,0 +1,38 @@
+[workspace]
+resolver = "2"
+members = ["crates/core", "crates/ifc_reader", "crates/cli", "src-tauri"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+authors = ["VeriModel contributors"]
+repository = "https://github.com/grohle/verimodel"
+
+[workspace.dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = { version = "1", features = ["preserve_order"] }
+serde_yaml = "0.9"
+schemars = "0.8"
+thiserror = "2"
+anyhow = "1"
+regex = "1"
+sha2 = "0.10"
+hex = "0.4"
+chrono = { version = "0.4", default-features = false, features = ["clock", "std", "serde"] }
+csv = "1"
+zip = { version = "2", default-features = false, features = ["deflate"] }
+quick-xml = { version = "0.37", features = ["serialize"] }
+rust_xlsxwriter = "0.79"
+uuid = { version = "1", features = ["v4", "v5"] }
+indexmap = { version = "2", features = ["serde"] }
+clap = { version = "4", features = ["derive"] }
+tempfile = "3"
+log = "0.4"
+env_logger = "0.11"
+html-escape = "0.2"
+
+[profile.release]
+lto = "thin"
+codegen-units = 1
+strip = true

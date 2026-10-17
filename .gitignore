@@ -1,7 +1,7 @@
 # Rust
 /target/
 **/target/
-Cargo.lock
+# Cargo.lock is committed: this workspace builds binaries (CLI + desktop)
 # Keep Cargo.lock for the Tauri binary / CLI — uncomment if this becomes a library-only crate
 # !Cargo.lock
 

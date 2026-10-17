@@ -1,0 +1,16 @@
+[package]
+name = "verimodel-desktop"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "VeriModel desktop app (Tauri v2)."
+
+[lib]
+name = "verimodel_desktop_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[dependencies]
+verimodel-core = { path = "../crates/core" }
+verimodel-ifc-reader = { path = "../crates/ifc_reader" }
+serde.workspace = true
+serde_json.workspace = true
