@@ -1,0 +1,17 @@
+# Build flags shared by every developer and by CI.
+#
+# The assistant's quantized inference kernels (Candle) are only compiled when
+# the target CPU has AVX2/FMA; without them the copilot is 3-4x slower. All
+# x86-64 machines since 2013 (Intel Haswell, AMD Excavator/Zen) support the
+# x86-64-v3 level. Apple Silicon (aarch64) always has NEON and needs no flag.
+[target.x86_64-unknown-linux-gnu]
+rustflags = ["-C", "target-cpu=x86-64-v3"]
+
+[target.x86_64-pc-windows-msvc]
+rustflags = ["-C", "target-cpu=x86-64-v3"]
+
+[target.x86_64-pc-windows-gnu]
+rustflags = ["-C", "target-cpu=x86-64-v3"]
+
+[target.x86_64-apple-darwin]
+rustflags = ["-C", "target-cpu=x86-64-v3"]

@@ -21,7 +21,13 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install IfcOpenShell + IfcTester (the IFC reader bridge)
-        run: python -m pip install --upgrade pip && python -m pip install ifcopenshell "ifctester" --no-deps && python -m pip install lxml xmlschema
+        # ifctester is installed without its optional reporting extras (odfpy has no wheel);
+        # everything the IDS engine itself needs is listed explicitly.
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install ifcopenshell typing_extensions numpy lxml xmlschema
+          python -m pip install --no-deps ifctester
+          python -c "import ifcopenshell, ifctester; print('ifcopenshell', ifcopenshell.version)"
       - name: Install Tauri system dependencies (Linux)
         run: |
           sudo apt-get update

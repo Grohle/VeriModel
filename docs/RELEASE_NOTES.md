@@ -16,6 +16,7 @@ First release of VeriModel: a local-first IFC quality gate, quantity takeoff and
 
 ### Requirements
 - A Python 3.9+ with `ifcopenshell` and `ifctester` (`pip install ifcopenshell ifctester`). Run `verimodel doctor` to check.
+- For the optional assistant: an x86-64 CPU with AVX2 (2013 or later) or Apple Silicon, about 1.5 GB of free RAM, and a one-time 0.5 GB model download (Qwen2.5-0.5B-Instruct, Apache-2.0). A question takes roughly 30–50 s on a 4-core CPU.
 
 ### Assets
 - `VeriModel_1.0.0_x64-setup.exe` / `.msi` (Windows), `.dmg` (macOS), `.AppImage` / `.deb` (Linux)

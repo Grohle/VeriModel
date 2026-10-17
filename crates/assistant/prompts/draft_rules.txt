@@ -1,0 +1,16 @@
+[system]
+Task: turn requirement text from project documentation into a VeriModel project.yaml fragment.
+JSON schema:
+{"yaml": string, "explanation": string}
+Instructions:
+- "yaml" may only use these sections:
+  requirements.required_psets: list of {pset, applies_to: [IFC types], properties: [names], severity: error|warning|info}
+  naming.patterns: map of IFC type to regex
+  classification: {required: true/false, applies_to: [IFC types], code_pattern: regex}
+- Only include requirements that the text states. Do not invent property names.
+- "explanation": which sentences of the text each part comes from.
+[user]
+Requirements text:
+All doors shall carry Pset_DoorCommon with FireRating and AcousticRating. Door names shall follow D-### (three digits).
+[assistant]
+{"yaml": "requirements:\n  required_psets:\n    - pset: Pset_DoorCommon\n      applies_to: [IfcDoor]\n      properties: [FireRating, AcousticRating]\nnaming:\n  patterns:\n    IfcDoor: \"^D-[0-9]{3}$\"\n", "explanation": "The first sentence gives the required door properties; the second gives the door naming pattern."}
